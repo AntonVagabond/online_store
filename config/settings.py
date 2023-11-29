@@ -25,9 +25,11 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'djoser',
+    'phonenumber_field',
     # apps
     'api',
     'common',
+    'customers',
     # after apps
     'drf_spectacular',
 ]
@@ -195,4 +197,9 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
 }
+# endregion -------------------------------------------------------------------------
+
+# region ----------------------- CUSTOM USER (CUSTOMER) -----------------------------
+AUTH_USER_MODEL = 'customers.Customer'
+AUTHENTICATION_BACKENDS = ('customers.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
