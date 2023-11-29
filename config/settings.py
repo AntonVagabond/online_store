@@ -42,7 +42,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'corsheaders.middleware.CorsMiddleware',
+    # 'customers.middleware.ActiveUserMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -65,6 +67,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# region -------------------------- DATABASE ----------------------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -79,6 +82,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+# endregion -------------------------------------------------------------------------
 
 # region --------------------- DJANGO REST FRAMEWORK --------------------------------
 REST_FRAMEWORK = {
