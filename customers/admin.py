@@ -3,7 +3,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-Customer = get_user_model()
+from customers.models.customers import Customer
+from customers.models.profile import Profile
+
+
+class ProfileAdmin(admin.StackedInline):
+    model = Profile
+    fields = ('photo',)
 
 
 @admin.register(Customer)
@@ -15,7 +21,8 @@ class CustomerAdmin(UserAdmin):
         (_('Личная информация'),
          {'fields': ('first_name', 'last_name',)}),
         (_('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions',)
+            'fields': ('is_active', 'is_staff', 'is_superuser',
+                       'groups', 'user_permissions',)
         }),
         (_('Important dates'), {'fields': ('last_login',)}),
     )
@@ -33,3 +40,5 @@ class CustomerAdmin(UserAdmin):
     ordering = ('-id',)
     filter_horizontal = ('groups', 'user_permissions',)
     readonly_fields = ('last_login',)
+
+    inlines = (ProfileAdmin,)
