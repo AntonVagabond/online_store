@@ -10,12 +10,6 @@ class Product(BaseModel):
         'Название товара',
         max_length=255,
     )
-    images = models.ForeignKey(
-        to='ProductImage',
-        on_delete=models.PROTECT,
-        related_name='products',
-        verbose_name='Изображения продукта'
-    )
     availability = models.BooleanField(
         verbose_name='Наличие товара',
         null=True,
@@ -38,6 +32,19 @@ class Product(BaseModel):
         verbose_name='Время создания',
         null=True,
         blank=True,
+    )
+    image = models.ForeignKey(
+        to='products.ProductImage',
+        on_delete=models.PROTECT,
+        related_name='products',
+        verbose_name='Изображения продукта'
+    )
+    categories = models.ManyToManyField(
+        to='products.Category',
+        related_name='products_categories',
+        verbose_name='Категории товаров',
+        blank=True,
+        through='ProductCategory',
     )
 
     class Meta:
@@ -64,7 +71,7 @@ class ProductDescription(BaseModel):
     """Модель описания товара"""
 
     product = models.OneToOneField(
-        to='Product',
+        to='products.Product',
         on_delete=models.CASCADE,
         related_name='products_description',
         verbose_name='Описание товара',
@@ -77,7 +84,7 @@ class ProductFeature(BaseModel):
     """Модель характеристик товара"""
 
     product = models.OneToOneField(
-        to='Product',
+        to='products.Product',
         on_delete=models.CASCADE,
         related_name='products_feature',
         verbose_name='Характеристика товара',
@@ -99,3 +106,29 @@ class ProductFeature(BaseModel):
         null=True,
         blank=True,
     )
+
+
+class ProductCategory(BaseModel):
+    """Вывод конкретной категории товаров"""
+
+    product = models.ForeignKey(
+        to='products.Product',
+        on_delete=models.CASCADE,
+        related_name='category_info',
+        verbose_name='Категория',
+    )
+    category = models.ForeignKey(
+        to='products.Category',
+        on_delete=models.CASCADE,
+        related_name='product_info',
+        verbose_name='Продукт',
+    )
+
+
+
+
+
+
+
+
+
