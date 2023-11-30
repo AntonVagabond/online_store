@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 
 import environ
+import sentry_sdk
 
 root = environ.Path(__file__) - 2
 env = environ.Env()
@@ -203,7 +204,22 @@ SIMPLE_JWT = {
 }
 # endregion -------------------------------------------------------------------------
 
-# region ----------------------- CUSTOM USER (CUSTOMER) -----------------------------
+# region ------------- CUSTOM USER (CUSTOMER), CUSTOM BACKEND -----------------------
 AUTH_USER_MODEL = 'customers.Customer'
 AUTHENTICATION_BACKENDS = ('customers.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
+
+
+if DEBUG:
+    # region ------------------------- SENTRY ---------------------------------------
+    sentry_sdk.init(
+        dsn=env.str(var='SENTRY_DSN', default=''),
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+    )
+    # endregion ---------------------------------------------------------------------
