@@ -27,6 +27,12 @@ class Customer(AbstractUser):
         null=True,
         blank=True,
     )
+    order = models.ForeignKey(
+        to='orders.Order',
+        on_delete=models.CASCADE,
+        related_name='customer',
+        verbose_name='Заказ'
+    )
 
     objects = CustomCustomerManager()
 
