@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'api',
     'common',
     'customers',
-    'orders'
+    'orders',
     # after apps
     'drf_spectacular',
 ]
