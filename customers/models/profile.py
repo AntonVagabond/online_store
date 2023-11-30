@@ -20,6 +20,14 @@ class Profile(BaseModel):
         blank=True,
     )
 
+    class Meta:
+        verbose_name = 'Профиль покупателя'
+        verbose_name_plural = 'Профили покупателей'
+
+    def __str__(self):
+        return f'{self.customer} ({self.pk})'
+
     def is_online(self) -> bool:
+        """Проверка покупателя на онлайн в течении последних 5 мин."""
         last_seen = cache.get(f'last-seen-{self.customer.id}')
         return bool(last_seen and timezone.timedelta(seconds=300))
