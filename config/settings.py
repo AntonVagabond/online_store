@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'common',
     'customers',
     'orders',
+    'products',
     # after apps
     'drf_spectacular',
 ]
