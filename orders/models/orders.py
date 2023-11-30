@@ -23,5 +23,5 @@ class Order(BaseModel):
         verbose_name_plural = 'Заказы'
         ordering = ('-date',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Заказ №{self.pk} от {self.objects.customer.username}'
