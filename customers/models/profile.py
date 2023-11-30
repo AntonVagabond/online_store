@@ -6,6 +6,8 @@ from common.models.mixins import BaseModel
 
 
 class Profile(BaseModel):
+    """Профиль покупателя"""
+
     customer = models.OneToOneField(
         to='customers.Customer',
         on_delete=models.CASCADE,
