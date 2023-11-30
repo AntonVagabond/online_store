@@ -12,7 +12,7 @@ class Profile(BaseModel):
         to='customers.Customer',
         on_delete=models.CASCADE,
         related_name='profile',
-        verbose_name='Профиль',
+        verbose_name='Пользователь',
         primary_key=True,
     )
     photo = models.ImageField(
