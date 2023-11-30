@@ -167,7 +167,7 @@ media/
 /media/
 */media/
 
-*/migrations/
+*/migrations/*
 !*/migrations/__init__.py
 
 /.env
