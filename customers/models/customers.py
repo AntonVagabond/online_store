@@ -29,8 +29,8 @@ class Customer(AbstractUser):
     )
     order = models.ForeignKey(
         to='orders.Order',
-        on_delete=models.CASCADE,
-        related_name='customer',
+        on_delete=models.RESTRICT,
+        related_name='customers',
         verbose_name='Заказ'
     )
 
