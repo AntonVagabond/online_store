@@ -5,9 +5,9 @@ Customer = get_user_model()
 
 
 class AuthBackend(object):
-    supports_objects_permission = True
+    supports_object_permissions = True
     supports_anonymous_user = True
-    supports_inactive_users = True
+    supports_inactive_user = True
 
     @staticmethod
     def get_user(user_id: int) -> int | None:
@@ -19,7 +19,7 @@ class AuthBackend(object):
             return None
 
     @staticmethod
-    def authenticate(username, password):
+    def authenticate(request, username, password):
         """Проверка на один из выборов аутентификации и пароля"""
         try:
             customer = Customer.objects.get(
