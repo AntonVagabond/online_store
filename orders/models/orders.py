@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from common.models.mixins import BaseModel
 
@@ -42,4 +43,12 @@ class OrderProduct(BaseModel):
         related_name='orders_info',
         verbose_name='Товар'
     )
+    date_created = models.DateTimeField(
+        verbose_name='Date created',
+        default=timezone.now
+    )
 
+    class Meta:
+        verbose_name = 'Заказ товара'
+        verbose_name_plural = 'Заказы товаров'
+        ordering = ('-date_created',)
