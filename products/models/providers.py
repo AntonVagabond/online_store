@@ -5,6 +5,8 @@ from common.models.mixins import BaseModel
 
 
 class Provider(BaseModel):
+    """Модель Поставщика"""
+
     name = models.CharField(
         'Название поставщика',
         max_length=30,
