@@ -25,3 +25,21 @@ class Order(BaseModel):
 
     def __str__(self) -> str:
         return f'Заказ №{self.pk} от {self.objects.customer.username}'
+
+
+class OrderProduct(BaseModel):
+    """Модель Заказа товаров"""
+
+    order = models.ForeignKey(
+        to='orders.Order',
+        on_delete=models.CASCADE,
+        related_name='products_info',
+        verbose_name='Заказ',
+    )
+    product = models.ForeignKey(
+        to='products.Product',
+        on_delete=models.CASCADE,
+        related_name='orders_info',
+        verbose_name='Товар'
+    )
+
