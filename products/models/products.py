@@ -109,7 +109,7 @@ class ProductFeature(BaseModel):
 
 
 class ProductCategory(BaseModel):
-    """Вывод конкретной категории товаров"""
+    """Модель категории товаров"""
 
     product = models.ForeignKey(
         to='products.Product',
