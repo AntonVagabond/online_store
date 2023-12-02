@@ -12,7 +12,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(orders.OrderProduct)
 class OrderProductAdmin(admin.ModelAdmin):
-    """Модель продукта заказа"""
+    """Модель заказа товара"""
 
     list_display = ('id',)
     search_fields = ('product__name', 'order__sum')
