@@ -29,3 +29,8 @@ class Provider(BaseModel):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name = 'Поставщик'
+        verbose_name_plural = 'Поставщики'
+        ordering = ('-name',)
