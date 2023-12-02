@@ -56,7 +56,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'title',
-        'images',
+        'image',
         'description',
         'parent_category',
     )
