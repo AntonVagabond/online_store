@@ -9,7 +9,7 @@ from customers.models.profile import Profile
 
 # region ----------------------------- INLINE ---------------------------------------
 class ProfileAdmin(admin.StackedInline):
-    """Встраиваемая модель для CustomerAdmin"""
+    """Встраиваемая модель профиля для CustomerAdmin"""
     model = Profile
     fields = ('photo',)
 
