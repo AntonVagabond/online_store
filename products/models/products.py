@@ -33,7 +33,7 @@ class Product(BaseModel):
         null=True,
         blank=True,
     )
-    update_at = models.DateTimeField(
+    updated_at = models.DateTimeField(
         verbose_name='Время обновления',
         null=True,
         blank=True,
