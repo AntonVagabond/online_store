@@ -4,6 +4,7 @@ from django.contrib.admin import TabularInline
 from orders.models import orders
 
 
+# region ----------------------------- INLINE ---------------------------------------
 @admin.register(orders.OrderProduct)
 class OrderProductInline(TabularInline):
     """Встроенная модель Заказа товара"""
@@ -18,6 +19,9 @@ class OrderProductInline(TabularInline):
     readonly_fields = ('date_created',)
 
 
+# endregion -------------------------------------------------------------------------
+
+# region -------------------------- MODEL ADMIN -------------------------------------
 @admin.register(orders.Order)
 class OrderAdmin(admin.ModelAdmin):
     """Модель админа заказа"""
@@ -29,3 +33,4 @@ class OrderAdmin(admin.ModelAdmin):
         'date'
     )
     inlines = (OrderProductInline,)
+# endregion -------------------------------------------------------------------------
