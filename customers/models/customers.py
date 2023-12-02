@@ -31,7 +31,9 @@ class Customer(AbstractUser):
         to='orders.Order',
         on_delete=models.RESTRICT,
         related_name='customers',
-        verbose_name='Заказ'
+        verbose_name='Заказ',
+        null=True,
+        blank=True,
     )
 
     objects = CustomCustomerManager()

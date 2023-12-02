@@ -44,6 +44,8 @@ class OrderProduct(BaseModel):
         on_delete=models.CASCADE,
         related_name='products_info',
         verbose_name='Заказ',
+        null=True,
+        blank=True
     )
     product = models.ForeignKey(
         to='products.Product',
