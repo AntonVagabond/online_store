@@ -7,13 +7,21 @@ from customers.models.customers import Customer
 from customers.models.profile import Profile
 
 
+# region ----------------------------- INLINE ---------------------------------------
 class ProfileAdmin(admin.StackedInline):
+    """Встраиваемая модель для покупателя"""
     model = Profile
     fields = ('photo',)
 
 
+# endregion -------------------------------------------------------------------------
+
+
+# region -------------------------- MODEL ADMIN -------------------------------------
 @admin.register(Customer)
 class CustomerAdmin(UserAdmin):
+    """Модель админа покупателя"""
+
     change_user_password_template = None
     fieldsets = (
         (None,
@@ -42,3 +50,4 @@ class CustomerAdmin(UserAdmin):
     readonly_fields = ('last_login',)
 
     inlines = (ProfileAdmin,)
+# endregion -------------------------------------------------------------------------
