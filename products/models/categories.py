@@ -11,7 +11,7 @@ class Category(BaseModel):
         max_length=255,
         unique=True,
     )
-    images = models.ImageField(
+    image = models.ImageField(
         verbose_name='Изображение категории',
         upload_to='orders/categories/%Y/%m/%d',
         null=True,
