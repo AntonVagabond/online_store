@@ -5,7 +5,6 @@ from orders.models import orders
 
 
 # region ----------------------------- INLINE ---------------------------------------
-@admin.register(orders.OrderProduct)
 class OrderProductInline(TabularInline):
     """Встроенная модель Заказа товара"""
 
