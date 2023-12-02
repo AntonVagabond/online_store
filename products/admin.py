@@ -31,6 +31,7 @@ class ProductAdmin(admin.ModelAdmin):
     """Модель админа товара"""
 
     list_display = (
+        'id',
         'name',
         'image',
         'category',
@@ -45,6 +46,32 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = (
         ProductFeatureInline,
         ProductDescriptionInline,
+    )
+
+
+@admin.register(categories.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    """Модель админа категории"""
+
+    list_display = (
+        'id',
+        'title',
+        'images',
+        'description',
+        'parent_category',
+    )
+
+
+@admin.register(providers.Provider)
+class ProviderAdmin(admin.ModelAdmin):
+    """Модель админа поставщика"""
+
+    list_display = (
+        'id',
+        'name',
+        'logo',
+        'email',
+        'phone_number',
     )
 
 # endregion -------------------------------------------------------------------------
