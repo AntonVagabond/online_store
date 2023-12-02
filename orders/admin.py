@@ -1,5 +1,21 @@
 from django.contrib import admin
+from django.contrib.admin import TabularInline
+
 from orders.models import orders
+
+
+@admin.register(orders.OrderProduct)
+class OrderProductInline(TabularInline):
+    """Встроенная модель Заказа товара"""
+
+    model = orders.OrderProduct
+    fields = (
+        'order',
+        'product',
+        'date_created',
+    )
+
+    readonly_fields = ('date_created',)
 
 
 @admin.register(orders.Order)
@@ -7,13 +23,9 @@ class OrderAdmin(admin.ModelAdmin):
     """Модель админа заказа"""
 
     list_display = ('id',)
-    readonly_fields = ('quantity', 'sum')
-
-
-@admin.register(orders.OrderProduct)
-class OrderProductAdmin(admin.ModelAdmin):
-    """Модель заказа товара"""
-
-    list_display = ('id',)
-    search_fields = ('product__name', 'order__sum')
-    readonly_fields = ('date_created',)
+    readonly_fields = (
+        'quantity',
+        'sum',
+        'date'
+    )
+    inlines = (OrderProductInline,)
