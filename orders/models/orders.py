@@ -37,7 +37,7 @@ class Order(BaseModel):
 
 
 class OrderProduct(BaseModel):
-    """Модель Заказа товаров"""
+    """Модель корзины"""
 
     order = models.ForeignKey(
         to='orders.Order',

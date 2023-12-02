@@ -6,7 +6,7 @@ from orders.models import orders
 
 # region ----------------------------- INLINE ---------------------------------------
 class OrderProductInline(TabularInline):
-    """Встроенная модель Заказа товара"""
+    """Встраиваемая модель корзины для OrderAdmin"""
 
     model = orders.OrderProduct
     fields = (
