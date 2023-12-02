@@ -10,7 +10,7 @@ class Product(BaseModel):
         'Название товара',
         max_length=255,
     )
-    availability = models.BooleanField(
+    is_available = models.BooleanField(
         verbose_name='Наличие товара',
         null=True,
         blank=True,
@@ -18,8 +18,8 @@ class Product(BaseModel):
     )
     price = models.DecimalField(
         verbose_name='Цена товара',
-        max_digits=8,
-        decimal_places=1,
+        max_digits=10,
+        decimal_places=2,
         null=True,
         blank=True,
     )
@@ -33,18 +33,22 @@ class Product(BaseModel):
         null=True,
         blank=True,
     )
+    update_at = models.DateTimeField(
+        verbose_name='Время обновления',
+        null=True,
+        blank=True,
+    )
     image = models.ForeignKey(
         to='products.ProductImage',
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         related_name='products',
         verbose_name='Изображения продукта'
     )
-    categories = models.ManyToManyField(
+    category = models.ForeignKey(
         to='products.Category',
-        related_name='products_categories',
-        verbose_name='Категории товаров',
-        blank=True,
-        through='ProductCategory',
+        on_delete=models.CASCADE,
+        related_name='products',
+        verbose_name='Категория товара'
     )
 
     class Meta:
@@ -105,23 +109,6 @@ class ProductFeature(BaseModel):
         verbose_name='Узоры у товара',
         null=True,
         blank=True,
-    )
-
-
-class ProductCategory(BaseModel):
-    """Модель категории товаров"""
-
-    product = models.ForeignKey(
-        to='products.Product',
-        on_delete=models.CASCADE,
-        related_name='category_info',
-        verbose_name='Категория',
-    )
-    category = models.ForeignKey(
-        to='products.Category',
-        on_delete=models.CASCADE,
-        related_name='product_info',
-        verbose_name='Продукт',
     )
 
 
