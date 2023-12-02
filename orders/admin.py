@@ -11,4 +11,5 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(orders.OrderProduct)
 class OrderProductAdmin(admin.ModelAdmin):
     list_display = ('id',)
+    search_fields = ('product__name', 'order__sum')
     readonly_fields = ('date_created',)
