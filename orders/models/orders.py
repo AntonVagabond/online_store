@@ -19,6 +19,14 @@ class Order(BaseModel):
     )
     date = models.DateField(verbose_name='Дата заказа')
 
+    cart = models.ManyToManyField(
+        to='products.Product',
+        related_name='orders_products',
+        verbose_name='Корзина',
+        blank=True,
+        through='OrderProduct'
+    )
+
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
