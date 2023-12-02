@@ -18,7 +18,7 @@ class Provider(BaseModel):
         blank=True,
     )
     phone_number = PhoneNumberField(
-        max_length='Телефон поставщика',
+        verbose_name='Телефон поставщика',
         unique=True,
         null=True,
         blank=True,
