@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from users.models.users import User
@@ -8,10 +9,18 @@ from users.models.profile import Profile
 
 
 # region ----------------------------- INLINE ---------------------------------------
-class ProfileAdmin(admin.StackedInline):
+class ProfileAdmin(admin.TabularInline):
     """Встраиваемая модель профиля для UserAdmin"""
+
     model = Profile
-    fields = ('photo',)
+    fields = ('photo', 'photo_show')
+    readonly_fields = ('photo_show',)
+
+    @admin.display(description='Логотип', ordering='photo')
+    def photo_show(self, obj):
+        if obj.photo:
+            return mark_safe(f"<img src='{obj.photo.url}' width='60' />")
+        return 'Нет фотографии'
 
 
 # endregion -------------------------------------------------------------------------
