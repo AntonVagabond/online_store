@@ -207,8 +207,8 @@ SIMPLE_JWT = {
 # endregion -------------------------------------------------------------------------
 
 # region ------------- CUSTOM USER, CUSTOM BACKEND -----------------------
-AUTH_USER_MODEL = 'customers.Customer'
-AUTHENTICATION_BACKENDS = ('customers.backends.AuthBackend',)
+AUTH_USER_MODEL = 'users.User'
+AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
 
