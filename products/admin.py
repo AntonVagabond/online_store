@@ -1,27 +1,26 @@
 from django.contrib import admin
-from django.contrib.admin import TabularInline, StackedInline
 from django.utils.safestring import mark_safe
 
-from products.models import products, categories, providers
 from common.admin import ModelaAdminWithImage
+from products.models import products, categories, providers
 
 
 # region ----------------------------- INLINE ---------------------------------------
-class ProductFeatureInline(StackedInline):
+class ProductFeatureInline(admin.StackedInline):
     """Встраиваемая модель хар-ик для ProductAdmin"""
 
     model = products.ProductFeature
     fields = ('size', 'colour', 'patterns')
 
 
-class ProductDescriptionInline(StackedInline):
+class ProductDescriptionInline(admin.StackedInline):
     """Встраиваемая модель описания для ProductAdmin"""
 
     model = products.ProductDescription
     fields = ('description',)
 
 
-class SubCategoryInline(TabularInline):
+class SubCategoryInline(admin.TabularInline):
     """Встраиваемая модель описания для CategoryAdmin"""
 
     model = categories.Category
