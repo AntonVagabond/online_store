@@ -17,7 +17,11 @@ class Order(BaseModel):
         null=True,
         blank=True,
     )
-    date = models.DateField(verbose_name='Дата заказа')
+    date = models.DateField(
+        verbose_name='Дата заказа',
+        null=True,
+        blank=True,
+    )
 
     cart = models.ManyToManyField(
         to='products.Product',
@@ -55,7 +59,8 @@ class OrderProduct(BaseModel):
     )
     date_created = models.DateTimeField(
         verbose_name='Date created',
-        default=timezone.now
+        null=True,
+        blank=True,
     )
 
     class Meta:
