@@ -72,6 +72,10 @@ class ProductDescription(BaseModel):
     )
     description = models.TextField('Описание товара')
 
+    class Meta:
+        verbose_name = 'Описание товара'
+        verbose_name_plural = 'Описания товаров'
+
 
 class ProductFeature(BaseModel):
     """Модель характеристик товара"""
@@ -100,7 +104,9 @@ class ProductFeature(BaseModel):
         blank=True,
     )
 
-
+    class Meta:
+        verbose_name = 'Характеристика товара'
+        verbose_name_plural = 'Характеристики товаров'
 
 
 
