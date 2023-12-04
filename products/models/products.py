@@ -38,17 +38,17 @@ class Product(BaseModel):
         null=True,
         blank=True,
     )
-    image = models.ForeignKey(
-        to='products.ProductImage',
-        on_delete=models.RESTRICT,
-        related_name='products',
-        verbose_name='Изображения продукта'
+    image = models.ImageField(
+        verbose_name='Изображение товара',
+        upload_to='products/%Y/%m/%d',
+        null=True,
+        blank=True,
     )
     category = models.ForeignKey(
         to='products.Category',
         on_delete=models.CASCADE,
         related_name='products',
-        verbose_name='Категория товара'
+        verbose_name='Категория товара',
     )
 
     class Meta:
@@ -58,17 +58,6 @@ class Product(BaseModel):
 
     def __str__(self) -> models.CharField:
         return self.name
-
-
-class ProductImage(BaseModel):
-    """Модель изображения товара"""
-
-    image = models.ImageField(
-        verbose_name='Изображение товара',
-        upload_to='products/%Y/%m/%d',
-        null=True,
-        blank=True,
-    )
 
 
 class ProductDescription(BaseModel):
