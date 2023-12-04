@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from customers.models.customers import Customer
-from customers.models.profile import Profile
+from users.models.users import User
+from users.models.profile import Profile
 
 
 # region ----------------------------- INLINE ---------------------------------------
@@ -18,7 +18,7 @@ class ProfileAdmin(admin.StackedInline):
 
 
 # region -------------------------- MODEL ADMIN -------------------------------------
-@admin.register(Customer)
+@admin.register(User)
 class UserAdmin(UserAdmin):
     """Модель админа пользователя"""
 
