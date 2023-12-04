@@ -9,11 +9,7 @@ class OrderProductInline(TabularInline):
     """Встраиваемая модель корзины для OrderAdmin"""
 
     model = orders.OrderProduct
-    fields = (
-        'order',
-        'product',
-        'date_created',
-    )
+    fields = ('order', 'product', 'date_created')
 
     readonly_fields = ('date_created',)
 
@@ -25,11 +21,8 @@ class OrderProductInline(TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     """Модель админа заказа"""
 
-    list_display = ('id',)
-    readonly_fields = (
-        'quantity',
-        'sum',
-        'date'
-    )
+    list_display = ('id', 'quantity', 'sum', 'date')
+    fields = ('quantity', 'sum', 'date')
+    readonly_fields = ('quantity', 'sum', 'date')
     inlines = (OrderProductInline,)
 # endregion -------------------------------------------------------------------------
