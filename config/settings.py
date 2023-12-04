@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     # apps
     'api',
     'common',
-    'customers',
+    'users',
     'orders',
     'products',
     # after apps
@@ -206,7 +206,7 @@ SIMPLE_JWT = {
 }
 # endregion -------------------------------------------------------------------------
 
-# region ------------- CUSTOM USER (CUSTOMER), CUSTOM BACKEND -----------------------
+# region ------------- CUSTOM USER, CUSTOM BACKEND -----------------------
 AUTH_USER_MODEL = 'customers.Customer'
 AUTHENTICATION_BACKENDS = ('customers.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
