@@ -26,7 +26,7 @@ class Profile(BaseModel):
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.user} ({self.pk})'
 
     def is_online(self) -> bool:
