@@ -64,7 +64,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('old_password', 'new_password')
 
-    def validate(self, attrs: dict[str]) -> ParseError | dict[str]:
+    def validate(self, attrs: dict[str: str]) -> ParseError | dict[str: str]:
         """Проверка на корректность пароля"""
 
         user = self.instance
