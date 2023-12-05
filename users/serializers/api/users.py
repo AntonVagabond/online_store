@@ -30,7 +30,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'password')
 
     @staticmethod
-    def validate_email(value: str) -> str:
+    def validate_email(value: str) -> ParseError | str:
         """Проверка на уникальность почты"""
 
         email = value.lower()
@@ -62,7 +62,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('old_password', 'new_password')
 
-    def validate(self, attrs: dict[str]) -> dict[str]:
+    def validate(self, attrs: dict[str]) -> ParseError | dict[str]:
         """Проверка на корректность пароля"""
 
         user = self.instance
@@ -133,7 +133,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
 
-    def update(self, instance: User, validated_data: dict[str]):
+    def update(self, instance: User, validated_data: dict[str]) -> User:
         """Обновление в модели пользователя"""
 
         # Проверка на наличия профиля
