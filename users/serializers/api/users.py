@@ -10,6 +10,8 @@ from users.serializers.nested.profile import (
     ProfileUpdateSerializer,
 )
 
+from typing import Type
+
 User = get_user_model()
 
 
@@ -45,7 +47,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validate_password(password=password)
         return password
 
-    def create(self, validated_data: dict) -> User:
+    def create(self, validated_data: dict) -> Type[User]:
         """Создание пользователя"""
 
         user = User.objects.create_user(**validated_data)
@@ -78,7 +80,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         validate_password(password=password)
         return password
 
-    def update(self, instance: User, validated_data: dict[str]) -> User:
+    def update(self, instance: Type[User], validated_data: dict[str]) -> Type[User]:
         """Обновление пароля в модели User"""
 
         password = validated_data.pop('new_password')
@@ -124,7 +126,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def _update_profile(profile: Profile, data) -> None:
+    def _update_profile(profile: Type[Profile], data: dict[str]) -> None:
         """Обновление профиля"""
 
         profile_serializer = ProfileUpdateSerializer(
@@ -133,7 +135,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
 
-    def update(self, instance: User, validated_data: dict[str]) -> User:
+    def update(self, instance: Type[User], validated_data: dict[str]) -> Type[User]:
         """Обновление в модели пользователя"""
 
         # Проверка на наличия профиля
