@@ -2,7 +2,7 @@ from typing import Type
 
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from requests import Request
+from rest_framework.request import Request
 
 User = get_user_model()
 
