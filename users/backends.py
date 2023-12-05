@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from django.http import HttpRequest
 
 User = get_user_model()
 
@@ -19,7 +20,11 @@ class AuthBackend(object):
             return None
 
     @staticmethod
-    def authenticate(request, username, password):
+    def authenticate(
+            request: HttpRequest,
+            username: str,
+            password: str
+    ) -> User | None:
         """Проверка на один из выборов аутентификации и пароля"""
         try:
             user = User.objects.get(
