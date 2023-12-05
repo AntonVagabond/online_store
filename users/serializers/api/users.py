@@ -84,6 +84,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         """Обновление пароля в модели User"""
 
         password = validated_data.pop('new_password')
+        # Хэшируем пароль
         instance.set_password(raw_password=password)
         instance.save()
         return instance
