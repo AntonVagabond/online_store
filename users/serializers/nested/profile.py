@@ -3,7 +3,7 @@ from users.models.profile import Profile
 
 
 class ProfileShortSerializer(serializers.ModelSerializer):
-    """Преобразователь профиля"""
+    """Вложенный преобразователь профиля"""
 
     class Meta:
         model = Profile
@@ -11,7 +11,7 @@ class ProfileShortSerializer(serializers.ModelSerializer):
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
-    """Преобразователь обновления профиля"""
+    """Вложенный преобразователь обновления профиля"""
 
     class Meta:
         model = Profile
