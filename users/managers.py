@@ -1,21 +1,26 @@
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
 
+from users.models.users import User
+
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
     @staticmethod
-    def _check_email_or_phone_number(email, phone_number):
+    def _check_email_or_phone_number(email: str, phone_number: str) -> str | None:
         """Проверка есть ли почта либо номер телефона"""
 
         return email or phone_number
 
     def _create_user(
             self,
-            phone_number=None, email=None, password=None,
-            username=None, **extra_fields
-    ):
+            phone_number: str | None = None,
+            email: str | None = None,
+            password: str | None = None,
+            username: str | None = None,
+            **extra_fields: (str, bool)
+    ) -> User | ParseError:
         """Проверка данных пользователя, суперпользователя"""
 
         # Проверка на то что мы заполнили данные.
@@ -37,9 +42,13 @@ class CustomUserManager(BaseUserManager):
         return user
 
     def create_user(
-            self, phone_number=None, email=None, password=None,
-            username=None, **extra_fields
-    ):
+            self,
+            phone_number: str | None = None,
+            email: str | None = None,
+            password: str | None = None,
+            username: str | None = None,
+            **extra_fields: (str, bool)
+    ) -> User | ParseError:
         """Создание пользователя"""
 
         extra_fields.setdefault('is_superuser', False)
@@ -51,9 +60,13 @@ class CustomUserManager(BaseUserManager):
         )
 
     def create_superuser(
-            self, email=None, phone_number=None, password=None,
-            username=None, **extra_fields
-    ):
+            self,
+            email: str | None = None,
+            phone_number: str | None = None,
+            password: str | None = None,
+            username: str | None = None,
+            **extra_fields: (str, bool)
+    ) -> ValueError | ParseError | User:
         """Создание супер пользователя"""
 
         extra_fields.setdefault('is_superuser', True)
