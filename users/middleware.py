@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.deprecation import MiddlewareMixin
 from django.core.cache import cache
+from rest_framework.request import Request
 
 User = get_user_model()
 
@@ -12,7 +13,7 @@ class ActiveUserMiddleware(MiddlewareMixin):
     """Класс для реализации функционала статуса покупателя: В сети/Не в сети"""
 
     @staticmethod
-    def process_request(request) -> None:
+    def process_request(request: Request) -> None:
         """
         Проверка на авторизацию пользователя, и имеет
         ли его сессия уникальный идентификатор session_key
