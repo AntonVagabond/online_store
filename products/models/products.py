@@ -107,10 +107,3 @@ class ProductFeature(BaseModel):
     class Meta:
         verbose_name = 'Характеристика товара'
         verbose_name_plural = 'Характеристики товаров'
-
-
-
-
-
-
-
