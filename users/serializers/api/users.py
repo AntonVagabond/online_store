@@ -15,6 +15,7 @@ from typing import Type
 User = get_user_model()
 
 
+# region ------------------ REGISTRATION AND PASSWORD -------------------------------
 class RegistrationSerializer(serializers.ModelSerializer):
     """Преобразователь регистрации пользователей"""
 
@@ -89,8 +90,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.set_password(raw_password=password)
         instance.save()
         return instance
+# endregion -------------------------------------------------------------------------
 
 
+# region ---------------------------- USER ------------------------------------------
 class MeSerializer(serializers.ModelSerializer):
     """Преобразователь пользователя"""
 
@@ -166,3 +169,5 @@ class UserSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'full_name')
+
+# endregion -------------------------------------------------------------------------

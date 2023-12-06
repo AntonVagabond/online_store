@@ -16,6 +16,7 @@ from users.serializers.api import users as user_s
 User = get_user_model()
 
 
+# region ------------------ REGISTRATION AND PASSWORD -------------------------------
 @extend_schema_view(
     post=extend_schema(
         summary='Регистрация пользователя',
@@ -56,6 +57,9 @@ class ChangePasswordView(APIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
 
+# endregion -------------------------------------------------------------------------
+
+# region ---------------------------- USER ------------------------------------------
 @extend_schema_view(
     get=extend_schema(
         summary='Профиль пользователя',
@@ -80,7 +84,7 @@ class MeView(RetrieveUpdateAPIView):
 
     def get_serializer_class(self) -> Type[
         user_s.MeUpdateSerializer | user_s.MeSerializer
-    ]:
+        ]:
         """Получение преобразователя на основе метода пользователя"""
 
         if self.request.method in ('PUT', 'PATCH'):
@@ -106,5 +110,4 @@ class UserListSearchView(ListViewSet):
     serializer_class = user_s.UserSearchSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('first_name', 'last_name', 'email', 'username')
-
-
+# endregion -------------------------------------------------------------------------
