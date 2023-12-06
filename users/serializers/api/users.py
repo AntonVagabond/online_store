@@ -15,9 +15,6 @@ from typing import Type
 User = get_user_model()
 
 
-# TODO: Доделать типизацию у атрибутов у dict-ов
-
-
 class RegistrationSerializer(serializers.ModelSerializer):
     """Преобразователь регистрации пользователей"""
 
@@ -47,7 +44,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validate_password(password=password)
         return password
 
-    def create(self, validated_data: dict) -> Type[User]:
+    def create(self, validated_data: dict[str: str]) -> Type[User]:
         """Создание пользователя"""
 
         user = User.objects.create_user(**validated_data)
@@ -80,7 +77,11 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         validate_password(password=password)
         return password
 
-    def update(self, instance: Type[User], validated_data: dict[str]) -> Type[User]:
+    def update(
+            self,
+            instance: Type[User],
+            validated_data: dict[str: str],
+    ) -> Type[User]:
         """Обновление пароля в модели User"""
 
         password = validated_data.pop('new_password')
@@ -127,7 +128,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def _update_profile(profile: Type[Profile], data: dict[str]) -> None:
+    def _update_profile(profile: Type[Profile], data: dict[str: str]) -> None:
         """Обновление профиля"""
 
         profile_serializer = ProfileUpdateSerializer(
@@ -136,7 +137,11 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         profile_serializer.is_valid(raise_exception=True)
         profile_serializer.save()
 
-    def update(self, instance: Type[User], validated_data: dict[str]) -> Type[User]:
+    def update(
+            self,
+            instance: Type[User],
+            validated_data: dict[str: str],
+    ) -> Type[User]:
         """Обновление в модели пользователя"""
 
         # Проверка на наличия профиля
