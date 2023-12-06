@@ -3,17 +3,9 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 
+from common.models.base import BaseModel
+
 User = get_user_model()
-
-
-class BaseModel(models.Model):
-    """
-    Абстрактная базовая модель. Нужна для инициализации objects в других моделях.
-    """
-    objects = models.Manager()
-
-    class Meta:
-        abstract = True
 
 
 class DateMixin(BaseModel):

@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
 
-from common.models.mixins import BaseModel
+from common.models.base import BaseModel
 
 
 class Profile(BaseModel):

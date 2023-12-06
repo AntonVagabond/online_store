@@ -1,6 +1,6 @@
 from django.db import models
 
-from common.models.mixins import BaseModel
+from common.models.base import BaseModel
 
 
 class Category(BaseModel):

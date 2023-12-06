@@ -1,7 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from common.models.mixins import BaseModel
+from common.models.base import BaseModel
 
 
 class Provider(BaseModel):

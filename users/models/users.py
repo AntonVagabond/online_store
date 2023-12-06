@@ -59,6 +59,6 @@ class User(AbstractUser):
 
 
 @receiver(post_save, sender=User)
-def post_save_user(instance: Type[User]) -> None:
+def post_save_user(instance) -> None:
     if not hasattr(instance, 'profile'):
         Profile.objects.create(user=instance)
