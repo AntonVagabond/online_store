@@ -72,6 +72,9 @@ class ProviderAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'name', 'logo_show', 'email', 'phone_number')
 
+    fields = ('name', 'logo', 'logo_show', 'email', 'phone_number')
+    readonly_fields = ('logo_show',)
+
     @admin.display(description='Логотип', ordering='logo')
     def logo_show(self, obj):
         if obj.logo:
