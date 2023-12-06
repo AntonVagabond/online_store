@@ -34,3 +34,6 @@ class Provider(BaseModel):
         verbose_name = 'Поставщик'
         verbose_name_plural = 'Поставщики'
         ordering = ('-name',)
+
+    def __str__(self):
+        return f'Характеристика {self.name} ({self.pk})'

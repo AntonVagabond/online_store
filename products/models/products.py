@@ -76,6 +76,9 @@ class ProductDescription(BaseModel):
         verbose_name = 'Описание товара'
         verbose_name_plural = 'Описания товаров'
 
+    def __str__(self):
+        return f'Описание {self.product} ({self.pk})'
+
 
 class ProductFeature(BaseModel):
     """Модель характеристик товара"""
@@ -107,3 +110,6 @@ class ProductFeature(BaseModel):
     class Meta:
         verbose_name = 'Характеристика товара'
         verbose_name_plural = 'Характеристики товаров'
+
+    def __str__(self):
+        return f'Характеристика {self.product} ({self.pk})'
