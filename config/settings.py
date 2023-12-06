@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
+    'crum.CurrentRequestUserMiddleware'
     # 'customers.middleware.ActiveUserMiddleware',
 ]
 
