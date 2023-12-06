@@ -116,7 +116,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
     profile = ProfileUpdateSerializer()
 
     class Meta:
-        field = User
+        model = User
         fields = (
             'id',
             'first_name',
