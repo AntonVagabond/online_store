@@ -1,8 +1,17 @@
+from typing import Type
+
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
 
-from users.models.users import User
 
+# region -------------------------- ТИПИЗАЦИЯ ---------------------------------------
+# Если вызвать сюда настоящего User, а не создать макет, то выскочит ошибка
+# => django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'users.User' that has not been installed
+class User:
+    pass
+
+
+# endregion -------------------------------------------------------------------------
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -20,7 +29,7 @@ class CustomUserManager(BaseUserManager):
             password: str | None = None,
             username: str | None = None,
             **extra_fields: (str, bool)
-    ) -> User | ParseError:
+    ) ->  ParseError | Type[User]:
         """Проверка данных пользователя, суперпользователя"""
 
         # Проверка на то что мы заполнили данные.
@@ -48,7 +57,7 @@ class CustomUserManager(BaseUserManager):
             password: str | None = None,
             username: str | None = None,
             **extra_fields: (str, bool)
-    ) -> User | ParseError:
+    ) -> ParseError | Type[User]:
         """Создание пользователя"""
 
         extra_fields.setdefault('is_superuser', False)
@@ -66,7 +75,7 @@ class CustomUserManager(BaseUserManager):
             password: str | None = None,
             username: str | None = None,
             **extra_fields: (str, bool)
-    ) -> ValueError | ParseError | User:
+    ) -> ValueError | ParseError | Type[User]:
         """Создание супер пользователя"""
 
         extra_fields.setdefault('is_superuser', True)
