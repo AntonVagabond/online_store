@@ -40,7 +40,8 @@ class CustomUserManager(BaseUserManager):
             email = self.normalize_email(email)
 
         if not username:
-            username = self._check_email_or_phone_number(email, phone_number)
+            value = self._check_email_or_phone_number(email, phone_number)
+            username = value.split('@')[0] if '@' in value else value
 
         user = self.model(username=username, **extra_fields)
         if email:
