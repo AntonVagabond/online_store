@@ -28,8 +28,8 @@ class CustomUserManager(BaseUserManager):
             email: str | None = None,
             password: str | None = None,
             username: str | None = None,
-            **extra_fields: (str, bool)
-    ) ->  ParseError | Type[User]:
+            **extra_fields: str | bool
+    ) -> ParseError | Type[User]:
         """Проверка данных пользователя, суперпользователя"""
 
         # Проверка на то что мы заполнили данные.
@@ -43,8 +43,10 @@ class CustomUserManager(BaseUserManager):
             username = self._check_email_or_phone_number(email, phone_number)
 
         user = self.model(username=username, **extra_fields)
-        user_data = self._check_email_or_phone_number(email, phone_number)
-        user.user_data = user_data
+        if email:
+            user.email = email
+        if phone_number:
+            user.phone_number = phone_number
 
         user.set_password(password)
         user.save(using=self._db)
@@ -56,7 +58,7 @@ class CustomUserManager(BaseUserManager):
             email: str | None = None,
             password: str | None = None,
             username: str | None = None,
-            **extra_fields: (str, bool)
+            **extra_fields: str | bool
     ) -> ParseError | Type[User]:
         """Создание пользователя"""
 
@@ -74,7 +76,7 @@ class CustomUserManager(BaseUserManager):
             phone_number: str | None = None,
             password: str | None = None,
             username: str | None = None,
-            **extra_fields: (str, bool)
+            **extra_fields: str | bool
     ) -> ValueError | ParseError | Type[User]:
         """Создание супер пользователя"""
 
