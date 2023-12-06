@@ -2,6 +2,7 @@ from typing import Type
 
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework import permissions
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny
@@ -26,7 +27,7 @@ class RegistrationView(CreateAPIView):
     """Вид регистрации"""
 
     queryset = User.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = (AllowAny,)
     serializer_class = user_s.RegistrationSerializer
 
 
@@ -40,8 +41,7 @@ class RegistrationView(CreateAPIView):
 class ChangePasswordView(APIView):
     """Представление смены пароля"""
 
-    queryset = User.objects.all()
-    serializer_class = user_s.ChangePasswordSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     @staticmethod
     def post(request: Request) -> Response:
