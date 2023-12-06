@@ -13,7 +13,7 @@ class AuthBackend(object):
     supports_inactive_user = True
 
     @staticmethod
-    def get_user(user_id: int) -> int | None:
+    def get_user(user_id: int) -> Type[User] | None:
         """Получить пользователя по id"""
 
         try:
@@ -28,6 +28,7 @@ class AuthBackend(object):
             password: str,
     ) -> Type[User] | None:
         """Проверка на один из выборов аутентификации и пароля"""
+
         try:
             user = User.objects.get(
                 Q(username=username) |
