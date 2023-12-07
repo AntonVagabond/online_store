@@ -35,7 +35,7 @@ class RegistrationView(CreateAPIView):
     post=extend_schema(
         request=user_s.ChangePasswordSerializer,
         summary='Смена пароля',
-        tags=['Пользователь'],
+        tags=['Вход и Регистрация'],
     )
 )
 class ChangePasswordView(APIView):
