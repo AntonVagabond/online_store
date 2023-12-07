@@ -20,7 +20,7 @@ User = get_user_model()
 @extend_schema_view(
     post=extend_schema(
         summary='Регистрация пользователя',
-        tags=['Аутентификация & Авторизация'],
+        tags=['Вход и Регистрация'],
     )
 )
 class RegistrationView(CreateAPIView):
@@ -35,7 +35,7 @@ class RegistrationView(CreateAPIView):
     post=extend_schema(
         request=user_s.ChangePasswordSerializer,
         summary='Смена пароля',
-        tags=['Аутентификация & Авторизация'],
+        tags=['Пользователь'],
     )
 )
 class ChangePasswordView(APIView):
@@ -63,15 +63,15 @@ class ChangePasswordView(APIView):
 @extend_schema_view(
     get=extend_schema(
         summary='Профиль пользователя',
-        tags=['Пользователи'],
+        tags=['Пользователь'],
     ),
     put=extend_schema(
         summary='Изменить профиль пользователя',
-        tags=['Пользователи'],
+        tags=['Пользователь'],
     ),
     patch=extend_schema(
         summary='Изменить частично профиль пользователя',
-        tags=['Пользователи'],
+        tags=['Пользователь'],
     ),
 )
 class MeView(RetrieveUpdateAPIView):
@@ -99,7 +99,7 @@ class MeView(RetrieveUpdateAPIView):
 
 @extend_schema_view(
     list=extend_schema(
-        summary='Поиск списка пользователей',
+        summary='Поиск пользователей',
         tags=['Поиск'],
     )
 )
