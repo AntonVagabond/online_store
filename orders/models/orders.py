@@ -68,5 +68,5 @@ class OrderProduct(BaseModel):
         verbose_name_plural = 'Заказы товаров'
         ordering = ('-date_created',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Корзина {self.order} #{self.pk}'
