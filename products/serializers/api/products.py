@@ -13,9 +13,4 @@ class ProductSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = (
-            'id',
-            'name',
-            'product_images',
-            'category',
-        )
+        fields = ('id', 'name', 'product_images', 'category')
