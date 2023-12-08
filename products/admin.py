@@ -10,7 +10,7 @@ class ProductFeatureInline(admin.StackedInline):
     """Встраиваемая модель хар-ик для ProductAdmin"""
 
     model = products.ProductFeature
-    fields = ('size', 'colour', 'patterns')
+    fields = ('size', 'color', 'patterns')
 
 
 class ProductDescriptionInline(admin.StackedInline):
@@ -27,33 +27,41 @@ class SubCategoryInline(admin.TabularInline):
     fields = ('title', 'image', 'description')
 
 
+class ProductImagesInline(admin.TabularInline):
+    model = products.ProductImages
+    fields = ('image', 'image_show')
+    readonly_fields = ('image_show',)
+
+    @admin.display(description='Изображение', ordering='image')
+    def image_show(self, obj):
+        if obj.image:
+            return mark_safe(f"<img src='{obj.image.url}' width='60' />")
+        return 'Нет изображения'
+
+
 # endregion -------------------------------------------------------------------------
 
 # region -------------------------- MODEL ADMIN -------------------------------------
 @admin.register(products.Product)
-class ProductAdmin(ModelaAdminWithImage):
+class ProductAdmin(admin.ModelAdmin):
     """Модель админа товара"""
 
     list_display = (
         'id',
         'name',
-        'image_show',
-        'category',
-        'quantity',
         'price',
         'is_available',
     )
+    list_display_links = ('id', 'name',)
     fields = (
         'name',
-        'image',
-        'image_show',
-        'category',
         'quantity',
         'price',
         'is_available',
+        'category',
+        'provider',
     )
-    readonly_fields = ('image_show',)
-    inlines = (ProductFeatureInline, ProductDescriptionInline)
+    inlines = (ProductImagesInline, ProductFeatureInline, ProductDescriptionInline)
 
 
 @admin.register(categories.Category)
@@ -61,8 +69,8 @@ class CategoryAdmin(ModelaAdminWithImage):
     """Модель админа категории"""
 
     list_display = ('id', 'title', 'image_show', 'description', 'parent_category')
-    fields = ('title', 'image', 'image_show', 'description', 'parent_category')
-    readonly_fields = ('image_show', 'parent_category',)
+    fields = ('title', 'image', 'description', 'parent_category')
+    readonly_fields = ('image_show', 'parent_category')
     inlines = (SubCategoryInline,)
 
 

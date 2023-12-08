@@ -28,17 +28,17 @@ class Product(BaseModel):
         null=True,
         blank=True,
     )
-    image = models.ImageField(
-        verbose_name='Изображение товара',
-        upload_to='products/%Y/%m/%d',
-        null=True,
-        blank=True,
-    )
     category = models.ForeignKey(
         to='products.Category',
+        on_delete=models.RESTRICT,
+        related_name='products',
+        verbose_name='Категории',
+    )
+    provider = models.ForeignKey(
+        to='products.Provider',
         on_delete=models.CASCADE,
         related_name='products',
-        verbose_name='Категория товара',
+        verbose_name='Поставщики',
     )
 
     class Meta:
@@ -103,3 +103,28 @@ class ProductFeature(BaseModel):
 
     def __str__(self) -> str:
         return f'Характеристика {self.product} ({self.pk})'
+
+
+class ProductImages(BaseModel):
+    """Модель для изображений товара"""
+    product = models.ForeignKey(
+        to='Product',
+        on_delete=models.CASCADE,
+        related_name='products_images',
+        verbose_name='Товары',
+        null=True,
+        blank=True,
+    )
+    image = models.ImageField(
+        verbose_name='Изображение товара',
+        upload_to='products/%Y/%m/%d',
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = 'Изображении товара'
+        verbose_name_plural = 'Изображении товаров'
+
+    def __str__(self) -> str:
+        return f'Фотография №{self.pk}'
