@@ -17,7 +17,7 @@ class Profile(BaseModel):
     )
     photo = models.ImageField(
         verbose_name='Фото',
-        upload_to='customers/%Y/%m/%d',
+        upload_to='users/%Y/%m/%d',
         null=True,
         blank=True,
     )
