@@ -5,7 +5,7 @@ from products.serializers.nested.categories import CategoryNestedSerializer
 from products.serializers.nested.products import ProductImagesNestedSerializer
 
 
-class ProductSearchListSerializer(serializers.ModelSerializer):
+class ProductSearchSerializer(serializers.ModelSerializer):
     """Преобразователь поиска товаров"""
 
     product_images = ProductImagesNestedSerializer()
