@@ -66,7 +66,7 @@ class ProductDescription(BaseModel):
     product = models.OneToOneField(
         to='products.Product',
         on_delete=models.CASCADE,
-        related_name='products_description',
+        related_name='product_description',
         verbose_name='Описание товара',
         primary_key=True,
     )
@@ -86,7 +86,7 @@ class ProductFeature(BaseModel):
     product = models.OneToOneField(
         to='products.Product',
         on_delete=models.CASCADE,
-        related_name='products_feature',
+        related_name='product_feature',
         verbose_name='Характеристика товара',
         primary_key=True,
     )
