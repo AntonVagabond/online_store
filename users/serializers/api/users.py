@@ -163,7 +163,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UserSearchSerializer(serializers.ModelSerializer):
+class UserListSearchSerializer(serializers.ModelSerializer):
     """Преобразователь поиска пользователей"""
 
     class Meta:
