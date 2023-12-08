@@ -52,7 +52,7 @@ class ProductAdmin(ModelaAdminWithImage):
         'price',
         'is_available',
     )
-    readonly_fields = ('image_show', 'created_at', 'updated_at')
+    readonly_fields = ('image_show',)
     inlines = (ProductFeatureInline, ProductDescriptionInline)
 
 

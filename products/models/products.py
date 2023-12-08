@@ -28,16 +28,6 @@ class Product(BaseModel):
         null=True,
         blank=True,
     )
-    created_at = models.DateTimeField(
-        verbose_name='Время создания',
-        null=True,
-        blank=True,
-    )
-    updated_at = models.DateTimeField(
-        verbose_name='Время обновления',
-        null=True,
-        blank=True,
-    )
     image = models.ImageField(
         verbose_name='Изображение товара',
         upload_to='products/%Y/%m/%d',
@@ -54,7 +44,7 @@ class Product(BaseModel):
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'
-        ordering = ('-created_at',)
+        ordering = ('name',)
 
     def __str__(self) -> models.CharField:
         return self.name
