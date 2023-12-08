@@ -36,4 +36,4 @@ class Provider(BaseModel):
         ordering = ('-name',)
 
     def __str__(self) -> str:
-        return f'Характеристика {self.name} ({self.pk})'
+        return f'{self.name} ({self.pk})'
