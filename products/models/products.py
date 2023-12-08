@@ -85,7 +85,7 @@ class ProductFeature(BaseModel):
         null=True,
         blank=True,
     )
-    colour = models.CharField(
+    color = models.CharField(
         'Цвет товара',
         max_length=30,
         null=True,
