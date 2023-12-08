@@ -21,13 +21,15 @@ class ProductDescriptionInline(admin.StackedInline):
 
 
 class SubCategoryInline(admin.TabularInline):
-    """Встраиваемая модель описания для CategoryAdmin"""
+    """Встраиваемая модель подкатегорий для CategoryAdmin"""
 
     model = categories.Category
     fields = ('title', 'image', 'description')
 
 
 class ProductImagesInline(admin.TabularInline):
+    """Встраиваемая модель изображений товара для ProductAdmin"""
+
     model = products.ProductImages
     fields = ('image', 'image_show')
     readonly_fields = ('image_show',)
