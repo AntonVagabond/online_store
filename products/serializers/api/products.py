@@ -40,6 +40,7 @@ class ProductRetrieveSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id',
+            'name',
             'is_available',
             'price',
             'quantity',
@@ -62,6 +63,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id',
+            'name',
             'is_available',
             'price',
             'quantity',
@@ -82,6 +84,7 @@ class ProductUpdateSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             'id',
+            'name',
             'is_available',
             'price',
             'quantity',
