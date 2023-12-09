@@ -9,18 +9,16 @@ from products.serializers.nested.providers import ProviderNestedSerializer
 class ProductSearchSerializer(serializers.ModelSerializer):
     """Преобразователь поиска товаров"""
 
-    product_images = products.ProductImagesNestedSerializer()
-    category = CategoryNestedSerializer()
-
     class Meta:
         model = Product
-        fields = ('id', 'name', 'category', 'product_images')
+        fields = ('id', 'name')
 
 
 class ProductListSerializer(serializers.ModelSerializer):
     """Преобразователь списка товаров"""
 
-    product_images = products.ProductImagesNestedSerializer()
+    product_images = products.ProductImagesNestedSerializer(many=True,
+                                                            read_only=True)
 
     class Meta:
         model = Product
