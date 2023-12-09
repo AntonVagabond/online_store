@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.request import Request
@@ -10,6 +11,7 @@ from products.models.products import Product
 from products.serializers.api import products as products_s
 
 
+# TODO: добавить валидацию для клиента который создает, обновляет, удаляет записи.
 @extend_schema_view(
     list=extend_schema(
         summary='Посмотреть список товаров',
@@ -21,10 +23,6 @@ from products.serializers.api import products as products_s
     ),
     create=extend_schema(
         summary='Добавить товар',
-        tags=['Товар'],
-    ),
-    update=extend_schema(
-        summary='Изменить товар',
         tags=['Товар'],
     ),
     partial_update=extend_schema(
@@ -44,7 +42,7 @@ from products.serializers.api import products as products_s
 class ProductView(CRUDListViewSet):
     """Представление товара"""
 
-    # permission_classes = [???]
+    permission_classes = (permissions.AllowAny,)
 
     queryset = Product.objects.all()
     serializer_class = products_s.ProductListSerializer
@@ -53,13 +51,12 @@ class ProductView(CRUDListViewSet):
         'list': products_s.ProductListSerializer,
         'retrieve': products_s.ProductRetrieveSerializer,
         'create': products_s.ProductCreateSerializer,
-        'update': products_s.ProductUpdateSerializer,
         'partial_update': products_s.ProductUpdateSerializer,
         'search': products_s.ProductSearchSerializer,
         # 'destroy': products.ProductDeleteSerializer ???
     }
 
-    http_method_names = ('get', 'post', 'patch')
+    http_method_names = ('get', 'post', 'patch', 'delete')
 
     filter_backends = (
         DjangoFilterBackend,
@@ -71,5 +68,5 @@ class ProductView(CRUDListViewSet):
     # filterset_class = ... ???
 
     @action(methods=['GET'], detail=False, url_path='search')
-    def search(self, request: Request, *args, **kwargs) -> Response:
+    def search(self, request: Request, *args: None, **kwargs: None) -> Response:
         return super().list(request, *args, **kwargs)
