@@ -42,18 +42,7 @@ from products.serializers.api import products as products_s
     # endregion ---------------------------------------------------------------------
 )
 class ProductView(CRUDListViewSet):
-    """
-    Представление товара.
-
-    Аттрибуты:
-        * `permission_classes` (tuple[AllowAny]): классы разрешений.
-        * `queryset` (Product): набор запросов.
-        * `serializer_class` (ProductListSerializer): класс преобразования.
-        * `multi_serializer_class` (dict[str: product_s]): классы преобразования.
-        * `http_method_names` (tuple[str]): допустимые http методы.
-        * `filter_backends` (tuple)): классы для фильтрации.
-        * `ordering` (tuple[str]): порядок.
-    """
+    """Представление товара."""
     # region ------------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ТОВАРА -----------------------
     permission_classes = (permissions.AllowAny,)
 
@@ -83,6 +72,4 @@ class ProductView(CRUDListViewSet):
 
     @action(methods=['GET'], detail=False, url_path='search')
     def search(self, request: Request, *args: None, **kwargs: None) -> Response:
-        """Поиск по списку."""
-
         return super().list(request, *args, **kwargs)

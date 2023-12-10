@@ -21,14 +21,7 @@ User = get_user_model()
     )
 )
 class RegistrationView(generics.CreateAPIView):
-    """
-    Вид регистрации.
-
-    Аттрибуты:
-        * `queryset` (User): пользователь.
-        * `permission_classes` (tuple[AllowAny]): классы разрешений.
-        * `serializer_class` (RegistrationSerializer): класс преобразования.
-    """
+    """Вид регистрации."""
     # region ------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ВИДА РЕГИСТРАЦИИ -------------------
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny,)
@@ -44,13 +37,7 @@ class RegistrationView(generics.CreateAPIView):
     )
 )
 class ChangePasswordView(APIView):
-    """
-    Представление смены пароля.
-
-    Аттрибуты:
-        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
-        * `serializer_class` (ChangePasswordSerializer): класс преобразования.
-    """
+    """Представление смены пароля."""
 
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = user_s.ChangePasswordSerializer
@@ -78,14 +65,7 @@ class ChangePasswordView(APIView):
     )
 )
 class MeView(generics.RetrieveAPIView):
-    """
-    Представление профиля пользователя.
-
-    Аттрибуты:
-        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
-        * `queryset` (User): пользователь.
-        * `serializer_class` (MeSerializer): класс преобразования.
-    """
+    """Представление профиля пользователя."""
     # region ---------- АТРИБУТЫ ПРЕДСТАВЛЕНИЕ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ -----------------
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
@@ -109,14 +89,7 @@ class MeView(generics.RetrieveAPIView):
     )
 )
 class MeUpdateView(generics.UpdateAPIView):
-    """
-    Представление для обновления профиля пользователя.
-
-    Аттрибуты:
-        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
-        * `queryset` (User): пользователь.
-        * `serializer_class` (MeUpdateSerializer): класс преобразования.
-    """
+    """Представление для обновления профиля пользователя."""
     # region -------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ --------
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
@@ -132,14 +105,7 @@ class MeUpdateView(generics.UpdateAPIView):
     )
 )
 class UserListSearchView(mixins.ListViewSet):
-    """Представление списка пользователей.
-
-    Аттрибуты:
-        * `queryset` (User): пользователь.
-        * `serializer_class` (UserListSearchSerializer): класс преобразования.
-        * `filter_backends` (tuple): классы для фильтрации.
-        * `search_fields` (tuple[str]): поле для поиска.
-    """
+    """Представление списка пользователей."""
     # region ----------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ СПИСКА ПОЛЬЗОВАТЕЛЕЙ ----------------
     queryset = User.objects.exclude(is_superuser=True)
     serializer_class = user_s.UserListSearchSerializer
