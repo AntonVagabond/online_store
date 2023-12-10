@@ -5,8 +5,17 @@ from common.models.base import BaseModel
 
 
 class Provider(BaseModel):
-    """Модель Поставщика"""
+    """
+    Модель Поставщика.
 
+    Аттрибуты:
+        * `name` (CharField): название поставщика.
+        * `email` (EmailField): почта поставщика.
+        * `phone_number` (PhoneNumberField): телефон поставщика.
+        * `logo` (ImageField): логотип поставщика.
+        * `products` (Product): товары.
+    """
+    # region ------------------------ АТРИБУТЫ ПОСТАВЩИКА ---------------------------
     name = models.CharField(
         'Название поставщика',
         max_length=30,
@@ -29,6 +38,7 @@ class Provider(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Поставщик'

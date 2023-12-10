@@ -10,13 +10,13 @@ User = get_user_model()
 # TODO: В чтобы работало, под конец проекта раскомментировать в settings.py MIDDLEWARE
 
 class ActiveUserMiddleware(MiddlewareMixin):
-    """Класс для реализации функционала статуса покупателя: В сети/Не в сети"""
+    """Класс для реализации функционала статуса покупателя: В сети/Не в сети."""
 
     @staticmethod
     def process_request(request: Request) -> None:
         """
         Проверка на авторизацию пользователя, и имеет
-        ли его сессия уникальный идентификатор session_key
+        ли его сессия уникальный идентификатор session_key.
         """
         if request.user.is_authenticated and request.session.session_key:
             cache_key = f'last-seen-{request.user.id}'

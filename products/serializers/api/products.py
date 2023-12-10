@@ -7,7 +7,7 @@ from products.serializers.nested.providers import ProviderNestedSerializer
 
 
 class ProductSearchSerializer(serializers.ModelSerializer):
-    """Преобразователь поиска товаров"""
+    """Преобразователь поиска товаров."""
 
     class Meta:
         model = Product
@@ -15,7 +15,12 @@ class ProductSearchSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    """Преобразователь списка товаров"""
+    """
+    Преобразователь списка товаров.
+
+    Аттрибуты:
+        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+    """
 
     product_images = products.ProductImagesNestedSerializer(many=True,
                                                             read_only=True)
@@ -26,13 +31,24 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class ProductRetrieveSerializer(serializers.ModelSerializer):
-    """Преобразователь извлечения товара"""
+    """
+    Преобразователь извлечения товара.
 
+    Аттрибуты:
+        * `category` (CategoryNestedSerializer): категория.
+        * `provider` (ProviderNestedSerializer): поставщик.
+        * `product_description` (ProductDescriptionNestedSerializer): описание товара.
+        * `product_feature` (ProductFeatureNestedSerializer): хар-ки товара.
+        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+    """
+
+    # region -------------------- АТРИБУТЫ ИЗВЛЕЧЕНИЯ ТОВАРА ------------------------
     category = CategoryNestedSerializer()
     provider = ProviderNestedSerializer()
     product_description = products.ProductDescriptionNestedSerializer()
     product_feature = products.ProductFeatureNestedSerializer()
     product_images = products.ProductImagesNestedSerializer()
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         model = Product
@@ -51,7 +67,14 @@ class ProductRetrieveSerializer(serializers.ModelSerializer):
 
 
 class ProductCreateSerializer(serializers.ModelSerializer):
-    """Преобразователь создания товара"""
+    """
+    Преобразователь создания товара.
+
+    Аттрибуты:
+        * `product_description` (ProductDescriptionNestedSerializer): описание товара.
+        * `product_feature` (ProductFeatureNestedSerializer): хар-ки товара.
+        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+    """
 
     product_description = products.ProductDescriptionNestedSerializer()
     product_feature = products.ProductFeatureNestedSerializer()
@@ -72,7 +95,14 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
 
 class ProductUpdateSerializer(serializers.ModelSerializer):
-    """Преобразователь обновления товара"""
+    """
+    Преобразователь обновления товара.
+
+    Аттрибуты:
+        * `product_description` (ProductDescriptionNestedSerializer): описание товара.
+        * `product_feature` (ProductFeatureNestedSerializer): хар-ки товара.
+        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+    """
 
     product_description = products.ProductDescriptionNestedSerializer()
     product_feature = products.ProductFeatureNestedSerializer()

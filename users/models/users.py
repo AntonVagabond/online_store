@@ -1,5 +1,3 @@
-from typing import Type
-
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save
@@ -11,8 +9,19 @@ from users.models.profile import Profile
 
 
 class User(AbstractUser):
-    """Модель Пользователя"""
+    """
+    Модель Пользователя.
 
+    Аттрибуты:
+        * `username` (CharField): имя пользователя.
+        * `email` (EmailField): почта.
+        * `phone_number` (PhoneNumberField): телефон.
+        * `order` (ForeignKey): заказ.
+        * `objects` (CustomUserManager): кастомный менеджер пользователей.
+        * `USERNAME_FIELD` (str): поле имя пользователя.
+        * `REQUIRED_FIELDS` (list[str]): обязательные поля.
+    """
+    # region -------------------- АТРИБУТЫ МОДЕЛИ ПОЛЬЗОВАТЕЛЯ ----------------------
     username = models.CharField(
         'Никнейм',
         max_length=32,
@@ -45,6 +54,7 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -59,6 +69,8 @@ class User(AbstractUser):
 
 
 @receiver(post_save, sender=User)
-def post_save_user(sender, instance: Type[User], created, **kwargs) -> None:
+def post_save_user(sender, instance: type[User], created, **kwargs) -> None:
+    """Сохранить сообщение пользователя."""
+
     if not hasattr(instance, 'profile'):
         Profile.objects.create(user=instance)

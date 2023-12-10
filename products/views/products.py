@@ -13,6 +13,7 @@ from products.serializers.api import products as products_s
 
 # TODO: добавить валидацию для клиента который создает, обновляет, удаляет записи.
 @extend_schema_view(
+    # region ----------------------- РАСШИРЕННАЯ СХЕМА ------------------------------
     list=extend_schema(
         summary='Посмотреть список товаров',
         tags=['Список'],
@@ -38,10 +39,22 @@ from products.serializers.api import products as products_s
         summary='Поиск по списку товаров',
         tags=['Поиск'],
     ),
+    # endregion ---------------------------------------------------------------------
 )
 class ProductView(CRUDListViewSet):
-    """Представление товара"""
+    """
+    Представление товара.
 
+    Аттрибуты:
+        * `permission_classes` (tuple[AllowAny]): классы разрешений.
+        * `queryset` (Product): набор запросов.
+        * `serializer_class` (ProductListSerializer): класс преобразования.
+        * `multi_serializer_class` (dict[str: product_s]): классы преобразования.
+        * `http_method_names` (tuple[str]): допустимые http методы.
+        * `filter_backends` (tuple)): классы для фильтрации.
+        * `ordering` (tuple[str]): порядок.
+    """
+    # region ------------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ТОВАРА -----------------------
     permission_classes = (permissions.AllowAny,)
 
     queryset = Product.objects.all()
@@ -66,7 +79,10 @@ class ProductView(CRUDListViewSet):
     ordering = ('is_available', 'id')
 
     # filterset_class = ... ???
+    # endregion ---------------------------------------------------------------------
 
     @action(methods=['GET'], detail=False, url_path='search')
     def search(self, request: Request, *args: None, **kwargs: None) -> Response:
+        """Поиск по списку."""
+
         return super().list(request, *args, **kwargs)

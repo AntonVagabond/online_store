@@ -4,7 +4,7 @@ from products.models.categories import Category
 
 
 class CategoryNestedSerializer(serializers.ModelSerializer):
-    """Вложенный преобразователь категории товара"""
+    """Вложенный преобразователь категории товара."""
 
     class Meta:
         model = Category

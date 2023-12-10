@@ -1,12 +1,21 @@
 from django.db import models
-from django.utils import timezone
 
 from common.models.base import BaseModel
 
 
 class Order(BaseModel):
-    """Модель заказа"""
+    """
+    Модель заказа.
 
+    Аттрибуты:
+        * `quantity` (PositiveSmallIntegerField): количество товара.
+        * `sum` (PositiveIntegerField): сумма заказа.
+        * `date` (DateField): дата заказа.
+        * `cart` (ManyToManyField): корзина.
+        * `products_info` (OrderProduct): модель корзины.
+    """
+
+    # region -------------------- АТРИБУТЫ ТОВАРА -----------------------------------
     quantity = models.PositiveSmallIntegerField(
         verbose_name='Количество товара',
         null=True,
@@ -30,6 +39,7 @@ class Order(BaseModel):
         blank=True,
         through='OrderProduct'
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Заказ'
@@ -41,8 +51,16 @@ class Order(BaseModel):
 
 
 class OrderProduct(BaseModel):
-    """Модель корзины"""
+    """
+    Модель корзины.
 
+    Аттрибуты:
+        * `order` (ForeignKey): заказ.
+        * `product` (ForeignKey): товар.
+        * `date_created` (DateTimeField): дата создания.
+    """
+
+    # region -------------------- АТРИБУТЫ КОРЗИНЫ ---------------------------------
     order = models.ForeignKey(
         to='orders.Order',
         on_delete=models.CASCADE,
@@ -58,10 +76,11 @@ class OrderProduct(BaseModel):
         verbose_name='Товар'
     )
     date_created = models.DateTimeField(
-        verbose_name='Date created',
+        verbose_name='Дата создания',
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Заказ товара'

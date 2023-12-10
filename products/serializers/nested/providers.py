@@ -4,7 +4,7 @@ from products.models.providers import Provider
 
 
 class ProviderNestedSerializer(serializers.ModelSerializer):
-    """Вложенный преобразователь поставщика товара"""
+    """Вложенный преобразователь поставщика товара."""
 
     class Meta:
         model = Provider

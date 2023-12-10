@@ -4,8 +4,17 @@ from common.models.base import BaseModel
 
 
 class Category(BaseModel):
-    """Модель Категории товара"""
+    """
+    Модель Категории товара.
 
+    Аттрибуты:
+        * `title` (CharField): название категории.
+        * `image` (ImageField): изображение категории.
+        * `description` (CharField): описание категории.
+        * `parent_category` (ForeignKey): подкатегория.
+        * `products` (Product): модель товара.
+    """
+    # region ---------------------- АТРИБУТЫ КАТЕГОРИИ ------------------------------
     title = models.CharField(
         'Название категории',
         max_length=255,
@@ -31,6 +40,7 @@ class Category(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Категория товаров'

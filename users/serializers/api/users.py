@@ -10,14 +10,20 @@ from users.serializers.nested.profile import (
     ProfileUpdateSerializer,
 )
 
-from typing import Type
+from typing import Union
 
 User = get_user_model()
 
 
 # region ------------------ REGISTRATION AND PASSWORD -------------------------------
 class RegistrationSerializer(serializers.ModelSerializer):
-    """Преобразователь регистрации пользователей"""
+    """
+    Преобразователь регистрации пользователей.
+
+    Аттрибуты:
+        * `email` (EmailField): почта.
+        * `password` (CharField): пароль.
+    """
 
     email = serializers.EmailField()
     password = serializers.CharField(
@@ -30,8 +36,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'password')
 
     @staticmethod
-    def validate_email(value: str) -> ParseError | str:
-        """Проверка на уникальность почты"""
+    def validate_email(value: str) -> Union[ParseError, str]:
+        """Проверка на уникальность почты."""
 
         email = value.lower()
         if User.objects.filter(email=email).exists():
@@ -40,20 +46,26 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_password(password: str) -> str:
-        """Проверка пароля"""
+        """Проверка пароля."""
 
         validate_password(password=password)
         return password
 
-    def create(self, validated_data: dict[str: str]) -> Type[User]:
-        """Создание пользователя"""
+    def create(self, validated_data: dict[str, str]) -> type[User]:
+        """Создание пользователя."""
 
         user = User.objects.create_user(**validated_data)
         return user
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    """Преобразователь смены пароля"""
+    """
+    Преобразователь смены пароля.
+
+    Аттрибуты:
+        * `old_password` (CharField): старый пароль.
+        * `new_password` (CharField): новый пароль.
+    """
 
     old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
@@ -62,8 +74,8 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('old_password', 'new_password')
 
-    def validate(self, attrs: dict[str: str]) -> ParseError | dict[str: str]:
-        """Проверка на корректность пароля"""
+    def validate(self, attrs: dict[str, str]) -> Union[ParseError, dict[str, str]]:
+        """Проверка на корректность пароля."""
 
         user = self.instance
         old_password = attrs.pop('old_password')
@@ -73,17 +85,17 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_new_password(password: str) -> str:
-        """Проверка на корректность нового пароля"""
+        """Проверка на корректность нового пароля."""
 
         validate_password(password=password)
         return password
 
     def update(
             self,
-            instance: Type[User],
-            validated_data: dict[str: str],
-    ) -> Type[User]:
-        """Обновление пароля в модели User"""
+            instance: type[User],
+            validated_data: dict[str, str],
+    ) -> type[User]:
+        """Обновление пароля в модели User."""
 
         password = validated_data.pop('new_password')
         # Хэшируем пароль
@@ -95,7 +107,12 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 # region ---------------------------- USER ------------------------------------------
 class MeSerializer(serializers.ModelSerializer):
-    """Преобразователь пользователя"""
+    """
+    Преобразователь пользователя.
+
+    Аттрибуты:
+        * `profile` (ProfileShortSerializer): профиль.
+    """
 
     profile = ProfileShortSerializer()
 
@@ -114,7 +131,12 @@ class MeSerializer(serializers.ModelSerializer):
 
 
 class MeUpdateSerializer(serializers.ModelSerializer):
-    """Преобразователь обновления пользователя"""
+    """
+    Преобразователь обновления пользователя.
+
+    Аттрибуты:
+        * `profile` (ProfileShortSerializer): профиль.
+    """
 
     profile = ProfileUpdateSerializer()
 
@@ -131,8 +153,8 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def _update_profile(profile: Type[Profile], data: dict[str: str]) -> None:
-        """Обновление профиля"""
+    def _update_profile(profile: type[Profile], data: Union[str, None]) -> None:
+        """Обновление профиля."""
 
         profile_serializer = ProfileUpdateSerializer(
             instance=profile, data=data, partial=True
@@ -142,10 +164,10 @@ class MeUpdateSerializer(serializers.ModelSerializer):
 
     def update(
             self,
-            instance: Type[User],
-            validated_data: dict[str: str],
-    ) -> Type[User]:
-        """Обновление в модели пользователя"""
+            instance: type[User],
+            validated_data: dict[str, str],
+    ) -> type[User]:
+        """Обновление в модели пользователя."""
 
         # Проверка на наличия профиля
         profile_data = validated_data.pop(
@@ -164,7 +186,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserListSearchSerializer(serializers.ModelSerializer):
-    """Преобразователь поиска пользователей"""
+    """Преобразователь поиска пользователей."""
 
     class Meta:
         model = User

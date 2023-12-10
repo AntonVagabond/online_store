@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Union
 
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
@@ -14,23 +14,33 @@ class User:
 # endregion -------------------------------------------------------------------------
 
 class CustomUserManager(BaseUserManager):
+    """
+        Кастомный менеджер пользователей.
+
+        Аттрибуты:
+            * `use_in_migrations` (bool): использование в миграциях.
+        """
+
     use_in_migrations = True
 
     @staticmethod
-    def _check_email_or_phone_number(email: str, phone_number: str) -> str | None:
-        """Проверка есть ли почта либо номер телефона"""
+    def _check_email_or_phone_number(
+            email: str,
+            phone_number: str
+    ) -> Union[str, None]:
+        """Проверка есть ли почта либо номер телефона."""
 
         return email or phone_number
 
     def _create_user(
             self,
-            phone_number: str | None = None,
-            email: str | None = None,
-            password: str | None = None,
-            username: str | None = None,
-            **extra_fields: str | bool
-    ) -> ParseError | Type[User]:
-        """Проверка данных пользователя, суперпользователя"""
+            phone_number: Union[str, None] = None,
+            email: Union[str, None] = None,
+            password: Union[str, None] = None,
+            username: Union[str, None] = None,
+            **extra_fields: Union[str, bool]
+    ) -> Union[ParseError, Type[User]]:
+        """Проверка данных пользователя, суперпользователя."""
 
         # Проверка на то что мы заполнили данные.
         if not (email or phone_number or username):
@@ -55,13 +65,13 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(
             self,
-            phone_number: str | None = None,
-            email: str | None = None,
-            password: str | None = None,
-            username: str | None = None,
-            **extra_fields: str | bool
-    ) -> ParseError | Type[User]:
-        """Создание пользователя"""
+            phone_number: Union[str, None] = None,
+            email: Union[str, None] = None,
+            password: Union[str, None] = None,
+            username: Union[str, None] = None,
+            **extra_fields: Union[str, bool]
+    ) -> Union[ParseError, Type[User]]:
+        """Создание пользователя."""
 
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_staff', False)
@@ -73,12 +83,12 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(
             self,
-            email: str | None = None,
-            phone_number: str | None = None,
-            password: str | None = None,
-            username: str | None = None,
-            **extra_fields: str | bool
-    ) -> ValueError | ParseError | Type[User]:
+            email: Union[str, None] = None,
+            phone_number: Union[str, None] = None,
+            password: Union[str, None] = None,
+            username: Union[str, None] = None,
+            **extra_fields: Union[str, bool]
+    ) -> Union[ValueError, ParseError, Type[User]]:
         """Создание супер пользователя"""
 
         extra_fields.setdefault('is_superuser', True)

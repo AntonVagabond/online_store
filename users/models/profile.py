@@ -6,8 +6,15 @@ from common.models.base import BaseModel
 
 
 class Profile(BaseModel):
-    """Профиль покупателя"""
+    """
+    Профиль пользователя.
 
+    Аттрибуты:
+        * `user` (OneToOneField): пользователь.
+        * `photo` (ImageField): фотография профиля.
+    """
+
+    # region ------------------------ АТРИБУТЫ ПРОФИЛЯ ------------------------------
     user = models.OneToOneField(
         to='users.User',
         on_delete=models.CASCADE,
@@ -21,6 +28,7 @@ class Profile(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Профиль пользователя'

@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Union
 
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -8,13 +8,22 @@ User = get_user_model()
 
 
 class AuthBackend(object):
+    """
+    Аутентификация серверной части.
+
+    Аттрибуты:
+        * `supports_object_permissions` (bool): поддерживает разрешения для объектов.
+        * `supports_anonymous_user` (bool): поддерживает анонимного пользователя.
+        * `supports_inactive_user` (bool): поддерживает неактивного пользователя.
+    """
+
     supports_object_permissions = True
     supports_anonymous_user = True
     supports_inactive_user = True
 
     @staticmethod
-    def get_user(user_id: int) -> Type[User] | None:
-        """Получить пользователя по id"""
+    def get_user(user_id: int) -> Union[type[User], None]:
+        """Получить пользователя по id."""
 
         try:
             return User.objects.get(pk=user_id)
@@ -26,7 +35,7 @@ class AuthBackend(object):
             request: Request,
             username: str,
             password: str,
-    ) -> Type[User] | None:
+    ) -> Union[None, Union[type[User], None]]:
         """Проверка на один из выборов аутентификации и пароля"""
 
         try:

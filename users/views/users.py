@@ -1,9 +1,6 @@
-from typing import Type
-
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, generics
-from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -24,11 +21,19 @@ User = get_user_model()
     )
 )
 class RegistrationView(generics.CreateAPIView):
-    """Вид регистрации"""
+    """
+    Вид регистрации.
 
+    Аттрибуты:
+        * `queryset` (User): пользователь.
+        * `permission_classes` (tuple[AllowAny]): классы разрешений.
+        * `serializer_class` (RegistrationSerializer): класс преобразования.
+    """
+    # region ------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ВИДА РЕГИСТРАЦИИ -------------------
     queryset = User.objects.all()
     permission_classes = (permissions.AllowAny,)
     serializer_class = user_s.RegistrationSerializer
+    # endregion ---------------------------------------------------------------------
 
 
 @extend_schema_view(
@@ -39,14 +44,20 @@ class RegistrationView(generics.CreateAPIView):
     )
 )
 class ChangePasswordView(APIView):
-    """Представление смены пароля"""
+    """
+    Представление смены пароля.
+
+    Аттрибуты:
+        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
+        * `serializer_class` (ChangePasswordSerializer): класс преобразования.
+    """
 
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = user_s.ChangePasswordSerializer
 
     @staticmethod
     def post(request: Request) -> Response:
-        """Изменить пароль"""
+        """Изменить пароль."""
 
         user = request.user
         serializer = user_s.ChangePasswordSerializer(
@@ -67,13 +78,21 @@ class ChangePasswordView(APIView):
     )
 )
 class MeView(generics.RetrieveAPIView):
-    """Представление профиля пользователя"""
+    """
+    Представление профиля пользователя.
 
+    Аттрибуты:
+        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
+        * `queryset` (User): пользователь.
+        * `serializer_class` (MeSerializer): класс преобразования.
+    """
+    # region ---------- АТРИБУТЫ ПРЕДСТАВЛЕНИЕ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ -----------------
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = user_s.MeSerializer
+    # endregion ---------------------------------------------------------------------
 
-    def get_object(self) -> Type[User]:
+    def get_object(self) -> type[User]:
         """Получить объект пользователя"""
 
         return self.request.user
@@ -90,11 +109,19 @@ class MeView(generics.RetrieveAPIView):
     )
 )
 class MeUpdateView(generics.UpdateAPIView):
-    """Представление для обновления профиля пользователя"""
+    """
+    Представление для обновления профиля пользователя.
 
+    Аттрибуты:
+        * `permission_classes` (tuple[IsAuthenticated]): классы разрешений.
+        * `queryset` (User): пользователь.
+        * `serializer_class` (MeUpdateSerializer): класс преобразования.
+    """
+    # region -------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ --------
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = user_s.MeUpdateSerializer
+    # endregion ---------------------------------------------------------------------
 
 
 @extend_schema_view(
@@ -105,10 +132,18 @@ class MeUpdateView(generics.UpdateAPIView):
     )
 )
 class UserListSearchView(mixins.ListViewSet):
-    """Представление списка пользователей"""
+    """Представление списка пользователей.
 
+    Аттрибуты:
+        * `queryset` (User): пользователь.
+        * `serializer_class` (UserListSearchSerializer): класс преобразования.
+        * `filter_backends` (tuple): классы для фильтрации.
+        * `search_fields` (tuple[str]): поле для поиска.
+    """
+    # region ----------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ СПИСКА ПОЛЬЗОВАТЕЛЕЙ ----------------
     queryset = User.objects.exclude(is_superuser=True)
     serializer_class = user_s.UserListSearchSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('first_name', 'last_name', 'email', 'username')
+    # endregion ---------------------------------------------------------------------
 # endregion -------------------------------------------------------------------------

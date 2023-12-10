@@ -9,8 +9,15 @@ User = get_user_model()
 
 
 class DateMixin(BaseModel):
-    """Абстрактная модель даты и времени"""
+    """
+    Абстрактная модель даты и времени.
 
+    Аттрибуты:
+        * `created_at` (DateTimeField): создан в
+        * `updated_at` (DateTimeField): обновлен в
+    """
+
+    # region ------------------------ АТТРИБУТЫ ДАТЫ --------------------------------
     created_at = models.DateTimeField(
         verbose_name='Создан в',
         null=True,
@@ -21,12 +28,13 @@ class DateMixin(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs) -> None:
-        """Сохраняем информацию о создании и обновлении."""
+        """Сохраняем дату о создании и обновлении."""
 
         if not self.pk and not self.created_at:
             self.created_at = timezone.now()
@@ -35,8 +43,15 @@ class DateMixin(BaseModel):
 
 
 class InfoMixin(DateMixin):
-    """Абстрактная модель информации"""
+    """
+    Абстрактная модель информации.
 
+    Аттрибуты:
+        * `created_by` (ForeignKey): созданный.
+        * `updated_by` (ForeignKey): обновленный.
+    """
+
+    # region ---------------------- АТТРИБУТЫ ИФОРМАЦИИ -----------------------------
     created_by = models.ForeignKey(
         to=User,
         on_delete=models.SET_NULL,
@@ -51,11 +66,14 @@ class InfoMixin(DateMixin):
         verbose_name='Обновленный',
         null=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs) -> None:
+        """Сохраняем информацию о создании и обновлении."""
+
         user = get_current_user()
 
         if user and not user.pk:

@@ -4,8 +4,21 @@ from common.models.base import BaseModel
 
 
 class Product(BaseModel):
-    """Модель товара"""
+    """
+    Модель товара.
 
+    Аттрибуты:
+        * `name` (CharField): название товара.
+        * `is_available` (BooleanField): наличие товара.
+        * `price` (DecimalField): цена товара.
+        * `quantity` (PositiveSmallIntegerField): количество товара.
+        * `category` (ForeignKey): категории.
+        * `provider` (ForeignKey): поставщики.
+        * `product_description` (ProductDescription): модель описания товара.
+        * `product_feature` (ProductFeature): модель характеристик товара.
+        * `product_images` (ProductImages): модель для изображений товара.
+    """
+    # region ------------------------ АТРИБУТЫ ТОВАРА -------------------------------
     name = models.CharField(
         'Название товара',
         max_length=255,
@@ -40,6 +53,7 @@ class Product(BaseModel):
         related_name='products',
         verbose_name='Поставщики',
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Товар'
@@ -51,8 +65,13 @@ class Product(BaseModel):
 
 
 class ProductDescription(BaseModel):
-    """Модель описания товара"""
+    """Модель описания товара.
 
+    Аттрибуты:
+        * `product` (OneToOneField): описание товара.
+        * `description` (TextField): описание товара.
+    """
+    # region -------------------- АТРИБУТЫ ОПИСАНИЯ ТОВАРА --------------------------
     product = models.OneToOneField(
         to='products.Product',
         on_delete=models.CASCADE,
@@ -61,6 +80,7 @@ class ProductDescription(BaseModel):
         primary_key=True,
     )
     description = models.TextField('Описание товара')
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Описание товара'
@@ -71,8 +91,16 @@ class ProductDescription(BaseModel):
 
 
 class ProductFeature(BaseModel):
-    """Модель характеристик товара"""
+    """
+    Модель характеристик товара.
 
+    Аттрибуты:
+        * `product` (OneToOneField): характеристика товара.
+        * `size` (PositiveSmallIntegerField): размер товара.
+        * `color` (CharField): цвет товара.
+        * `patterns` (BooleanField): узоры у товара.
+    """
+    # region ------------------ АТРИБУТЫ ХАРАКТЕРИСТИК ТОВАРА -----------------------
     product = models.OneToOneField(
         to='products.Product',
         on_delete=models.CASCADE,
@@ -96,6 +124,7 @@ class ProductFeature(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Характеристика товара'
@@ -106,7 +135,14 @@ class ProductFeature(BaseModel):
 
 
 class ProductImages(BaseModel):
-    """Модель для изображений товара"""
+    """
+    Модель для изображений товара.
+
+    Аттрибуты:
+        * `product` (ForeignKey): товары.
+        * `image` (ImageField): изображение товара.
+    """
+    # region ----------------- АТРИБУТЫ ДЛЯ ИЗОБРАЖЕНИЙ ТОВАРА ----------------------
     product = models.ForeignKey(
         to='Product',
         on_delete=models.CASCADE,
@@ -121,6 +157,7 @@ class ProductImages(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
         verbose_name = 'Изображении товара'
