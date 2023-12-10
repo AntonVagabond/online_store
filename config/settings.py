@@ -165,7 +165,12 @@ SPECTACULAR_SETTINGS = {
     'SWAGGER_UI_SETTINGS': {
         'DeepLinking': True,
         'DisplayOperationId': True,
-
+        'syntaxHighlight.active': True,
+        'syntaxHighlight.theme': 'arta',
+        'defaultModelsExpandDepth': -1,
+        'displayRequestDuration': True,
+        'filter': True,
+        'requestSnippetsEnabled': True,
     },
 
     'COMPONENT_SPLIT_REQUEST': True,
@@ -208,7 +213,7 @@ SIMPLE_JWT = {
 }
 # endregion -------------------------------------------------------------------------
 
-# region ------------- CUSTOM USER, CUSTOM BACKEND -----------------------
+# region ------------------ CUSTOM USER, CUSTOM BACKEND -----------------------------
 AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
