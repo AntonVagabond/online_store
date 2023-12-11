@@ -36,7 +36,7 @@ class Category(BaseModel):
         to='self',
         on_delete=models.SET_NULL,
         related_name='children_category',
-        verbose_name='Подкатегория',
+        verbose_name='Родительская категория',
         null=True,
         blank=True,
     )
