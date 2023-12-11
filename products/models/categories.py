@@ -35,7 +35,7 @@ class Category(BaseModel):
     parent_category = models.ForeignKey(
         to='self',
         on_delete=models.SET_NULL,
-        related_name='categories',
+        related_name='children_category',
         verbose_name='Подкатегория',
         null=True,
         blank=True,
