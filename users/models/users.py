@@ -16,7 +16,7 @@ class User(AbstractUser):
         * `username` (CharField): имя пользователя.
         * `email` (EmailField): почта.
         * `phone_number` (PhoneNumberField): телефон.
-        * `order` (ForeignKey): заказ.
+        * `orders` (ForeignKey): заказы.
         * `objects` (CustomUserManager): кастомный менеджер пользователей.
         * `USERNAME_FIELD` (str): поле имя пользователя.
         * `REQUIRED_FIELDS` (list[str]): обязательные поля.
@@ -38,14 +38,6 @@ class User(AbstractUser):
     phone_number = PhoneNumberField(
         'Телефон',
         unique=True,
-        null=True,
-        blank=True,
-    )
-    order = models.ForeignKey(
-        to='orders.Order',
-        on_delete=models.RESTRICT,
-        related_name='users',
-        verbose_name='Заказ',
         null=True,
         blank=True,
     )

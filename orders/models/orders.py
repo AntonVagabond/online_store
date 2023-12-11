@@ -31,7 +31,14 @@ class Order(BaseModel):
         null=True,
         blank=True,
     )
-
+    user = models.ForeignKey(
+        to='users.User',
+        on_delete=models.RESTRICT,
+        related_name='orders',
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+    )
     cart = models.ManyToManyField(
         to='products.Product',
         related_name='orders_products',
