@@ -17,7 +17,6 @@ class User(AbstractUser):
         * `email` (EmailField): почта.
         * `phone_number` (PhoneNumberField): телефон.
         * `orders` (ForeignKey): заказы.
-        * `auth_token` (OneToOneField): токен.
         * `profile` (OneToOneField): профиль.
         * `objects` (CustomUserManager): кастомный менеджер пользователей.
         * `USERNAME_FIELD` (str): поле имя пользователя.
