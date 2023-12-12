@@ -3,12 +3,11 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
-from rest_framework.authtoken.models import Token
 
 from users.managers import CustomUserManager
 from users.models.profile import Profile
 
-Token
+
 class User(AbstractUser):
     """
     Модель Пользователя.
