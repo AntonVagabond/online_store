@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # packages
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
     'corsheaders',
     'djoser',
@@ -94,8 +95,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATED_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
@@ -183,7 +184,7 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
+    'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {},
 }
 
