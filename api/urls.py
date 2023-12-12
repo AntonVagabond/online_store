@@ -8,7 +8,6 @@ from products.urls import urlpatterns as product_urls
 app_name = 'api'
 
 urlpatterns = [
-    path('auth/', include('djoser.urls.authtoken')),
     path('auth/', include('djoser.urls.jwt')),
 ]
 
