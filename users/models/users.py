@@ -3,11 +3,12 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
+from rest_framework.authtoken.models import Token
 
 from users.managers import CustomUserManager
 from users.models.profile import Profile
 
-
+Token
 class User(AbstractUser):
     """
     Модель Пользователя.
@@ -17,6 +18,8 @@ class User(AbstractUser):
         * `email` (EmailField): почта.
         * `phone_number` (PhoneNumberField): телефон.
         * `orders` (ForeignKey): заказы.
+        * `auth_token` (OneToOneField): токен.
+        * `profile` (OneToOneField): профиль.
         * `objects` (CustomUserManager): кастомный менеджер пользователей.
         * `USERNAME_FIELD` (str): поле имя пользователя.
         * `REQUIRED_FIELDS` (list[str]): обязательные поля.
