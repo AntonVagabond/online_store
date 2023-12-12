@@ -1,4 +1,4 @@
-from typing import Type, Union
+from typing import Union
 
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
@@ -39,7 +39,7 @@ class CustomUserManager(BaseUserManager):
             password: Union[str, None] = None,
             username: Union[str, None] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ParseError, Type[User]]:
+    ) -> Union[ParseError, type[User]]:
         """Проверка данных пользователя, суперпользователя."""
 
         # Проверка на то что мы заполнили данные.
@@ -70,7 +70,7 @@ class CustomUserManager(BaseUserManager):
             password: Union[str, None] = None,
             username: Union[str, None] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ParseError, Type[User]]:
+    ) -> Union[ParseError, type[User]]:
         """Создание пользователя."""
 
         extra_fields.setdefault('is_superuser', False)
@@ -88,7 +88,7 @@ class CustomUserManager(BaseUserManager):
             password: Union[str, None] = None,
             username: Union[str, None] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ValueError, ParseError, Type[User]]:
+    ) -> Union[ValueError, ParseError, type[User]]:
         """Создание супер пользователя"""
 
         extra_fields.setdefault('is_superuser', True)
