@@ -15,6 +15,15 @@ class ListViewSet(ExtendedGenericViewSet, mixins.ListModelMixin):
     pass
 
 
+class CreateViewSet(ExtendedGenericViewSet, mixins.CreateModelMixin):
+    """
+        Класс включающий базовый набор поведения generic view и включающий
+        модель списка, имеет такие методы как: `get_object`,
+        `get_queryset`, `create()`.
+    """
+    pass
+
+
 class CRUListViewSet(ExtendedGenericViewSet,
                      mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
