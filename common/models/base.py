@@ -1,5 +1,4 @@
 from django.db import models
-from rest_framework.authtoken.models import Token
 
 
 class BaseModel(models.Model):
@@ -8,13 +7,5 @@ class BaseModel(models.Model):
     """
     objects = models.Manager()
 
-    class Meta:
-        abstract = True
-
-
-class CustomToken(BaseModel, Token):
-    """
-    Абстрактная модель Токена. Нужна для инициализации objects.
-    """
     class Meta:
         abstract = True
