@@ -17,8 +17,6 @@ class User(AbstractUser):
         * `email` (EmailField): почта.
         * `phone_number` (PhoneNumberField): телефон.
         * `orders` (ForeignKey): заказы.
-        * `is_active` (BooleanField): является ли пользователь активным.
-        * `is_staff` (BooleanField): является ли пользователь частью персонала.
         * `profile` (OneToOneField): профиль.
         * `objects` (CustomUserManager): кастомный менеджер пользователей.
         * `USERNAME_FIELD` (str): поле имя пользователя.
@@ -44,8 +42,6 @@ class User(AbstractUser):
         null=True,
         blank=True,
     )
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
