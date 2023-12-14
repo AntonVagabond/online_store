@@ -2,10 +2,6 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.status import HTTP_204_NO_CONTENT
-from rest_framework.views import APIView
 
 from common.views import mixins
 from users.serializers.api import users as user_s
@@ -13,51 +9,6 @@ from users.serializers.api import users as user_s
 User = get_user_model()
 
 
-# region ------------------ REGISTRATION AND PASSWORD -------------------------------
-@extend_schema_view(
-    post=extend_schema(
-        summary='Регистрация пользователя',
-        tags=['Вход и Регистрация'],
-    )
-)
-class RegistrationView(generics.CreateAPIView):
-    """Вид регистрации."""
-    # region ------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ВИДА РЕГИСТРАЦИИ -------------------
-    queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = user_s.RegistrationSerializer
-    # endregion ---------------------------------------------------------------------
-
-
-@extend_schema_view(
-    post=extend_schema(
-        request=user_s.ChangePasswordSerializer,
-        summary='Смена пароля',
-        tags=['Вход и Регистрация'],
-    )
-)
-class ChangePasswordView(APIView):
-    """Представление смены пароля."""
-
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = user_s.ChangePasswordSerializer
-
-    @staticmethod
-    def post(request: Request) -> Response:
-        """Изменить пароль."""
-
-        user = request.user
-        serializer = user_s.ChangePasswordSerializer(
-            instance=user, data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(status=HTTP_204_NO_CONTENT)
-
-
-# endregion -------------------------------------------------------------------------
-
-# region ---------------------------- USER ------------------------------------------
 @extend_schema_view(
     get=extend_schema(
         summary='Профиль пользователя',
@@ -66,11 +17,10 @@ class ChangePasswordView(APIView):
 )
 class MeView(generics.RetrieveAPIView):
     """Представление профиля пользователя."""
-    # region ---------- АТРИБУТЫ ПРЕДСТАВЛЕНИЕ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ -----------------
+
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = user_s.MeSerializer
-    # endregion ---------------------------------------------------------------------
 
     def get_object(self) -> type[User]:
         """Получить объект пользователя"""
@@ -90,11 +40,10 @@ class MeView(generics.RetrieveAPIView):
 )
 class MeUpdateView(generics.UpdateAPIView):
     """Представление для обновления профиля пользователя."""
-    # region -------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ОБНОВЛЕНИЯ ПРОФИЛЯ ПОЛЬЗОВАТЕЛЯ --------
+
     permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = user_s.MeUpdateSerializer
-    # endregion ---------------------------------------------------------------------
 
 
 @extend_schema_view(
@@ -106,10 +55,8 @@ class MeUpdateView(generics.UpdateAPIView):
 )
 class UserListSearchView(mixins.ListViewSet):
     """Представление списка пользователей."""
-    # region ----------- АТРИБУТЫ ПРЕДСТАВЛЕНИЯ СПИСКА ПОЛЬЗОВАТЕЛЕЙ ----------------
+
     queryset = User.objects.exclude(is_superuser=True)
     serializer_class = user_s.UserListSearchSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('first_name', 'last_name', 'email', 'username')
-    # endregion ---------------------------------------------------------------------
-# endregion -------------------------------------------------------------------------
