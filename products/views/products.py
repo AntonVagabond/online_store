@@ -43,7 +43,7 @@ from products.serializers.api import products as products_s
 )
 class ProductView(CRUDListViewSet):
     """Представление товара."""
-    # region ------------------ АТРИБУТЫ ПРЕДСТАВЛЕНИЯ ТОВАРА -----------------------
+
     permission_classes = (permissions.AllowAny,)
 
     queryset = Product.objects.all()
@@ -68,7 +68,6 @@ class ProductView(CRUDListViewSet):
     ordering = ('is_available', 'id')
 
     # filterset_class = ... ???
-    # endregion ---------------------------------------------------------------------
 
     @action(methods=['GET'], detail=False, url_path='search')
     def search(self, request: Request, *args: None, **kwargs: None) -> Response:
