@@ -1,3 +1,5 @@
+from typing import OrderedDict, Union
+
 from rest_framework import serializers
 
 from products.models.categories import Category
@@ -16,7 +18,15 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'image')
+        fields = ('id', 'title', 'image', 'parent', 'children')
+
+    def to_representation(
+            self, obj: Category
+    ) -> OrderedDict[str, Union[int, str, None]]:
+        # Добавляем поле 'children' и его полное значение.
+        self.fields['children'] = CategoryListSerializer(many=True)
+        # Повторяется этот процесс, пока есть еще вложенность.
+        return super(CategoryListSerializer, self).to_representation(obj)
 
 
 class CategoryRetrieveSerializer(serializers.ModelSerializer):
