@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
@@ -27,19 +27,19 @@ class CustomUserManager(BaseUserManager):
     def _check_email_or_phone_number(
             email: str,
             phone_number: str
-    ) -> Union[str, None]:
+    ) -> Optional[str]:
         """Проверка есть ли почта либо номер телефона."""
 
         return email or phone_number
 
     def _create_user(
             self,
-            phone_number: Union[str, None] = None,
-            email: Union[str, None] = None,
-            password: Union[str, None] = None,
-            username: Union[str, None] = None,
-            **extra_fields: Union[str, bool]
-    ) -> Union[ParseError, type[User]]:
+            phone_number: Optional[str] = None,
+            email: Optional[str] = None,
+            password: Optional[str] = None,
+            username: Optional[str] = None,
+            **extra_fields: Optional[str]
+    ) -> Union[ParseError, User]:
         """Проверка данных пользователя, суперпользователя."""
 
         # Проверка на то что мы заполнили данные.
@@ -65,10 +65,10 @@ class CustomUserManager(BaseUserManager):
 
     def create_user(
             self,
-            phone_number: Union[str, None] = None,
-            email: Union[str, None] = None,
-            password: Union[str, None] = None,
-            username: Union[str, None] = None,
+            phone_number: Optional[str] = None,
+            email: Optional[str] = None,
+            password: Optional[str] = None,
+            username: Optional[str] = None,
             **extra_fields: Union[str, bool]
     ) -> Union[ParseError, type[User]]:
         """Создание пользователя."""
@@ -83,12 +83,12 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(
             self,
-            email: Union[str, None] = None,
-            phone_number: Union[str, None] = None,
-            password: Union[str, None] = None,
-            username: Union[str, None] = None,
+            email: Optional[str] = None,
+            phone_number: Optional[str] = None,
+            password: Optional[str] = None,
+            username: Optional[str] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ValueError, ParseError, type[User]]:
+    ) -> Union[ValueError, ParseError, User]:
         """Создание супер пользователя"""
 
         extra_fields.setdefault('is_superuser', True)
