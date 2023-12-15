@@ -1,10 +1,12 @@
-from typing import Union
+from typing import Union, TypeAlias
 
 from django.contrib import admin
 from django.utils.safestring import mark_safe, SafeString
 
 from common.admin import ModelaAdminWithImage
 from products.models import products, categories, providers
+
+Provider: TypeAlias = providers.Provider
 
 
 # region ----------------------------- INLINE ---------------------------------------
@@ -140,7 +142,7 @@ class ProviderAdmin(admin.ModelAdmin):
     # endregion ---------------------------------------------------------------------
 
     @admin.display(description='Логотип', ordering='logo')
-    def logo_show(self, obj: type[providers.Provider]) -> Union[str, SafeString]:
+    def logo_show(self, obj: Provider) -> Union[str, SafeString]:
         if obj.logo:
             return mark_safe(f"<img src='{obj.logo.url}' width='60' />")
         return 'Нет логотипа'

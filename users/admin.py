@@ -26,7 +26,7 @@ class ProfileAdmin(admin.TabularInline):
     readonly_fields = ('photo_show',)
 
     @admin.display(description='Логотип', ordering='photo')
-    def photo_show(self, obj: type[Profile]) -> Union[SafeString, str]:
+    def photo_show(self, obj: Profile) -> Union[SafeString, str]:
         if obj.photo:
             return mark_safe(f"<img src='{obj.photo.url}' width='60' />")
         return 'Нет фотографии'

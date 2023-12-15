@@ -83,9 +83,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def update(
             self,
-            instance: type[User],
+            instance: User,
             validated_data: dict[str, str],
-    ) -> type[User]:
+    ) -> User:
         """Обновление пароля в модели User."""
 
         password = validated_data.pop('new_password')

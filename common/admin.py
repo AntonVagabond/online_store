@@ -10,7 +10,7 @@ class ModelaAdminWithImage(admin.ModelAdmin):
     """Общая модель админа для отображения ссылок изображения."""
 
     @admin.display(description='Изображение', ordering='image')
-    def image_show(self, obj: type[Category]) -> Union[str, SafeString]:
+    def image_show(self, obj: Category) -> Union[str, SafeString]:
         """Отображает изображение."""
 
         if obj.image:
