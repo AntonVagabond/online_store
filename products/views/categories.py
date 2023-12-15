@@ -30,7 +30,7 @@ from products.serializers.api import categories as categories_s
         tags=['Категория'],
     ),
     destroy=extend_schema(
-        summary='Удалить товар',
+        summary='Удалить категорию',
         tags=['Категория'],
     ),
     search=extend_schema(
