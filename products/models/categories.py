@@ -32,10 +32,10 @@ class Category(BaseModel):
         null=True,
         blank=True,
     )
-    parent_category = models.ForeignKey(
+    parent = models.ForeignKey(
         to='self',
         on_delete=models.SET_NULL,
-        related_name='children_category',
+        related_name='children',
         verbose_name='Родительская категория',
         null=True,
         blank=True,

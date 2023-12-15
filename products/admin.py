@@ -115,9 +115,9 @@ class CategoryAdmin(ModelaAdminWithImage):
     """
 
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА КАТЕГОРИИ -----------------------
-    list_display = ('id', 'title', 'image_show', 'description', 'parent_category')
-    fields = ('title', 'image', 'image_show', 'description', 'parent_category')
-    readonly_fields = ('image_show', 'parent_category')
+    list_display = ('id', 'title', 'image_show', 'description', 'parent')
+    fields = ('title', 'image', 'image_show', 'description', 'parent')
+    readonly_fields = ('image_show', 'parent')
     inlines = (SubCategoryInline,)
     # endregion ---------------------------------------------------------------------
 
