@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional
 
 from django.contrib.auth import get_user_model
 from django.db.models import Q
@@ -22,7 +22,7 @@ class AuthBackend(object):
     supports_inactive_user = True
 
     @staticmethod
-    def get_user(user_id: int) -> Union[type[User], None]:
+    def get_user(user_id: int) -> Optional[User]:
         """Получить пользователя по id."""
 
         try:
@@ -35,7 +35,7 @@ class AuthBackend(object):
             request: Request,
             username: str,
             password: str,
-    ) -> Union[None, Union[type[User], None]]:
+    ) -> Optional[User]:
         """Проверка на один из выборов аутентификации и пароля"""
 
         try:
