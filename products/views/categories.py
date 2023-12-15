@@ -45,7 +45,8 @@ class CategoryView(CRUDListViewSet):
 
     permission_classes = (permissions.AllowAny,)
 
-    queryset = Category.objects.all()
+    # Фильтрация убирает дубликаты подкатегорий в разделе категорий.
+    queryset = Category.objects.filter(parent=None)
     serializer_class = categories_s.CategoryListSerializer
 
     multi_serializer_class = {
