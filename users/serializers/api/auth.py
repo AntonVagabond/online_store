@@ -44,7 +44,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         validate_password(password=password)
         return password
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict[str, str]) -> User:
         user = User.objects.create_user(**validated_data)
         return user
 
