@@ -59,6 +59,7 @@ class ProductView(CRUDListViewSet):
     }
 
     http_method_names = ('get', 'post', 'patch', 'delete')
+    lookup_url_kwarg = 'product_id'
 
     filter_backends = (
         DjangoFilterBackend,
