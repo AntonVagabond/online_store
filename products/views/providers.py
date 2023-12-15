@@ -59,8 +59,6 @@ class ProviderView(CRUDListViewSet):
 
     http_method_names = ('get', 'post', 'patch', 'delete')
 
-    lookup_url_kwarg = 'provider_id'
-
     filter_backends = (
         DjangoFilterBackend,
         OrderingFilter,
