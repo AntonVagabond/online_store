@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from products.models.providers import Provider
+from products.serializers.nested.products import ProductNestedSerializer
 
 
 class ProviderSearchSerializer(serializers.ModelSerializer):
@@ -12,9 +13,14 @@ class ProviderSearchSerializer(serializers.ModelSerializer):
 
 
 class ProviderListSerializer(serializers.ModelSerializer):
-    """Преобразователь списка товаров."""
+    """
+    Преобразователь списка товаров.
 
-    products = None
+    Аттрибуты:
+        * `products` (ProductNestedSerializer): товары поставщика.
+    """
+
+    products = ProductNestedSerializer()
 
     class Meta:
         model = Provider
@@ -22,13 +28,18 @@ class ProviderListSerializer(serializers.ModelSerializer):
 
 
 class ProviderRetrieveSerializer(serializers.ModelSerializer):
-    """Преобразователь извлечения товара."""
+    """
+    Преобразователь извлечения товара.
+
+    Аттрибуты:
+        * `products` (ProductNestedSerializer): товары поставщика.
+    """
+
+    products = ProductNestedSerializer()
 
     class Meta:
         model = Provider
-        fields = (
-
-        )
+        fields = ('id', 'name', 'phone_number', 'email', 'logo', 'products')
 
 
 class ProviderCreateSerializer(serializers.ModelSerializer):
@@ -36,16 +47,12 @@ class ProviderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Provider
-        fields = (
-
-        )
+        fields = ('id', 'name', 'email', 'phone_number', 'logo')
 
 
 class ProviderUpdateSerializer(serializers.ModelSerializer):
     """Преобразователь обновления товара."""
 
     class Meta:
-        model = None
-        fields = (
-
-        )
+        model = Provider
+        fields = ('id', 'name', 'email', 'phone_number', 'logo')
