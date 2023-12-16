@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'users',
     'orders',
     'products',
-    'cart',
+    'carts',
     # after apps
     'drf_spectacular',
 ]
@@ -236,7 +236,7 @@ AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
 # region --------------------------- SESSION ID -------------------------------------
-CART_SESSION_ID = 'cart'
+CART_SESSION_ID = 'carts'
 # endregion -------------------------------------------------------------------------
 
 
