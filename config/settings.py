@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'users',
     'orders',
     'products',
+    'cart',
     # after apps
     'drf_spectacular',
 ]
@@ -232,6 +233,10 @@ SIMPLE_JWT = {
 # region ------------------ CUSTOM USER, CUSTOM BACKEND -----------------------------
 AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
+# endregion -------------------------------------------------------------------------
+
+# region --------------------------- SESSION ID -------------------------------------
+CART_SESSION_ID = 'cart'
 # endregion -------------------------------------------------------------------------
 
 
