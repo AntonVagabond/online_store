@@ -1,5 +1,6 @@
 from typing import Union
 
+from crum import get_current_user
 from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, generics, status
@@ -45,7 +46,7 @@ class ChangePasswordView(APIView):
     def post(request: Request) -> Union[ValidationError, Response]:
         """Изменить пароль."""
 
-        user = request.user
+        user = get_current_user()
         serializer = auth_s.ChangePasswordSerializer(
             instance=user, data=request.data
         )
