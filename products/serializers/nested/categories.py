@@ -8,4 +8,4 @@ class CategoryNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('title', 'parent_category')
+        fields = ('title', 'parent')

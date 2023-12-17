@@ -18,7 +18,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'image', 'parent', 'children')
+        fields = ('id', 'title', 'image', 'children')
 
     def to_representation(
             self, obj: Category
@@ -34,7 +34,15 @@ class CategoryRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'description')
+        fields = ('id', 'title', 'image', 'description', 'children')
+
+    def to_representation(
+            self, obj: Category
+    ) -> OrderedDict[str, Union[int, str, None]]:
+        # Добавляем поле 'children' и его полное значение.
+        self.fields['children'] = CategoryListSerializer(many=True)
+        # Повторяется этот процесс, пока есть еще вложенность.
+        return super(CategoryRetrieveSerializer, self).to_representation(obj)
 
 
 class CategoryCreateSerializer(serializers.ModelSerializer):

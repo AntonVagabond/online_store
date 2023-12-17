@@ -1,3 +1,5 @@
+from typing import Union
+
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
@@ -10,7 +12,9 @@ class ExtendedView:
     serializer_class = None
     request = None
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> Union[
+        serializer_class, multi_serializer_class, None
+    ]:
         """Получить класс преобразователя."""
 
         # Если не будет этих двух условий, то выскачет ошибка.
