@@ -1,6 +1,7 @@
 from typing import Union
 
 from rest_framework import mixins
+from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from common.constans import roles
@@ -79,6 +80,17 @@ class CreateViewSet(ExtendedGenericViewSet, mixins.CreateModelMixin):
     pass
 
 
+class CUDListViewSet(ExtendedGenericViewSet,
+                     mixins.CreateModelMixin,
+                     mixins.UpdateModelMixin,
+                     mixins.DestroyModelMixin,
+                     mixins.ListModelMixin):
+    """
+    Класс представления включающий в себя базовые операции, кроме RetrieveModelMixin.
+    """
+    pass
+
+
 class CRUListViewSet(ExtendedGenericViewSet,
                      mixins.CreateModelMixin,
                      mixins.RetrieveModelMixin,
@@ -91,4 +103,12 @@ class CRUListViewSet(ExtendedGenericViewSet,
 class CRUDListViewSet(CRUListViewSet,
                       mixins.DestroyModelMixin):
     """Класс включающий в себя CRUD-операции."""
+    pass
+
+
+class ExtendedAPIView(ExtendedView, APIView):
+    """
+    Расширенный класс представления.
+    Исп-ся в местах, где нет модели класса.
+    """
     pass

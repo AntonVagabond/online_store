@@ -5,10 +5,10 @@ from django.conf import settings
 from rest_framework.request import Request
 
 from products.models.products import Product
-from products.serializers.api.products import ProductRetrieveSerializer
+from products.serializers.internal.products import ProductInternalSerializer
 
 
-class Cart(object):
+class CartService(object):
     """Класс Корзины."""
 
     def __init__(self, request: Request) -> None:
@@ -29,7 +29,7 @@ class Cart(object):
         # Добавляем товары в корзину.
         cart = self.cart.copy()
         for product in products:
-            cart[str(product.pk)]['product'] = ProductRetrieveSerializer(product).data
+            cart[str(product.pk)]['product'] = ProductInternalSerializer(product).data
 
         # Вычисляем стоимость товара.
         for item in cart.values():
