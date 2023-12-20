@@ -85,13 +85,8 @@ class ProductAdmin(admin.ModelAdmin):
         * `inlines` (tuple[inlines]): встроенные.
     """
     # region ----------------- АТРИБУТЫ МОДЕЛИ АДМИНА ТОВАРА ------------------------
-    list_display = (
-        'id',
-        'name',
-        'price',
-        'is_available',
-    )
-    list_display_links = ('id', 'name',)
+    list_display = ('id', 'name', 'price', 'is_available')
+    list_display_links = ('id', 'name')
     fields = (
         'name',
         'quantity',
@@ -118,6 +113,7 @@ class CategoryAdmin(ModelaAdminWithImage):
 
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА КАТЕГОРИИ -----------------------
     list_display = ('id', 'title', 'image_show', 'description', 'parent')
+    list_display_links = ('id', 'title')
     fields = ('title', 'image', 'image_show', 'description', 'parent')
     readonly_fields = ('image_show', 'parent')
     inlines = (SubCategoryInline,)
