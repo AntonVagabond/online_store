@@ -1,0 +1,62 @@
+[
+{
+  "model": "products.product",
+  "pk": 1,
+  "fields": {
+    "name": "Электрическая плита",
+    "is_available": true,
+    "price": "11499.00",
+    "quantity": 10,
+    "category": 3,
+    "provider": 3
+  }
+},
+{
+  "model": "products.product",
+  "pk": 2,
+  "fields": {
+    "name": "Холодильник многодверный LG GR-A24FQAKM",
+    "is_available": true,
+    "price": "320999.00",
+    "quantity": 5,
+    "category": 5,
+    "provider": 1
+  }
+},
+{
+  "model": "products.product",
+  "pk": 3,
+  "fields": {
+    "name": "Холодильная витрина Viatto VA-JC88WD",
+    "is_available": true,
+    "price": "39725.00",
+    "quantity": 2,
+    "category": 6,
+    "provider": 1
+  }
+},
+{
+  "model": "products.product",
+  "pk": 4,
+  "fields": {
+    "name": "Электрочайник Bosch TWK 8617P",
+    "is_available": true,
+    "price": "9799.00",
+    "quantity": 23,
+    "category": 8,
+    "provider": 2
+  }
+},
+{
+  "model": "products.product",
+  "pk": 5,
+  "fields": {
+    "name": "Термопот Redmond RTP-806",
+    "is_available": true,
+    "price": "10499.00",
+    "quantity": 8,
+    "category": 9,
+    "provider": 2
+  }
+}
+]
