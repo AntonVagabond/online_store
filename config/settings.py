@@ -235,10 +235,6 @@ AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
-# region --------------------------- SESSION ID -------------------------------------
-CART_SESSION_ID = 'carts'
-# endregion -------------------------------------------------------------------------
-
 
 if DEBUG:
     # region ------------------------- SENTRY ---------------------------------------
