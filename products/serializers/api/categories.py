@@ -10,7 +10,15 @@ class CategorySearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'children')
+
+    def to_representation(
+            self, obj: Category
+    ) -> OrderedDict[str, Union[int, str, None]]:
+        # Добавляем поле 'children' и его полное значение.
+        self.fields['children'] = CategorySearchSerializer(many=True)
+        # Повторяется этот процесс, пока есть еще вложенность.
+        return super(CategorySearchSerializer, self).to_representation(obj)
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
@@ -40,7 +48,7 @@ class CategoryRetrieveSerializer(serializers.ModelSerializer):
             self, obj: Category
     ) -> OrderedDict[str, Union[int, str, None]]:
         # Добавляем поле 'children' и его полное значение.
-        self.fields['children'] = CategoryListSerializer(many=True)
+        self.fields['children'] = CategoryRetrieveSerializer(many=True)
         # Повторяется этот процесс, пока есть еще вложенность.
         return super(CategoryRetrieveSerializer, self).to_representation(obj)
 
