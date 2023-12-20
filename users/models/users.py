@@ -42,6 +42,13 @@ class User(AbstractUser):
         null=True,
         blank=True,
     )
+    cart = models.ManyToManyField(
+        to='products.Product',
+        related_name='cart_products',
+        verbose_name='Корзина',
+        blank=True,
+        through='carts.Cart'
+    )
 
     objects = CustomUserManager()
 
