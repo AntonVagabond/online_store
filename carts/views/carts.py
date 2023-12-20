@@ -40,8 +40,3 @@ class CartViewSet(mixins.CUDListViewSet):
 
     http_method_names = ('get', 'post', 'patch', 'delete')
     lookup_field = 'products_id'
-
-    # def get_queryset(self):
-    #     user = get_current_user()
-    #     return Cart.objects.filter(user=user)
-

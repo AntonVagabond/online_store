@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
@@ -48,7 +50,7 @@ class CartSerializer(serializers.Serializer):
         queryset=Product.objects.all(),
     )
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict[str, Union[Product, int, User]]) -> Cart:
         """Создание корзины и проверка на её наличие."""
         user = self.context['request'].user
         products = validated_data['products']
@@ -66,15 +68,15 @@ class CartSerializer(serializers.Serializer):
                 cart = Cart.objects.create(**validated_data)
         return cart
 
-    def update(self, instance: Cart, validated_data: dict[str]) -> Cart:
-        """Изменение количества товара."""
-        instance.quantity = validated_data['quantity']
-        instance.save()
-        return instance
-
 
 class CartUpdateSerializer(serializers.ModelSerializer):
-    """Преобразователь обновления товара в корзине."""
+    """
+    Преобразователь обновления товара в корзине.
+
+    Аттрибуты:
+        * `user` (HiddenField): пользователь.
+        * `quantity` (IntegerField): products.
+    """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     quantity = serializers.IntegerField(
         required=True,
