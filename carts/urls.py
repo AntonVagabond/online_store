@@ -5,7 +5,7 @@ from carts.views import carts
 
 router = DefaultRouter()
 
-router.register(prefix='cart', viewset=carts.CartItemViewSet, basename='cart')
+router.register(prefix='cart', viewset=carts.CartViewSet, basename='cart')
 
 urlpatterns = [
     # path('cart/', carts.CartAPIView.as_view(), name='cart'),
