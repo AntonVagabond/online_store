@@ -15,11 +15,11 @@ class User:
 
 class CustomUserManager(BaseUserManager):
     """
-        Кастомный менеджер пользователей.
+    Кастомный менеджер пользователей.
 
-        Аттрибуты:
-            * `use_in_migrations` (bool): использование в миграциях.
-        """
+    Аттрибуты:
+        * `use_in_migrations` (bool): использование в миграциях.
+    """
 
     use_in_migrations = True
 

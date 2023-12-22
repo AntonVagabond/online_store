@@ -42,13 +42,6 @@ class User(AbstractUser):
         null=True,
         blank=True,
     )
-    cart = models.ManyToManyField(
-        to='products.Product',
-        related_name='cart_products',
-        verbose_name='Корзина',
-        blank=True,
-        through='carts.Cart'
-    )
 
     objects = CustomUserManager()
 
@@ -69,7 +62,7 @@ class User(AbstractUser):
 
 
 @receiver(post_save, sender=User)
-def post_save_user(sender, instance: type[User], created, **kwargs) -> None:
+def post_save_user(sender, instance: User, created, **kwargs) -> None:
     """Сохранить сообщение пользователя."""
 
     if not hasattr(instance, 'profile'):
