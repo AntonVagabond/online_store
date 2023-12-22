@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 from rest_framework.exceptions import ParseError
 from rest_framework.request import Request
@@ -28,6 +28,7 @@ class CartItemService:
         self.cart = cart
         self.validated_data = validated_data
         self.product = validated_data['product']
+        self.price = self.product.price
         self.quantity = validated_data['quantity']
 
     # region ----------------- METHODS CART ITEM SERVICE ----------------------------
@@ -41,17 +42,19 @@ class CartItemService:
         if self.quantity < 1:
             raise ParseError('Нельзя добавить товар с кол-вом меньше единицы!')
 
+    def _add_total_price_product(self) -> None:
+        """Установить общую стоимость товара."""
+        self.validated_data['total_price_product'] = self.price * self.quantity
+
     def _execute_create(self) -> CartItem:
         """Создание корзины."""
         return CartItem.objects.create(cart_id=self.cart.pk, **self.validated_data)
 
     def create_cart_item(self) -> CartItem:
-        """
-        Создать и вернуть содержимое корзины.
-        Либо вернуть None, если этот товар уже есть в Корзине.
-        """
+        """Создать и вернуть содержимое корзины, если оно новое."""
         self._is_product_quantity_is_positive()
         self._is_product_in_cart_items()
+        self._add_total_price_product()
         return self._execute_create()
     # endregion ---------------------------------------------------------------------
 
@@ -60,6 +63,7 @@ class CartItemUpdateService:
     def __init__(self, cart_item, validated_data):
         self.cart_item = cart_item
         self.product = cart_item.product
+        self.price = self.product.price
         self.quantity = validated_data['quantity']
 
     # region --------------- METHODS CART ITEM UPDATE SERVICE -----------------------
@@ -75,6 +79,7 @@ class CartItemUpdateService:
 
     def _execute_update(self) -> CartItem:
         """Обновление корзины."""
+        self.cart_item.total_price_product = self.price * self.quantity
         self.cart_item.quantity = self.quantity
         self.cart_item.save()
         return self.cart_item

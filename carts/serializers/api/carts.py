@@ -1,6 +1,7 @@
 from typing import Union
 
 from django.contrib.auth import get_user_model
+from django.db.models import F
 from rest_framework import serializers
 
 from carts.models.carts import Cart, CartItem
@@ -137,7 +138,7 @@ class CartItemUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ('product', 'quantity')
+        fields = ('quantity',)
 
     def update(self, instance, validated_data) -> CartItem:
         cart_item = CartItemUpdateService(instance, validated_data)
@@ -146,8 +147,25 @@ class CartItemUpdateSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    cart_price = serializers.SerializerMethodField(
+        method_name='get_cart_price',
+        read_only=True,
+    )
     cart_items = CartItemsNestedSerializer(many=True)
 
     class Meta:
         model = Cart
-        fields = ('user', 'cart_items')
+        fields = ('user', 'cart_price', 'cart_items')
+
+    @staticmethod
+    def get_cart_price(obj) -> str:
+        """Получить сумму корзины."""
+        # Делаем запрос в CartItem, получаем список словарей
+        # в котором ключ -> total_price_product, значение -> общая цена товара.
+        queryset = (
+            obj.cart_items
+            .annotate(price_product_sum=F('total_price_product'))
+            .values('price_product_sum')
+        )
+        total_price = sum(key['price_product_sum'] for key in queryset)
+        return str(total_price)

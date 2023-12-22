@@ -86,6 +86,17 @@ class CUDListViewSet(ExtendedGenericViewSet,
                      mixins.DestroyModelMixin,
                      mixins.ListModelMixin):
     """
+    Класс представления включающий в себя список, базовые операции,
+    кроме RetrieveModelMixin.
+    """
+    pass
+
+
+class CUDViewSet(ExtendedGenericViewSet,
+                 mixins.CreateModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin):
+    """
     Класс представления включающий в себя базовые операции, кроме RetrieveModelMixin.
     """
     pass

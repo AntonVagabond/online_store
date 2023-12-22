@@ -49,6 +49,13 @@ class Cart(BaseModel):
         null=True,
         blank=True,
     )
+    cart_price = models.DecimalField(
+        verbose_name='Цена корзины',
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
     products = models.ManyToManyField(
         to='products.Product',
         related_name='cart_products',
@@ -77,6 +84,13 @@ class CartItem(BaseModel):
         blank=True,
     )
     quantity = models.PositiveSmallIntegerField(default=1)
+    total_price_product = models.DecimalField(
+        verbose_name='Общая цена одного товара',
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Корзина'
