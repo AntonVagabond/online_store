@@ -6,9 +6,8 @@ from carts.views import carts
 router = DefaultRouter()
 
 router.register(prefix='cart', viewset=carts.CartViewSet, basename='cart')
+router.register(prefix='cart/item', viewset=carts.CartItemViewSet, basename='cart_item')
 
-urlpatterns = [
-    # path('cart/', carts.CartAPIView.as_view(), name='cart'),
-]
+urlpatterns = []
 
 urlpatterns += (path('', include(router.urls)),)

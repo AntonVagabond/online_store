@@ -1,5 +1,6 @@
 from typing import Optional, Union
 
+from rest_framework.exceptions import ParseError
 from rest_framework.request import Request
 
 from carts.models.carts import Cart, CartItem
@@ -29,31 +30,57 @@ class CartItemService:
         self.product = validated_data['product']
         self.quantity = validated_data['quantity']
 
-    def _find_cart_item(self) -> Optional[CartItem]:
-        """Найти корзину продуктов пользователя, если она есть."""
-        return CartItem.objects.filter(cart=self.cart, product=self.product)
+    # region ----------------- METHODS CART ITEM SERVICE ----------------------------
+    def _is_product_in_cart_items(self) -> None:
+        """Есть ли этот продукт в корзине пользователя."""
+        if CartItem.objects.filter(cart=self.cart, product=self.product):
+            raise ParseError('Этот товар уже добавлен в корзину!')
 
-    def _product_deduction(self):
-        self.product.quantity -= self.quantity
-        self.product.save()
+    def _is_product_quantity_is_positive(self) -> None:
+        """Проверка на правильность кол-ва товара при создании Корзины."""
+        if self.quantity < 1:
+            raise ParseError('Нельзя добавить товар с кол-вом меньше единицы!')
 
-    def _cart_item_update(self, cart_item: CartItem) -> CartItem:
-        """Обновление корзины"""
-        cart_item = cart_item[0]
-        cart_item.quantity += self.quantity
-        cart_item.save()
-        return cart_item
-
-    def _cart_item_create(self) -> CartItem:
+    def _execute_create(self) -> CartItem:
         """Создание корзины."""
-        # Вычет кол-ва товара
-        self._product_deduction()
         return CartItem.objects.create(cart_id=self.cart.pk, **self.validated_data)
 
-    def create_cart_item(self) -> Optional[CartItem]:
+    def create_cart_item(self) -> CartItem:
         """
         Создать и вернуть содержимое корзины.
         Либо вернуть None, если этот товар уже есть в Корзине.
         """
-        cart_item = self._find_cart_item()
-        return None if cart_item else self._cart_item_create()
+        self._is_product_quantity_is_positive()
+        self._is_product_in_cart_items()
+        return self._execute_create()
+    # endregion ---------------------------------------------------------------------
+
+
+class CartItemUpdateService:
+    def __init__(self, cart_item, validated_data):
+        self.cart_item = cart_item
+        self.product = cart_item.product
+        self.quantity = validated_data['quantity']
+
+    # region --------------- METHODS CART ITEM UPDATE SERVICE -----------------------
+    def _is_product_quantity_less_zero(self) -> None:
+        """Проверка кол-ва товара меньше или больше нуля."""
+        if self.quantity <= 0:
+            raise ParseError('Значение кол-ва товара не может быть меньше единицы!')
+
+    def _is_cart_more_products_than_product(self) -> None:
+        """Проверка на количество товара в корзине и на складе."""
+        if self.quantity > self.product.quantity:
+            raise ParseError('Столько товара нету на складе!')
+
+    def _execute_update(self) -> CartItem:
+        """Обновление корзины."""
+        self.cart_item.quantity = self.quantity
+        self.cart_item.save()
+        return self.cart_item
+
+    def update_cart_item(self) -> Union[ParseError, CartItem]:
+        self._is_product_quantity_less_zero()
+        self._is_cart_more_products_than_product()
+        return self._execute_update()
+    # endregion ---------------------------------------------------------------------

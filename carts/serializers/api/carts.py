@@ -1,13 +1,11 @@
 from typing import Union
 
 from django.contrib.auth import get_user_model
-from django.db import transaction
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
 
 from carts.models.carts import Cart, CartItem
-from carts.serializers.nested.carts import CartProductNestedSerializer
-from carts.services.carts import CartService, CartItemService
+from carts.serializers.nested.carts import CartItemsNestedSerializer
+from carts.services.carts import CartService, CartItemService, CartItemUpdateService
 from products.models.products import Product
 
 User = get_user_model()
@@ -111,16 +109,11 @@ class CartItemSerializer(serializers.Serializer):
         },
     )
 
-    def create(
-            self,
-            validated_data: dict[str, Union[Product, int]],
-    ) -> Union[ParseError, CartItem]:
+    def create(self, validated_data: dict[str, Union[Product, int]]) -> CartItem:
         """Создание содержимого корзины и проверка на её наличие."""
         cart = CartService.get_or_create_cart(self.context['request'])
         cart_item_init = CartItemService(cart=cart, validated_data=validated_data)
         cart_item = cart_item_init.create_cart_item()
-        if cart_item is None:
-            raise ParseError('Этот товар уже добавлен в корзину!')
         return cart_item
 
 
@@ -137,20 +130,24 @@ class CartItemUpdateSerializer(serializers.ModelSerializer):
         label='Количество',
         min_value=1,
         error_messages={
-            'min_value': 'Количество товаров не может быть меньше одного',
+            'min_value': 'Количество товаров не может быть меньше одного.',
             'required': 'Пожалуйста, выберите количество покупок',
         },
     )
 
     class Meta:
-        model = Cart
-        fields = ('quantity',)
+        model = CartItem
+        fields = ('product', 'quantity')
+
+    def update(self, instance, validated_data) -> CartItem:
+        cart_item = CartItemUpdateService(instance, validated_data)
+        return cart_item.update_cart_item()
 
 
 class CartSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    products = CartProductNestedSerializer(many=True)
+    cart_items = CartItemsNestedSerializer(many=True)
 
     class Meta:
         model = Cart
-        fields = ('user', 'products')
+        fields = ('user', 'cart_items')
