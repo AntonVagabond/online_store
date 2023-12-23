@@ -17,6 +17,8 @@ class Product(BaseModel):
         * `product_description` (ProductDescription): модель описания товара.
         * `product_feature` (ProductFeature): модель характеристик товара.
         * `product_images` (ProductImages): модель для изображений товара.
+        * `cart_items` (CartItem): обратное обращение с внешнего ключа product
+                                содержимого корзины.
     """
     # region ------------------------ АТРИБУТЫ ТОВАРА -------------------------------
     name = models.CharField(

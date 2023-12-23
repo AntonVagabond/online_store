@@ -24,7 +24,7 @@ class CartItemService:
             cart: Cart,
             validated_data: dict[str, Union[Product, int]]
     ) -> None:
-        """Инициализация товаров корзины"""
+        """Инициализация содержимого корзины."""
         self.cart = cart
         self.validated_data = validated_data
         self.product = validated_data['product']
@@ -51,7 +51,7 @@ class CartItemService:
         return CartItem.objects.create(cart_id=self.cart.pk, **self.validated_data)
 
     def create_cart_item(self) -> CartItem:
-        """Создать и вернуть содержимое корзины, если оно новое."""
+        """Создать и вернуть содержимое корзины, если этого товара в нём нет."""
         self._is_product_quantity_is_positive()
         self._is_product_in_cart_items()
         self._add_total_price_product()
@@ -60,7 +60,9 @@ class CartItemService:
 
 
 class CartItemUpdateService:
-    def __init__(self, cart_item, validated_data):
+    """Сервисная часть для Содержимого Корзины."""
+    def __init__(self, cart_item: CartItem, validated_data: dict[str, int]) -> None:
+        """Инициализация товаров корзины"""
         self.cart_item = cart_item
         self.product = cart_item.product
         self.price = self.product.price
@@ -84,7 +86,8 @@ class CartItemUpdateService:
         self.cart_item.save()
         return self.cart_item
 
-    def update_cart_item(self) -> Union[ParseError, CartItem]:
+    def update_cart_item(self) -> CartItem:
+        """Обновить и вернуть содержимое корзины, если данные корректны."""
         self._is_product_quantity_less_zero()
         self._is_cart_more_products_than_product()
         return self._execute_update()

@@ -4,43 +4,19 @@ from carts.managers.carts import CartManager
 from common.models.base import BaseModel
 
 
-# class Cart(BaseModel):
-#     """
-#     Модель корзины.
-#
-#     Аттрибуты:
-#         * `user` (ForeignKey): пользователи.
-#         * `products` (ManyToManyField): товары в корзине.
-#     """
-#     user = models.ForeignKey(
-#         to='users.User',
-#         on_delete=models.CASCADE,
-#         related_name='carts',
-#         verbose_name='Пользователи',
-#         null=True,
-#         blank=True,
-#     )
-#     products = models.ForeignKey(
-#         to='products.Product',
-#         on_delete=models.CASCADE,
-#         related_name='carts',
-#         verbose_name='Товары',
-#         null=True,
-#         blank=True,
-#     )
-#     quantity = models.PositiveSmallIntegerField(default=1)
-#
-#     class Meta:
-#         verbose_name = 'Корзина'
-#         verbose_name_plural = 'Корзины'
-#         # Товар не должен повторяться в корзине
-#         unique_together = ('user', 'products')
-#
-#     def __str__(self) -> str:
-#         return f'{self.products.name}({self.quantity})'
-
-
 class Cart(BaseModel):
+    """
+    Модель Корзины.
+
+    Аттрибуты:
+        * `user` (ForeignKey): пользователи.
+        * `cart_price` (ForeignKey): пользователи.
+        * `products` (ManyToManyField): товары в корзине.
+        * `cart_items` (CartItem): обратное обращение с внешнего ключа cart
+                                содержимого корзины.
+    """
+
+    # region ------------------------- АТРИБУТЫ КОРЗИНЫ -----------------------------
     user = models.ForeignKey(
         to='users.User',
         on_delete=models.CASCADE,
@@ -49,13 +25,13 @@ class Cart(BaseModel):
         null=True,
         blank=True,
     )
-    cart_price = models.DecimalField(
-        verbose_name='Цена корзины',
-        max_digits=10,
-        decimal_places=2,
-        null=True,
-        blank=True,
-    )
+    # cart_price = models.DecimalField(
+    #     verbose_name='Цена корзины',
+    #     max_digits=10,
+    #     decimal_places=2,
+    #     null=True,
+    #     blank=True,
+    # )
     products = models.ManyToManyField(
         to='products.Product',
         related_name='cart_products',
@@ -63,10 +39,26 @@ class Cart(BaseModel):
         blank=True,
         through='CartItem',
     )
+    # endregion ---------------------------------------------------------------------
     objects = CartManager()
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
 
 
 class CartItem(BaseModel):
+    """
+    Модель Содержимого Корзины.
+
+    Аттрибуты:
+        * `cart` (ForeignKey): корзина.
+        * `product` (ForeignKey): товар.
+        * `quantity` (PositiveSmallIntegerField): кол-во товара.
+        * `total_price_product` (DecimalField): общая стоимость одного товара
+    """
+
+    # region --------------------- АТРИБУТЫ СОДЕРЖИМОГО КОРЗИНЫ ---------------------
     cart = models.ForeignKey(
         to='carts.Cart',
         on_delete=models.CASCADE,
@@ -91,10 +83,11 @@ class CartItem(BaseModel):
         null=True,
         blank=True,
     )
+    # endregion ---------------------------------------------------------------------
 
     class Meta:
-        verbose_name = 'Корзина'
-        verbose_name_plural = 'Корзины'
+        verbose_name = 'Содержимое корзины'
+        verbose_name_plural = 'Содержимое корзин'
         # Товар не должен повторяться в корзине
         unique_together = ('cart', 'product')
 
