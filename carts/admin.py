@@ -32,7 +32,7 @@ class CartAdmin(admin.ModelAdmin):
     list_display = ('id', 'user',)
     list_display_links = ('id', 'user')
     fields = ('user', 'cart_price')
-    readonly_fields = ('cart_price',)
+    readonly_fields = ('user', 'cart_price',)
     inlines = (CartItemInline,)
 
     @admin.display(description='Стоимость корзины.')
