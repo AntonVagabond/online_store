@@ -41,3 +41,18 @@ class ProductNestedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('id', 'name', 'price', 'product_images')
+
+
+class ProductCartNestedSerializer(serializers.ModelSerializer):
+    """
+    Вложенный преобразователь товара корзины.
+
+    Аттрибуты:
+        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+    """
+
+    product_images = ProductImagesNestedSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = ('id', 'name', 'price', 'product_images')
