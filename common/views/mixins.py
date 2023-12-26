@@ -1,7 +1,6 @@
 from typing import Union
 
 from rest_framework import mixins
-from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 
 from common.constans import roles
@@ -71,23 +70,21 @@ class ListViewSet(ExtendedGenericViewSet, mixins.ListModelMixin):
     pass
 
 
-class CreateViewSet(ExtendedGenericViewSet, mixins.CreateModelMixin):
-    """
-        Класс включающий базовый набор поведения generic view и включающий
-        модель списка, имеет такие методы как: `get_object`,
-        `get_queryset`, `create()`.
-    """
+class RetrieveListViewSet(ExtendedGenericViewSet,
+                          mixins.RetrieveModelMixin,
+                          mixins.ListModelMixin):
+    """Класс представления включающий в себя List и Retrieve mixins."""
     pass
 
 
-class CUDListViewSet(ExtendedGenericViewSet,
+class CRDListViewSet(ExtendedGenericViewSet,
                      mixins.CreateModelMixin,
-                     mixins.UpdateModelMixin,
+                     mixins.RetrieveModelMixin,
                      mixins.DestroyModelMixin,
                      mixins.ListModelMixin):
     """
     Класс представления включающий в себя список, базовые операции,
-    кроме RetrieveModelMixin.
+    кроме UpdateModelMixin.
     """
     pass
 
@@ -114,12 +111,4 @@ class CRUListViewSet(ExtendedGenericViewSet,
 class CRUDListViewSet(CRUListViewSet,
                       mixins.DestroyModelMixin):
     """Класс включающий в себя CRUD-операции."""
-    pass
-
-
-class ExtendedAPIView(ExtendedView, APIView):
-    """
-    Расширенный класс представления.
-    Исп-ся в местах, где нет модели класса.
-    """
     pass
