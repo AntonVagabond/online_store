@@ -55,7 +55,7 @@ class CartItem(BaseModel):
     cart = models.ForeignKey(
         to='carts.Cart',
         on_delete=models.CASCADE,
-        related_name='cart_items',
+        related_name='products_info',
         verbose_name='Пользователь',
         null=True,
         blank=True,
@@ -63,7 +63,7 @@ class CartItem(BaseModel):
     product = models.ForeignKey(
         to='products.Product',
         on_delete=models.CASCADE,
-        related_name='cart_items',
+        related_name='carts_info',
         verbose_name='Товар',
         null=True,
         blank=True,

@@ -1,31 +1,15 @@
 from rest_framework import serializers
 
 from carts.models.carts import CartItem
-from products.models.products import Product
-from products.serializers.nested.products import ProductImagesNestedSerializer
-
-
-class ProductCartNestedSerializer(serializers.ModelSerializer):
-    """
-    Внутренний преобразователь товара.
-
-    Аттрибуты:
-        * `product_images` (ProductImagesNestedSerializer): изображение товара.
-    """
-
-    product_images = ProductImagesNestedSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Product
-        fields = ('id', 'name', 'price', 'product_images')
+from products.serializers.nested.products import ProductCartNestedSerializer
 
 
 class CartItemsNestedSerializer(serializers.ModelSerializer):
     """
-    Внутренний преобразователь товара.
+    Вложенный преобразователь содержимого корзины.
 
     Аттрибуты:
-        * `product_images` (ProductImagesNestedSerializer): изображение товара.
+        * `product` (ProductCartNestedSerializer): товар.
     """
 
     product = ProductCartNestedSerializer(read_only=True)

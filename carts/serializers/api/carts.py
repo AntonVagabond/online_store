@@ -1,18 +1,25 @@
 from typing import Union
 
 from django.contrib.auth import get_user_model
-from django.db.models import F
 from rest_framework import serializers
 
 from carts.models.carts import Cart, CartItem
 from carts.serializers.nested.carts import CartItemsNestedSerializer
 from carts.services.carts import CartService, CartItemService, CartItemUpdateService
 from products.models.products import Product
+from users.serializers.nested.users import UserNestedSerializer
 
 User = get_user_model()
 
 
 class CartItemSerializer(serializers.Serializer):
+    """
+    Преобразователь содержимого корзины.
+
+    Аттрибуты:
+        * `product` (PrimaryKeyRelatedField): товар.
+        * `quantity` (IntegerField): количество одного товара.
+    """
     product = serializers.PrimaryKeyRelatedField(
         required=True,
         queryset=Product.objects.all(),
@@ -37,11 +44,10 @@ class CartItemSerializer(serializers.Serializer):
 
 class CartItemUpdateSerializer(serializers.ModelSerializer):
     """
-    Преобразователь обновления товара в корзине.
+    Преобразователь обновления содержимого в корзине.
 
     Аттрибуты:
-        * `user` (HiddenField): пользователь.
-        * `quantity` (IntegerField): products.
+        * `quantity` (IntegerField): количество одного товара.
     """
     quantity = serializers.IntegerField(
         required=True,
@@ -64,19 +70,38 @@ class CartItemUpdateSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
+    """
+    Преобразователь корзины.
+
+    Аттрибуты:
+        * `user` (HiddenField): пользователь.
+        * `cart_price` (SerializerMethodField): стоимость корзины.
+        * `cart_items` (CartItemsNestedSerializer): содержимое корзины.
+    """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     cart_price = serializers.SerializerMethodField(
         method_name='get_cart_price',
         read_only=True,
     )
-    cart_items = CartItemsNestedSerializer(many=True)
+    products_info = CartItemsNestedSerializer(many=True)
 
     class Meta:
         model = Cart
-        fields = ('user', 'cart_price', 'cart_items')
+        fields = ('id', 'user', 'cart_price', 'products_info')
 
     @staticmethod
     def get_cart_price(obj) -> str:
         """Получить сумму корзины."""
         cart_price = Cart.objects.get_cart_price(obj)
         return cart_price
+
+
+class CartListSerializer(serializers.ModelSerializer):
+    """
+    Преобразователь поиска пользователей, у которых есть содержимое у корзины.
+    """
+    user = UserNestedSerializer(read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = ('id', 'user')

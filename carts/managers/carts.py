@@ -28,20 +28,6 @@ class CartManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-    def _get_cart_from_session(self, user: User, request: Request) -> Optional[Cart]:
-        """Получить корзину из сессии, если она есть."""
-        try:
-            cart = self.get(id=request.session['cart_id'])
-        except (self.model.DoesNotExist, KeyError):
-            return None
-        else:
-            # Если в корзине нет пользователя и пользователь
-            # прошел проверку подлинности, добавьте его в корзину.
-            if not cart.user and request.user.is_authenticated:
-                cart.user = user
-                cart.save()
-            return cart
-
     def _create_new_user(self, user: Optional[User]) -> Cart:
         """Создать нового пользователя в базе Cart."""
         # Если пользователь является `Anonymous User`
@@ -67,11 +53,6 @@ class CartManager(models.Manager):
             request.session['cart_id'] = cart.pk
             return cart
 
-        # Попробуем получить корзину на основе переменной id,
-        # хранящейся в `request.session`.
-        cart = self._get_cart_from_session(user=user, request=request)
-        if cart:
-            return cart
         cart = self._create_new_user(user)
         request.session['cart_id'] = cart.pk
         return cart
@@ -83,7 +64,7 @@ class CartManager(models.Manager):
         # Делаем запрос в CartItem, получаем список словарей
         # в котором ключ -> total_price_product, значение -> общая цена товара.
         queryset = (
-            cart.cart_items
+            cart.products_info
             .annotate(price_product_sum=F('total_price_product'))
             .values('price_product_sum')
         )

@@ -8,17 +8,26 @@ from common.views import mixins
 
 @extend_schema_view(
     list=extend_schema(
+        summary='Получить список корзин пользователей',
+        tags=['Корзина'],
+    ),
+    retrieve=extend_schema(
         summary='Получить информацию о корзине покупок',
         tags=['Корзина'],
     ),
 )
-class CartViewSet(mixins.ListViewSet):
+class CartViewSet(mixins.RetrieveListViewSet):
     """Представление корзины."""
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     queryset = Cart.objects.all()
-    serializer_class = carts_s.CartSerializer
+    serializer_class = carts_s.CartListSerializer
+
+    multi_serializer_class = {
+        'list': carts_s.CartListSerializer,
+        'retrieve': carts_s.CartSerializer,
+    }
 
 
 @extend_schema_view(
