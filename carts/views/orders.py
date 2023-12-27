@@ -4,6 +4,7 @@ from rest_framework import permissions
 
 from carts.models.carts import Cart, CartItem
 from carts.models.orders import Order, OrderItem
+from carts.services.orders import AddItemToOrderService
 from common.views import mixins
 from carts.serializers.api import orders as orders_s
 
@@ -43,18 +44,10 @@ class OrderViewSet(mixins.CRDListViewSet):
             self,
             serializer: orders_s.OrderSerializer,
     ) -> orders_s.OrderSerializer:
+        """Сохранение заказа."""
         user = get_current_user()
-
         order = serializer.save()
-        cart = Cart.objects.filter(user=user)[0]
-        cart_items = CartItem.objects.filter(cart_id=cart.pk)
-        for cart_item in cart_items:
-            order_items = OrderItem()
-            order_items.product = cart_item.product
-            order_items.quantity = cart_item.quantity
-            order_items.order = order
-            order_items.save()
-
-        cart.delete()
-
+        add_item_to_order_service = AddItemToOrderService(user=user, order=order)
+        # Добавление товара в заказ.
+        add_item_to_order_service.execute()
         return order
