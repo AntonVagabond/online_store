@@ -16,4 +16,4 @@ class OrderItemNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'order', 'product', 'quantity')
+        fields = ('id', 'product', 'quantity')

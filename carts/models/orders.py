@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -112,10 +110,6 @@ class OrderItem(BaseModel):
         verbose_name='Количество товара',
         default=0,
     )
-    # add_time = models.DateTimeField(
-    #     verbose_name='Добавить время',
-    #     default=datetime.now()
-    # )
 
     class Meta:
         verbose_name = 'Позиция заказа'
