@@ -11,8 +11,8 @@ from carts.serializers.api import orders as orders_s
 
 @extend_schema_view(
     list=extend_schema(
-        summary='Список заказов',
-        tags=['Заказ'],
+        summary='Посмотреть список заказов',
+        tags=['Список'],
     ),
     create=extend_schema(
         summary='Создать заказ',
