@@ -50,7 +50,7 @@ class OrderAmountService:
 
     def _get_cart_current_user(self) -> Cart:
         """Получить корзину текущего пользователя."""
-        return Cart.objects.filter(user=self._user)[0]
+        return Cart.objects.filter(user=self._user).first()
 
     @staticmethod
     def _get_cart_price(cart: Cart) -> str:

@@ -1,8 +1,9 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from carts.models.orders import Order
-from carts.serializers.nested.orders import OrderItemNestedSerializer
+from carts.models.orders import Order, OrderStatus
+from carts.serializers.nested.orders import OrderItemNestedSerializer, \
+    OrderStatusNestedSerializer
 from carts.services.orders import OrderSequenceNumberService, OrderAmountService
 
 
@@ -46,6 +47,7 @@ class OrderSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     # Эта информация для заказа, ниже, не должна быть изменяема.
+    order_status = OrderStatusNestedSerializer(read_only=True)
     sequence_number = serializers.CharField(read_only=True)
     transaction_number = serializers.CharField(read_only=True)
     order_amount = serializers.CharField(read_only=True)
@@ -57,6 +59,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'user',
+            'order_status',
             'sequence_number',
             'transaction_number',
             'post_script',
@@ -67,8 +70,8 @@ class OrderSerializer(serializers.ModelSerializer):
             'order_date',
         )
 
-    def _generate_sequence_number(self) -> str:
-        """Получить порядковый номер заказа."""
+    def _add_sequence_number(self) -> str:
+        """Добавить порядковый номер заказа."""
         seq_number_service = OrderSequenceNumberService(self.context['request'].user)
         return seq_number_service.execute()
 
@@ -82,7 +85,13 @@ class OrderSerializer(serializers.ModelSerializer):
         Добавление порядкового номера, суммы заказа,
         дата создания заказа в преобразователь.
         """
-        attrs['sequence_number'] = self._generate_sequence_number()
+        attrs['sequence_number'] = self._add_sequence_number()
         attrs['order_amount'] = self._add_order_amount()
         attrs['order_date'] = timezone.now().astimezone()
         return attrs
+
+    def create(self, validated_data):
+        """Создание заказа и статус заказа."""
+        status = OrderStatus.objects.get_status()
+        order = Order.objects.create(status=status, **validated_data)
+        return order

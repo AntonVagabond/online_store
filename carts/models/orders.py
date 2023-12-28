@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+from carts.managers.orders import OrderStatusManager
 from common.models.base import BaseModel
 
 
@@ -10,6 +11,7 @@ class Order(BaseModel):
 
     Аттрибуты:
         * `user` (ForeignKey): пользователь.
+        * `status` (ForeignKey): статус.
         * `sequence_number` (CharField): порядковый номер.
         * `transaction_number` (CharField): номер транзакции.
         * `post_script` (PositiveSmallIntegerField): сообщение о заказе.
@@ -26,6 +28,14 @@ class Order(BaseModel):
         on_delete=models.RESTRICT,
         related_name='orders',
         verbose_name='Пользователь',
+        null=True,
+        blank=True,
+    )
+    order_status = models.ForeignKey(
+        to='carts.OrderStatus',
+        on_delete=models.RESTRICT,
+        related_name='orders',
+        verbose_name='Статус',
         null=True,
         blank=True,
     )
@@ -90,6 +100,14 @@ class Order(BaseModel):
 
 
 class OrderItem(BaseModel):
+    """
+    Модель Содержимого заказа.
+
+    Аттрибуты:
+        * `order` (ForeignKey): заказ.
+        * `product` (ForeignKey): товар.
+        * `quantity` (PositiveSmallIntegerField): количество товара.
+    """
     order = models.ForeignKey(
         to='carts.Order',
         on_delete=models.RESTRICT,
@@ -114,3 +132,30 @@ class OrderItem(BaseModel):
     class Meta:
         verbose_name = 'Позиция заказа'
         verbose_name_plural = 'Позиции заказов'
+
+
+class OrderStatus(BaseModel):
+    """
+    Модель статуса заказа.
+
+    Аттрибуты:
+        * `status` (CharField): статус.
+        * `orders` (ManyToOne): заказ.
+    """
+    status = models.CharField(
+        'Название статуса',
+        max_length=30,
+        null=True,
+        blank=True,
+    )
+    description = models.CharField(
+        'Описание состояния заказа',
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    objects = OrderStatusManager()
+
+    class Meta:
+        verbose_name = 'Статус заказа'
+        verbose_name_plural = 'Статусы заказа'
