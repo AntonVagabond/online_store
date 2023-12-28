@@ -3,6 +3,7 @@ from typing import Optional
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
+from djoser import serializers as djoser_serializers
 
 from users.models.profile import Profile
 from users.serializers.nested.profile import (
@@ -13,7 +14,7 @@ from users.serializers.nested.profile import (
 User = get_user_model()
 
 
-class MeSerializer(serializers.ModelSerializer):
+class MeSerializer(djoser_serializers.UserCreateSerializer):
     """
     Преобразователь пользователя.
 
@@ -23,7 +24,7 @@ class MeSerializer(serializers.ModelSerializer):
 
     profile = ProfileShortSerializer()
 
-    class Meta:
+    class Meta(djoser_serializers.UserCreateSerializer.Meta):
         model = User
         fields = (
             'id',
@@ -34,6 +35,7 @@ class MeSerializer(serializers.ModelSerializer):
             'username',
             'profile',
             'date_joined',
+            'password'
         )
 
 
@@ -60,7 +62,7 @@ class MeUpdateSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def _update_profile(profile: type[Profile], data: Optional[str]) -> None:
+    def _update_profile(profile: Profile, data: Optional[str]) -> None:
         """Обновление профиля."""
 
         profile_serializer = ProfileUpdateSerializer(
@@ -71,9 +73,9 @@ class MeUpdateSerializer(serializers.ModelSerializer):
 
     def update(
             self,
-            instance: type[User],
+            instance: User,
             validated_data: dict[str, str],
-    ) -> type[User]:
+    ) -> User:
         """Обновление в модели пользователя."""
 
         # Проверка на наличия профиля

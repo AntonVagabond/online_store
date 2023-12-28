@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework_simplejwt import authentication
 
 from common.views import mixins
 from users.serializers.api import users as user_s
@@ -19,6 +20,7 @@ class MeView(generics.RetrieveAPIView):
     """Представление профиля пользователя."""
 
     permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (authentication.JWTAuthentication,)
     queryset = User.objects.all()
     serializer_class = user_s.MeSerializer
 
