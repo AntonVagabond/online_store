@@ -43,7 +43,7 @@ class OrderViewSet(mixins.CRDListViewSet):
     def perform_create(
             self,
             serializer: orders_s.OrderSerializer,
-    ) -> orders_s.OrderSerializer:
+    ) -> Order:
         """Сохранение заказа."""
         user = get_current_user()
         order = serializer.save()
