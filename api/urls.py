@@ -9,7 +9,6 @@ from carts.urls import urlpatterns as cart_urls
 app_name = 'api'
 
 urlpatterns = [
-    path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
 
