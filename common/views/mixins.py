@@ -1,57 +1,57 @@
-from typing import Union
+from typing import Optional, Union
 
+from djoser.views import UserViewSet
 from rest_framework import mixins
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
-
-from common.constans import roles
 
 
 class ExtendedView:
     """Расширенное представление"""
+    permission_classes = (AllowAny,)
+    multi_permission_classes = None
+
     multi_serializer_class = None
     serializer_class = None
     request = None
 
-    def get_serializer_class(self) -> Union[
-        serializer_class, multi_serializer_class, None
-    ]:
+    def _get_action_or_method(self) -> str:
+        """Получить действие или метод запроса."""
+        if hasattr(self, 'action') and self.action:
+            return self.action
+        return self.request.method
+
+    def get_permissions(self) -> Union[permission_classes]:
+        """Получить класс разрешения"""
+
+        assert self.permission_classes or self.multi_permission_classes, (
+                '"%s" должен либо включать `permission_classes`, '
+                '`multi_permission_classes`, атрибут, либо переопределять '
+                '`get_permissions()` метод.' % self.__class__.__name__
+        )
+        if not self.multi_permission_classes:
+            return self.permission_classes
+
+        # Определить действие или метод запроса.
+        action = self._get_action_or_method()
+        permissions = self.multi_permission_classes.get(action)
+        if permissions:
+            return [permission() for permission in permissions]
+        return [permission() for permission in self.permission_classes]
+
+    def get_serializer_class(self) -> Optional[serializer_class]:
         """Получить класс преобразователя."""
 
         # Если не будет этих двух условий, то выскачет ошибка.
         assert self.serializer_class or self.multi_serializer_class, (
-                '"%s" should either include `serializer_class`, '
-                '`multi_serializer_class`, attribute, or override the '
-                '`get_serializer_class()` method.' % self.__class__.__name__
+                '"%s" должен либо включать `serializer_class`, '
+                '`multi_serializer_class`, атрибут, либо переопределять '
+                '`get_serializer_class()` метод.' % self.__class__.__name__
         )
         if not self.multi_serializer_class:
             return self.serializer_class
 
-        # Определить коды ролей пользователя.
-        user = self.request.user
-        if user.is_anonymous:
-            user_roles = (roles.PUBLIC_GROUP,)
-        elif user.is_superuser:
-            user_roles = (roles.ADMIN_GROUP,)
-        else:
-            user_roles = set(user.groups.all().values_list('code', flat=True))
-
-        # Определить действие или метод запроса.
-        if hasattr(self, 'action') and self.action:
-            action = self.action
-        else:
-            action = self.request.method
-
-        # Пытаюсь получить роль + действие преобразователя.
-        for role in user_roles:
-            serializer_key = f'{role}__{action}'
-            if self.multi_serializer_class.get(serializer_key):
-                return self.multi_serializer_class.get(serializer_key)
-
-        # Пытаюсь получить преобразователь ролей.
-        for role in user_roles:
-            serializer_key = role
-            if self.multi_serializer_class.get(serializer_key):
-                return self.multi_serializer_class.get(serializer_key)
+        action = self._get_action_or_method()
 
         # Пытаюсь получить преобразователь действий или значение по умолчанию.
         return self.multi_serializer_class.get(action) or self.serializer_class
@@ -59,6 +59,11 @@ class ExtendedView:
 
 class ExtendedGenericViewSet(ExtendedView, GenericViewSet):
     """Расширенный набор общих представлений."""
+    pass
+
+
+class ExtendedUserViewSet(ExtendedView, UserViewSet):
+    """Расширенное представление пользователя."""
     pass
 
 
