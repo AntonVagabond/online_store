@@ -19,23 +19,23 @@ User = get_user_model()
 @extend_schema_view(
     registration=extend_schema(
         summary='Регистрация пользователя',
-        tags=['Регистрация и Авторизация'],
+        tags=['Регистрация'],
     ),
     activation=extend_schema(
         summary='Активация пользователя',
-        tags=['Регистрация и Авторизация'],
+        tags=['Регистрация'],
     ),
     change_password=extend_schema(
         summary='Смена пароля',
-        tags=['Регистрация и Авторизация'],
+        tags=['Авторизация'],
     ),
     reset_password=extend_schema(
         summary='Запрос о новом пароле на почту',
-        tags=['Регистрация и Авторизация'],
+        tags=['Авторизация'],
     ),
     reset_password_confirm=extend_schema(
         summary='Сброс пароля',
-        tags=['Регистрация и Авторизация'],
+        tags=['Авторизация'],
     ),
     me=extend_schema(
         summary='Профиль пользователя',
