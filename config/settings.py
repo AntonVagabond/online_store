@@ -195,7 +195,6 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 
 
 # region ----------------------- DJOSER AND SIMPLE JWT-------------------------------
-ACCOUNT_SERIALIZER = 'users.serializers.api.users.MeSerializer'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
@@ -231,9 +230,9 @@ DJOSER = {
     'SET_PASSWORD_RETYPE': True,
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SERIALIZERS': {
-        'user_create': ACCOUNT_SERIALIZER,
-        'user': ACCOUNT_SERIALIZER,
-        'current_user': ACCOUNT_SERIALIZER,
+        'user_create': 'users.serializers.api.users.RegistrationSerializer',
+        'user': 'users.serializers.api.users.UserSerializer',
+        'current_user': 'users.serializers.api.users.UserSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
 }
