@@ -1,55 +1,35 @@
-from typing import Union
-
-from crum import get_current_user
-from django.contrib.auth import get_user_model
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions, generics, status
-from rest_framework.exceptions import ValidationError
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from users.serializers.api import auth as auth_s
-
-User = get_user_model()
-
-
-# region ------------------ REGISTRATION AND PASSWORD -------------------------------
-@extend_schema_view(
-    post=extend_schema(
-        summary='Регистрация пользователя',
-        tags=['Авторизация и Регистрация'],
-    )
-)
-class RegistrationView(generics.CreateAPIView):
-    """Вид регистрации."""
-
-    queryset = User.objects.all()
-    permission_classes = (permissions.AllowAny,)
-    serializer_class = auth_s.RegistrationSerializer
+from rest_framework_simplejwt import views
 
 
 @extend_schema_view(
     post=extend_schema(
-        request=auth_s.ChangePasswordSerializer,
-        summary='Смена пароля',
-        tags=['Авторизация и Регистрация'],
-    )
+        summary='Создание токена',
+        tags=['Аутентификация'],
+    ),
 )
-class ChangePasswordView(APIView):
-    """Представление смены пароля."""
+class CustomTokenObtainPairView(views.TokenObtainPairView):
+    """Представление для создания токена."""
+    pass
 
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = auth_s.ChangePasswordSerializer
 
-    @staticmethod
-    def post(request: Request) -> Union[ValidationError, Response]:
-        """Изменить пароль."""
+@extend_schema_view(
+    post=extend_schema(
+        summary='Обновление токена',
+        tags=['Аутентификация'],
+    ),
+)
+class CustomTokenRefreshView(views.TokenRefreshView):
+    """Представление для обновления токена."""
+    pass
 
-        user = get_current_user()
-        serializer = auth_s.ChangePasswordSerializer(
-            instance=user, data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@extend_schema_view(
+    post=extend_schema(
+        summary='Проверка токена',
+        tags=['Аутентификация'],
+    ),
+)
+class CustomTokenVerifyView(views.TokenVerifyView):
+    """Представление проверки токена."""
+    pass

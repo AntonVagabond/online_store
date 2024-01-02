@@ -8,11 +8,11 @@ from common.views import mixins
 
 @extend_schema_view(
     list=extend_schema(
-        summary='Получить список корзин пользователей',
-        tags=['Корзина'],
+        summary='Получить список корзин',
+        tags=['Список'],
     ),
     retrieve=extend_schema(
-        summary='Получить информацию о корзине покупок',
+        summary='Посмотреть корзину',
         tags=['Корзина'],
     ),
 )
@@ -36,11 +36,11 @@ class CartViewSet(mixins.RetrieveListViewSet):
         tags=['Корзина'],
     ),
     partial_update=extend_schema(
-        summary='Частичное обновление товара в корзине',
+        summary='Частично изменить товар в корзине',
         tags=['Корзина'],
     ),
     destroy=extend_schema(
-        summary='Удалить записи о покупках',
+        summary='Удалить товар из корзины',
         tags=['Корзина'],
     )
 )

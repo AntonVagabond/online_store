@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # packages
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',
     'corsheaders',
     'djoser',
@@ -95,7 +96,6 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATED_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
@@ -180,32 +180,24 @@ SPECTACULAR_SETTINGS = {
 
 
 # region ------------------------------ SMPT ----------------------------------------
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# # Настройка почтового сервера по SMPT-протоколу
-# EMAIL_HOST = env.str(var='EMAIL_HOST')
-# EMAIL_PORT = env.int(var='EMAIL_PORT')
-# EMAIL_HOST_USER = env.str(var='EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env.str(var='EMAIL_HOST_PASSWORD')
-# EMAIL_USE_SSL = env.bool(var='EMAIL_USE_SSL')
-#
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-# SERVER_EMAIL = EMAIL_HOST_USER
-# EMAIL_ADMIN = EMAIL_HOST_USER
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# Настройка почтового сервера по SMPT-протоколу
+EMAIL_HOST = env.str(var='EMAIL_HOST')
+EMAIL_PORT = env.int(var='EMAIL_PORT')
+EMAIL_USE_TLS = env.bool(var='EMAIL_USE_TLS')
+EMAIL_HOST_USER = env.str(var='EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str(var='EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
 # endregion -------------------------------------------------------------------------
 
 
-# region ---------------------------- DJOSER ----------------------------------------
-DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,
-    'SERIALIZERS': {},
-}
-
+# region ----------------------- DJOSER AND SIMPLE JWT-------------------------------
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
@@ -214,7 +206,7 @@ SIMPLE_JWT = {
     'AUDIENCE': None,
     'ISSUER': None,
 
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_TYPES': ('JWT',),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
 
@@ -225,7 +217,24 @@ SIMPLE_JWT = {
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=1),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=7),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'SET_PASSWORD_RETYPE': True,
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.api.users.RegistrationSerializer',
+        'user': 'users.serializers.api.users.UserSerializer',
+        'current_user': 'users.serializers.api.users.UserSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    },
 }
 # endregion -------------------------------------------------------------------------
 
