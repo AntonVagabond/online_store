@@ -6,7 +6,7 @@ from products.models.categories import Category
 
 
 class BaseCategorySerializer(serializers.ModelSerializer):
-    """Базовый класс сериализатора для категории"""
+    """Базовый класс сериализатора для категории."""
     class Meta:
         abstract = True
 
