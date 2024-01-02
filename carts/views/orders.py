@@ -2,11 +2,10 @@ from crum import get_current_user
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
 
-from carts.models.carts import Cart, CartItem
-from carts.models.orders import Order, OrderItem
+from carts.models.orders import Order
+from carts.serializers.api import orders as orders_s
 from carts.services.orders import AddItemToOrderService
 from common.views import mixins
-from carts.serializers.api import orders as orders_s
 
 
 @extend_schema_view(
