@@ -179,9 +179,9 @@ SPECTACULAR_SETTINGS = {
 # endregion -------------------------------------------------------------------------
 
 
-# region ------------------------------ SMPT ----------------------------------------
+# region ------------------------------ SMTP ----------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# Настройка почтового сервера по SMPT-протоколу
+# Настройка почтового сервера по SMTP-протоколу
 EMAIL_HOST = env.str(var='EMAIL_HOST')
 EMAIL_PORT = env.int(var='EMAIL_PORT')
 EMAIL_USE_TLS = env.bool(var='EMAIL_USE_TLS')
