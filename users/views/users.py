@@ -21,16 +21,16 @@ User = get_user_model()
         summary='Регистрация пользователя',
         tags=['Регистрация'],
     ),
-    activation=extend_schema(
-        summary='Активация пользователя',
+    reset_password=extend_schema(
+        summary='Запрос о новом пароле на почту',
         tags=['Регистрация'],
     ),
     change_password=extend_schema(
         summary='Смена пароля',
         tags=['Авторизация'],
     ),
-    reset_password=extend_schema(
-        summary='Запрос о новом пароле на почту',
+    activation=extend_schema(
+        summary='Активация пользователя',
         tags=['Авторизация'],
     ),
     reset_password_confirm=extend_schema(
