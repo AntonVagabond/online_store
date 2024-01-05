@@ -243,6 +243,28 @@ AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
+# region ------------------------------- REDIS --------------------------------------
+# Кэш с помощью => Redis.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+    }
+}
+# endregion -------------------------------------------------------------------------
+
+
+# region ------------------------------- CELERY -------------------------------------
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+result_backend = 'redis://127.0.0.1:6379'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+accept_content = ['application/json']
+result_serializer = 'json'
+task_serializer = 'json'
+timezone = 'Europe/Moscow'
+# endregion -------------------------------------------------------------------------
+
 
 if DEBUG:
     # region ------------------------- SENTRY ---------------------------------------
