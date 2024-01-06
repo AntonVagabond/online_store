@@ -93,5 +93,5 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Создание заказа и статус заказа."""
         status = OrderStatus.objects.get_status()
-        order = Order.objects.create(status=status, **validated_data)
+        order = Order.objects.create(order_status=status, **validated_data)
         return order
