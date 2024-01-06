@@ -104,7 +104,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         return self.create(request, *args, **kwargs)
 
     @action(methods=['POST'], detail=False)
-    def activation(self, request, *args, **kwargs) -> Response:
+    def activation(self, request: Request, *args, **kwargs) -> Response:
         """Метод для активации пользователя."""
         # Все изменения будут сохранены в базе данных только в том случае,
         # если все операции прошли успешно.
@@ -130,7 +130,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['POST'], detail=False)
-    def change_password(self, request) -> Response:
+    def change_password(self, request: Request) -> Response:
         """Метод для смены пароля."""
         user = get_current_user()
         serializer: user_s.ChangePasswordSerializer = self.get_serializer(
@@ -141,7 +141,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['POST'], detail=False)
-    def reset_password(self, request, *args, **kwargs) -> Response:
+    def reset_password(self, request: Request, *args, **kwargs) -> Response:
         """Метод для запроса на почту о новом пароле."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
