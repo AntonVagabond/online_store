@@ -22,6 +22,7 @@ class CategoryListSerializer(BaseCategorySerializer):
 
 class CategoryRetrieveSerializer(BaseCategorySerializer):
     """Преобразователь получения категории."""
+
     class Meta:
         model = Category
         fields = ('id', 'title', 'image', 'description', 'children')

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from carts.models import carts
+from carts.models import orders
 
 
 class CartItemInline(admin.TabularInline):
@@ -39,4 +40,8 @@ class CartAdmin(admin.ModelAdmin):
     def cart_price(self, obj) -> str:
         cart_price = carts.Cart.objects.get_cart_price(obj)
         return f'{cart_price} руб.'
+
+
+admin.site.register(orders.Order)
+admin.site.register(orders.OrderStatus)
 # endregion -------------------------------------------------------------------------
