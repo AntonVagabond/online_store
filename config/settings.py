@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import environ
 import sentry_sdk
+from celery.schedules import crontab
 
 root = environ.Path(__file__) - 2
 env = environ.Env()
@@ -263,6 +264,14 @@ accept_content = ['application/json']
 result_serializer = 'json'
 task_serializer = 'json'
 timezone = 'Europe/Moscow'
+
+# Резервная копия Базы Данных с помощью => Celery Beat
+CELERY_BEAT_SCHEDULE = {
+    'backup_database': {
+        'task': 'users.tasks.db_backup_task',  # Путь к задаче указанной в tasks.py
+        'schedule': crontab(minute='12'),  # Резервная копия будет создаваться каждый день в полночь
+    },
+}
 # endregion -------------------------------------------------------------------------
 
 
