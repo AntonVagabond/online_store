@@ -128,7 +128,6 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
                 }
                 send_activation_task.delay(context, [user.email])
         return Response(status=status.HTTP_204_NO_CONTENT)
-        # return super().activation(request, *args, **kwargs)
 
     @action(methods=['POST'], detail=False)
     def change_password(self, request) -> Response:
