@@ -15,8 +15,7 @@ from djoser import permissions as djoser_permissions, signals
 
 from common.views import mixins
 from users.serializers.api import users as user_s
-from users.tasks import send_reset_password_task, send_activation_task, \
-    send_reset_password_confirm_task
+from users import tasks
 
 User = get_user_model()
 
@@ -85,13 +84,34 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         """Получить объект пользователя"""
         return self.request.user
 
+    def perform_create(
+            self,
+            serializer: user_s.RegistrationSerializer,
+            **kwargs: None,
+    ) -> None:
+        """Выполнить задание по отправке сообщения о создании пользователя."""
+        with transaction.atomic():
+            user = serializer.save(**kwargs)
+            signals.user_registered.send(
+                sender=self.__class__, user=user, request=self.request
+            )
+
+        if settings.SEND_ACTIVATION_EMAIL:
+            context = {
+                'user_id': user.pk,
+                'domain': self.request.get_host(),
+                'protocol': 'https' if self.request.is_secure() else 'http',
+                'site_name': self.request.get_host(),
+            }
+            tasks.send_registration_task.delay(context, [user.email])
+
     @action(methods=['GET'], detail=False)
-    def me(self, request: Request, *args, **kwargs) -> Response:
+    def me(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Метод для просмотра пользователя."""
         return self.retrieve(request, *args, **kwargs)
 
     @action(methods=['PUT', 'PATCH'], detail=False)
-    def edit(self, request: Request, *args, **kwargs) -> Response:
+    def edit(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Метод для редактирования пользователя."""
         dict_methods = {'PUT': self.update, 'PATCH': self.partial_update}
         for method, func in dict_methods.items():
@@ -99,12 +119,14 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
                 return func(*args, **kwargs)
 
     @action(methods=['POST'], detail=False)
-    def registration(self, request: Request, *args, **kwargs) -> Response:
+    def registration(
+            self, request: Request, *args: None, **kwargs: None
+    ) -> Response:
         """Метод регистрации."""
         return self.create(request, *args, **kwargs)
 
     @action(methods=['POST'], detail=False)
-    def activation(self, request: Request, *args, **kwargs) -> Response:
+    def activation(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Метод для активации пользователя."""
         # Все изменения будут сохранены в базе данных только в том случае,
         # если все операции прошли успешно.
@@ -126,7 +148,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
                     'protocol': 'https' if request.is_secure() else 'http',
                     'site_name': request.get_host(),
                 }
-                send_activation_task.delay(context, [user.email])
+                tasks.send_activation_task.delay(context, [user.email])
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['POST'], detail=False)
@@ -141,7 +163,9 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['POST'], detail=False)
-    def reset_password(self, request: Request, *args, **kwargs) -> Response:
+    def reset_password(
+            self, request: Request, *args: None, **kwargs: None
+    ) -> Response:
         """Метод для запроса на почту о новом пароле."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -156,12 +180,14 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
             }
             # Отправка сообщения с помощью Celery исп-зуя
             # брокер сообщений на базе Redis.
-            send_reset_password_task.delay(context, [user.email])
+            tasks.send_reset_password_task.delay(context, [user.email])
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['POST'], detail=False)
-    def reset_password_confirm(self, request: Request, *args, **kwargs) -> Response:
+    def reset_password_confirm(
+            self, request: Request, *args: None, **kwargs: None
+    ) -> Response:
         """Метод для сброса пароля."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -180,7 +206,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
                 'protocol': 'https' if request.is_secure() else 'http',
                 'site_name': request.get_host(),
             }
-            send_reset_password_confirm_task.delay(context, [user.email])
+            tasks.send_reset_password_confirm_task.delay(context, [user.email])
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
