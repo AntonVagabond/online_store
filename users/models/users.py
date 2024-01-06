@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 
-from users.managers import CustomUserManager
+from users.managers.users import CustomUserManager
 from users.models.profile import Profile
 
 

@@ -1,17 +1,14 @@
-from typing import Union, Optional
+from __future__ import annotations
 
+from typing import Union, Optional, TYPE_CHECKING
+
+from django.contrib.auth import get_user_model
 from django.contrib.auth.base_user import BaseUserManager
 from rest_framework.exceptions import ParseError
 
+if TYPE_CHECKING:
+    User = get_user_model()
 
-# region -------------------------- ТИПИЗАЦИЯ ---------------------------------------
-# Если вызвать сюда настоящего User, а не создать макет, то выскочит ошибка
-# => django.core.exceptions.ImproperlyConfigured: AUTH_USER_MODEL refers to model 'users.User' that has not been installed
-class User:
-    pass
-
-
-# endregion -------------------------------------------------------------------------
 
 class CustomUserManager(BaseUserManager):
     """
@@ -29,7 +26,6 @@ class CustomUserManager(BaseUserManager):
             phone_number: str
     ) -> Optional[str]:
         """Проверка есть ли почта либо номер телефона."""
-
         return email or phone_number
 
     def _create_user(
@@ -39,9 +35,8 @@ class CustomUserManager(BaseUserManager):
             password: Optional[str] = None,
             username: Optional[str] = None,
             **extra_fields: Optional[str]
-    ) -> Union[ParseError, User]:
+    ) -> User:
         """Проверка данных пользователя, суперпользователя."""
-
         # Проверка на то что мы заполнили данные.
         if not (email or phone_number or username):
             raise ParseError('Укажите email или телефон')
@@ -70,9 +65,8 @@ class CustomUserManager(BaseUserManager):
             password: Optional[str] = None,
             username: Optional[str] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ParseError, type[User]]:
+    ) -> User:
         """Создание пользователя."""
-
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', True)
@@ -88,9 +82,8 @@ class CustomUserManager(BaseUserManager):
             password: Optional[str] = None,
             username: Optional[str] = None,
             **extra_fields: Union[str, bool]
-    ) -> Union[ValueError, ParseError, User]:
-        """Создание супер пользователя"""
-
+    ) -> User:
+        """Создание супер-пользователя."""
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)

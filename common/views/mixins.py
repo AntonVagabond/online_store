@@ -30,7 +30,7 @@ class ExtendedView:
                 '`get_permissions()` метод.' % self.__class__.__name__
         )
         if not self.multi_permission_classes:
-            return self.permission_classes
+            return [permission() for permission in self.permission_classes]
 
         # Определить действие или метод запроса.
         action = self._get_action_or_method()
