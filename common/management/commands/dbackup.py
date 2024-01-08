@@ -20,7 +20,7 @@ class Command(BaseCommand):
             '--indent=2',
             '--exclude=contenttypes',
             '--exclude=admin.logentry',
-            f'--output=database-{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}.json'
+            f'--output=database-{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}.json',
         )
         self.stdout.write(
             self.style.SUCCESS('Успешное резервное копирование базы данных')
