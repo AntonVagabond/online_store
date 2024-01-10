@@ -265,13 +265,13 @@ result_serializer = 'json'
 task_serializer = 'json'
 timezone = 'Europe/Moscow'
 
-# Резервная копия Базы Данных с помощью => Celery Beat
+# Резервная копия Базы Данных с помощью => Celery Beat.
 CELERY_BEAT_SCHEDULE = {
     'backup_database': {
-        # Путь к задаче указанной в tasks.py
-        'task': 'users.tasks.db_backup_task',
-        # Резервная копия будет создаваться каждый день в полночь
-        'schedule': crontab(minute='12'),
+        # Путь к задаче указанной в tasks.py.
+        'task': 'common.tasks.db_backup_task',
+        # Резервная копия будет создаваться каждый день в полночь.
+        'schedule': crontab(hour='0', minute='0'),
     },
 }
 # endregion -------------------------------------------------------------------------

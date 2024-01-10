@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import Union
 
-from celery import shared_task
 from django.contrib.auth import get_user_model
-from django.core.management import call_command
 from djoser import email as djoser_email
 
 from config.celery import app
@@ -73,9 +71,3 @@ def send_reset_password_confirm_task(
     except Exception as exc:
         raise self.retry(exc=exc, countdown=60)
 # endregion -------------------------------------------------------------------------
-
-
-@shared_task()
-def db_backup_task() -> None:
-    """Выполнение резервного копирования базы данных."""
-    call_command('dbackup')

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from users.utils import is_route_selected
+from users.services.utils import is_route_selected
 from users.views import users
 from users.views import auth
 
