@@ -35,9 +35,7 @@ class Order(BaseModel):
         to='carts.OrderStatus',
         on_delete=models.RESTRICT,
         related_name='orders',
-        verbose_name='Статус',
-        null=True,
-        blank=True,
+        verbose_name='Статус'
     )
     sequence_number = models.CharField(
         verbose_name='Порядковый номер',
@@ -88,6 +86,7 @@ class Order(BaseModel):
         null=True,
         blank=True,
     )
+
     # endregion ---------------------------------------------------------------------
 
     class Meta:
@@ -140,22 +139,22 @@ class OrderStatus(BaseModel):
 
     Аттрибуты:
         * `status` (CharField): статус.
-        * `orders` (ManyToOne): заказ.
+        * 'description' (CharField): описание состояния.
     """
     status = models.CharField(
         'Название статуса',
         max_length=30,
-        null=True,
-        blank=True,
     )
     description = models.CharField(
         'Описание состояния заказа',
         max_length=255,
-        null=True,
-        blank=True
     )
+
     objects = OrderStatusManager()
 
     class Meta:
         verbose_name = 'Статус заказа'
         verbose_name_plural = 'Статусы заказа'
+
+    def __str__(self):
+        return self.status
