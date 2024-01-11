@@ -123,7 +123,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         # если все операции прошли успешно.
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = get_current_user()
+        user = serializer.user
         context = get_context(user, request, settings.SEND_CONFIRMATION_EMAIL)
         activation = users_services.UserActivationService(user, context)
         activation.execute()
@@ -159,7 +159,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        user = get_current_user()
+        user = serializer.user
         context = get_context(
             user=user,
             request=request,
