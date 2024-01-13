@@ -99,6 +99,11 @@ class Order(BaseModel):
     def __str__(self) -> str:
         return f'Заказ №{self.pk}'
 
+    def status(self):
+        a = Order
+        status = OrderStatus.objects.get_first_status()
+        return status
+
 
 class OrderItem(BaseModel):
     """
@@ -146,10 +151,14 @@ class OrderStatus(BaseModel):
     status = models.CharField(
         'Название статуса',
         max_length=30,
+        null=True,
+        blank=True,
     )
     description = models.CharField(
         'Описание состояния заказа',
         max_length=255,
+        null=True,
+        blank=True,
     )
 
     objects = OrderStatusManager()
