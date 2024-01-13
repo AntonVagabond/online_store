@@ -11,7 +11,7 @@ class Order(BaseModel):
 
     Аттрибуты:
         * `user` (ForeignKey): пользователь.
-        * `status` (ForeignKey): статус.
+        * `order_status` (ForeignKey): статус.
         * `sequence_number` (CharField): порядковый номер.
         * `transaction_number` (CharField): номер транзакции.
         * `post_script` (PositiveSmallIntegerField): сообщение о заказе.
@@ -35,7 +35,9 @@ class Order(BaseModel):
         to='carts.OrderStatus',
         on_delete=models.RESTRICT,
         related_name='orders',
-        verbose_name='Статус'
+        verbose_name='Статус',
+        null=True,
+        blank=True,
     )
     sequence_number = models.CharField(
         verbose_name='Порядковый номер',
@@ -95,7 +97,7 @@ class Order(BaseModel):
         ordering = ('-order_date',)
 
     def __str__(self) -> str:
-        return f'Заказ №{self.pk} от {self.objects.user.username}'
+        return f'Заказ №{self.pk} от {self.user.username}'
 
 
 class OrderItem(BaseModel):
