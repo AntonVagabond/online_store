@@ -256,7 +256,9 @@ CACHES = {
 
 
 # region ------------------------------- CELERY -------------------------------------
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+# Использование брокера сообщений для Celery на базе RabbitMQ.
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+# Использование БД для Celery на базе Redis.
 result_backend = 'redis://127.0.0.1:6379'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
