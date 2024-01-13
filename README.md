@@ -1,13 +1,14 @@
-# Online Store
-Конечно! Вот несколько вариантов значков для ваших проектов на GitHub:
+# _Online Store_
+![Static Badge](https://img.shields.io/badge/Python-blue?style=flat&logo=Python&labelColor=ffff99&color=0066ff)
+![Static Badge](https://img.shields.io/badge/-Django-006400?style=&logo=django)
+![Static Badge](https://img.shields.io/badge/Django%20Rest%20Framework-white?style=flat&logoColor=800080&labelColor=990000)
+![Static Badge](https://img.shields.io/badge/PostgresSQL-blue?style=flat&logo=postgresql&labelColor=white)
+![Static Badge](https://img.shields.io/badge/Celery-006400?style=flat&logo=Celery&logoColor=green)
+![Static Badge](https://img.shields.io/badge/Redis-ff5050?style=flat&logo=Redis&labelColor=white)
+![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)
+![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)
 
-![Celery 5.3.6 Icon](https://example.com/celery536_icon.png)
-![Django 4.2.7 Icon](https://example.com/django427_icon.png)
-![Redis 5.0.1 Icon](https://example.com/redis501_icon.png)
-![RabbitMQ 0.0.1 Icon](https://example.com/rabbitmq001_icon.png)
-
-Выберите нужные значки и используйте их в своих проектах на GitHub. Если у вас есть какие-либо особые предпочтения или запросы по дизайну значков, пожалуйста, укажите это.
-_Language: [Русский](README.md), [English](README.en.md)_ 
+>_Language: [Русский](README.md), [English](README.en.md)_ 
 
 ### 📃 Содержание
 1. ✏️ [Описание проекта](#project_desc)
