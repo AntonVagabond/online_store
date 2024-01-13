@@ -18,6 +18,11 @@ class CartItemInline(admin.TabularInline):
     readonly_fields = ('product', 'quantity', 'total_price_product')
 
 
+class OrderItemInline(admin.TabularInline):
+    model = orders.OrderItem
+    fields = ('id', 'product', 'quantity')
+
+
 # region ----------------------------- MODEL ADMIN ----------------------------------
 @admin.register(carts.Cart)
 class CartAdmin(admin.ModelAdmin):
@@ -42,6 +47,18 @@ class CartAdmin(admin.ModelAdmin):
         return f'{cart_price} руб.'
 
 
-admin.site.register(orders.Order)
+@admin.register(orders.Order)
+class OrderAdmin(admin.ModelAdmin):
+    """
+    Написать док стринг
+    """
+    list_display = (
+        'id', 'transaction_number', 'user', 'order_date', 'order_amount', 'order_status')
+    list_display_links = ('id', 'transaction_number', 'user')
+    readonly_fields = ('order_status', 'sequence_number', 'transaction_number')
+    inlines = (OrderItemInline, )
+
+
 admin.site.register(orders.OrderStatus)
+
 # endregion -------------------------------------------------------------------------
