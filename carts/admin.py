@@ -1,7 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from django.contrib import admin
 
 from carts.models import carts
 from carts.models import orders
+
+if TYPE_CHECKING:
+    from carts.models.orders import Order
 
 
 class CartItemInline(admin.TabularInline):
@@ -43,6 +49,7 @@ class CartAdmin(admin.ModelAdmin):
 
     @admin.display(description='Стоимость корзины.')
     def cart_price(self, obj) -> str:
+        """Отобразить стоимость корины."""
         cart_price = carts.Cart.objects.get_cart_price(obj)
         return f'{cart_price} руб.'
 
@@ -50,13 +57,36 @@ class CartAdmin(admin.ModelAdmin):
 @admin.register(orders.Order)
 class OrderAdmin(admin.ModelAdmin):
     """
-    Написать док стринг
+    Модель админа заказа.
     """
     list_display = (
-        'id', 'transaction_number', 'user', 'order_date', 'order_amount', 'order_status')
+        'id',
+        'user',
+        'status',
+        'transaction_number',
+        'order_date',
+        'order_amount',
+    )
     list_display_links = ('id', 'transaction_number', 'user')
-    readonly_fields = ('order_status', 'sequence_number', 'transaction_number')
-    inlines = (OrderItemInline, )
+    fields = (
+        'user',
+        'status',
+        'sequence_number',
+        'transaction_number',
+        'post_script',
+        'order_amount',
+        'address',
+        'signer_mobile',
+        'order_date',
+    )
+    readonly_fields = (
+        'status',
+        'sequence_number',
+        'transaction_number',
+        'order_amount',
+        'order_date',
+    )
+    inlines = (OrderItemInline,)
 
 
 admin.site.register(orders.OrderStatus)
