@@ -97,7 +97,7 @@ class Order(BaseModel):
         ordering = ('-order_date',)
 
     def __str__(self) -> str:
-        return f'Заказ №{self.pk} от {self.user.username}'
+        return f'Заказ №{self.pk}'
 
 
 class OrderItem(BaseModel):
