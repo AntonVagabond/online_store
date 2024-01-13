@@ -1,5 +1,10 @@
 # Online Store
 
+![Celery 5.3.6 Icon](https://example.com/celery536_icon.png)
+![Django 4.2.7 Icon](https://example.com/django427_icon.png)
+![Redis 5.0.1 Icon](https://example.com/redis501_icon.png)
+![RabbitMQ 0.0.1 Icon](https://example.com/rabbitmq001_icon.png)
+
 _Language: [Русский](README.md), [English](README.en.md)_ 
 
 ### 📃 Content
