@@ -8,7 +8,6 @@
 ![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)
 ![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)
 
-
 >_Language: [Русский](README.md), [English](README.en.md)_ 
 
 ### 📃 Content
