@@ -99,8 +99,7 @@ class Order(BaseModel):
     def __str__(self) -> str:
         return f'Заказ №{self.pk}'
 
-    def status(self):
-        a = Order
+    def update_status(self):
         status = OrderStatus.objects.get_first_status()
         return status
 
