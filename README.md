@@ -3,11 +3,11 @@
 [![Static Badge](https://img.shields.io/badge/-Django-006400?style=&logo=django)](https://www.djangoproject.com)
 [![Static Badge](https://img.shields.io/badge/Django%20Rest%20Framework-white?style=flat&logoColor=800080&labelColor=990000)](https://www.django-rest-framework.org)
 [![Static Badge](https://img.shields.io/badge/Swagger-3CB371?logo=swagger&logoColor=black)](https://swagger.io)
-![Static Badge](https://img.shields.io/badge/PostgreSQL-blue?style=flat&logo=postgresql&labelColor=white)
-![Static Badge](https://img.shields.io/badge/Celery-006400?style=flat&logo=Celery&logoColor=green)
-![Static Badge](https://img.shields.io/badge/Redis-ff5050?style=flat&logo=Redis&labelColor=white)
-![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)
-![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)
+[![Static Badge](https://img.shields.io/badge/PostgreSQL-blue?style=flat&logo=postgresql&labelColor=white)](https://www.postgresql.org)
+[![Static Badge](https://img.shields.io/badge/Celery-006400?style=flat&logo=Celery&logoColor=green)](https://docs.celeryq.dev/en/stable/)
+[![Static Badge](https://img.shields.io/badge/Redis-ff5050?style=flat&logo=Redis&labelColor=white)](https://redis.io)
+[![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)](https://www.rabbitmq.com)
+[![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)](https://sentry.io)
 
 >_Language: [Русский](README.md), [English](README.en.md)_ 
 
