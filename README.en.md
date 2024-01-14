@@ -49,11 +49,12 @@ Topics such as:
 - Users: 💁
   - Registration:
     - User registration.
-    - Request for a new password by email.
+    - Request for a new password **to the email**.
   - Authorization:
     - Password change.
-    - User activation.
-    - Password reset.
+    - User activation **via email**.
+    - Sending a new password **to the email**.
+    - Password reset **via email**.
   - JWT authentication
     - Token creation.
     - Token update.
