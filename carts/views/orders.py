@@ -17,6 +17,10 @@ from common.views import mixins
         summary='Создать заказ',
         tags=['Заказ'],
     ),
+    partial_update=extend_schema(
+        summary='Изменить заказ',
+        tags=['Заказ']
+    ),
     retrieve=extend_schema(
         summary='Посмотреть заказ',
         tags=['Заказ'],
@@ -26,7 +30,7 @@ from common.views import mixins
         tags=['Заказ'],
     ),
 )
-class OrderViewSet(mixins.CRDListViewSet):
+class OrderViewSet(mixins.CRUDListViewSet):
     """Представление заказа."""
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -35,13 +39,14 @@ class OrderViewSet(mixins.CRDListViewSet):
 
     multi_serializer_class = {
         'retrieve': orders_s.OrderRetrieveSerializer,
+        'partial_update': orders_s.OrderUpdateSerializer
     }
 
-    http_method_names = ('get', 'post', 'delete')
+    http_method_names = ('get', 'patch', 'post', 'delete')
 
     def perform_create(
-            self,
-            serializer: orders_s.OrderSerializer,
+                          self,
+                          serializer: orders_s.OrderSerializer,
     ) -> Order:
         """Сохранение заказа."""
         user = get_current_user()

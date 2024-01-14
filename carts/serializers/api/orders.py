@@ -7,6 +7,24 @@ from carts.serializers.nested.orders import OrderItemNestedSerializer, \
 from carts.services.orders import OrderSequenceNumberService, OrderAmountService
 
 
+class OrderUpdateSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор для Изменения статуса заказа
+    """
+
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'order_status'
+        )
+
+    def update(self, instance: Order, validated_data: dict):
+        instance.order_status = validated_data.get('order_status')
+        instance.save()
+        return instance
+
+
 class OrderRetrieveSerializer(serializers.ModelSerializer):
     """
     Преобразователь детали заказа.
