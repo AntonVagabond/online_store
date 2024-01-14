@@ -1,7 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
 from django.contrib import admin
 
 from carts.models import carts
 from carts.models import orders
+
+if TYPE_CHECKING:
+    from carts.models.orders import Order
 
 
 class CartItemInline(admin.TabularInline):
