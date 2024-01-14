@@ -55,8 +55,9 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'transaction_number', 'user', 'order_date', 'order_amount', 'order_status')
     list_display_links = ('id', 'transaction_number', 'user')
-    readonly_fields = ('order_status', 'sequence_number', 'transaction_number')
-    inlines = (OrderItemInline, )
+    readonly_fields = (
+        'order_status', 'sequence_number', 'transaction_number', 'order_amount')
+    inlines = (OrderItemInline,)
 
 
 admin.site.register(orders.OrderStatus)
