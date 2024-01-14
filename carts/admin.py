@@ -87,6 +87,9 @@ class OrderAdmin(admin.ModelAdmin):
         'order_date',
     )
     inlines = (OrderItemInline,)
+    readonly_fields = (
+        'order_status', 'sequence_number', 'transaction_number', 'order_amount')
+    inlines = (OrderItemInline,)
 
 
 admin.site.register(orders.OrderStatus)
