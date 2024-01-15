@@ -34,7 +34,6 @@ class OrderItemInline(admin.TabularInline):
     model = orders.OrderItem
     fields = ('id', 'product', 'quantity')
     readonly_fields = ('product', 'quantity')
-    search_fields = ('product__name',)
 # endregion -------------------------------------------------------------------------
 
 
