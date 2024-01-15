@@ -1,13 +1,9 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 from django.contrib import admin
 
 from carts.models import carts
 from carts.models import orders
-
-if TYPE_CHECKING:
-    from carts.models.orders import Order
 
 
 class CartItemInline(admin.TabularInline):
@@ -27,6 +23,8 @@ class CartItemInline(admin.TabularInline):
 class OrderItemInline(admin.TabularInline):
     model = orders.OrderItem
     fields = ('id', 'product', 'quantity')
+    readonly_fields = ('product', 'quantity')
+    search_fields = ('product__name',)
 
 
 # region ----------------------------- MODEL ADMIN ----------------------------------
@@ -62,15 +60,15 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'user',
-        'status',
+        'order_status',
         'transaction_number',
         'order_date',
         'order_amount',
     )
-    list_display_links = ('id', 'transaction_number', 'user')
+    list_display_links = ('id', 'user')
     fields = (
         'user',
-        'status',
+        'order_status',
         'sequence_number',
         'transaction_number',
         'post_script',
@@ -80,15 +78,15 @@ class OrderAdmin(admin.ModelAdmin):
         'order_date',
     )
     readonly_fields = (
-        'status',
+        'user',
         'sequence_number',
         'transaction_number',
+        'post_script',
         'order_amount',
+        'address',
+        'signer_mobile',
         'order_date',
     )
-    inlines = (OrderItemInline,)
-    readonly_fields = (
-        'order_status', 'sequence_number', 'transaction_number', 'order_amount')
     inlines = (OrderItemInline,)
 
 
