@@ -44,10 +44,7 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
     http_method_names = ('get', 'patch', 'post', 'delete')
 
-    def perform_create(
-                          self,
-                          serializer: orders_s.OrderSerializer,
-    ) -> Order:
+    def perform_create(self, serializer: orders_s.OrderSerializer) -> Order:
         """Сохранение заказа."""
         user = get_current_user()
         order = serializer.save()
