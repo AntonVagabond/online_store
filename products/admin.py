@@ -7,6 +7,9 @@ from common.admin import ModelaAdminWithImage
 from products.models import products, categories, providers
 
 Provider: TypeAlias = providers.Provider
+ProductImages: TypeAlias = products.ProductImages
+Product: TypeAlias = products.Product
+SubCategory: TypeAlias = categories.Category
 
 
 # region ----------------------------- INLINE ---------------------------------------
@@ -36,17 +39,26 @@ class ProductDescriptionInline(admin.StackedInline):
     fields = ('description',)
 
 
-class SubCategoryInline(admin.TabularInline):
+class SubCategoryInline(admin.StackedInline):
     """
     Встраиваемая модель подкатегорий для CategoryAdmin.
 
     Аттрибуты:
         * `model` (Category): модель категории товара.
         * `fields` (tuple[str]): поля.
+        * `readonly_fields` (tuple[str]): поля для чтения.
     """
 
     model = categories.Category
-    fields = ('title', 'image', 'description')
+    fields = ('title', 'image_show', 'image', 'description')
+    readonly_fields = ('image_show',)
+
+    @admin.display(description='Логотип', ordering='logo')
+    def image_show(self, obj: SubCategory) -> Union[str, SafeString]:
+        """Отображение ссылки на картинку."""
+        if obj.image:
+            return mark_safe(f"<img src='{obj.image.url}' width='60' />")
+        return 'Нет логотипа'
 
 
 class ProductImagesInline(admin.TabularInline):
@@ -64,7 +76,7 @@ class ProductImagesInline(admin.TabularInline):
     readonly_fields = ('image_show',)
 
     @admin.display(description='Изображение', ordering='image')
-    def image_show(self, obj):
+    def image_show(self, obj: ProductImages) -> Union[str, SafeString]:
         if obj.image:
             return mark_safe(f"<img src='{obj.image.url}' width='60' />")
         return 'Нет изображения'
@@ -81,22 +93,40 @@ class ProductAdmin(admin.ModelAdmin):
     Аттрибуты:
         * `list_display` (tuple[str]): отображение списка.
         * `list_display_links` (tuple[str]): список отображаемых ссылок.
+        * `list_per_page` (int): объектов на одной странице.
+        * `list_filter` (tuple[str]): фильтрация.
+        * `ordering` (tuple[str]): сортировка.
         * `fields` (tuple[str]): поля.
+        * `search_fields` (tuple[str]): поиск по полям.
         * `inlines` (tuple[inlines]): встроенные.
     """
     # region ----------------- АТРИБУТЫ МОДЕЛИ АДМИНА ТОВАРА ------------------------
-    list_display = ('id', 'name', 'price', 'is_available')
-    list_display_links = ('id', 'name')
-    fields = (
-        'name',
-        'quantity',
-        'price',
-        'is_available',
-        'category',
-        'provider',
-    )
+    list_display = ('id', 'name', 'list_images', 'price', 'category', 'is_available')
+    list_display_links = ('name',)
+    list_per_page = 10
+    list_filter = ('name', 'category')
+    ordering = ('-id',)
+    fields = ('name', 'quantity', 'price', 'is_available', 'category', 'provider')
+    search_fields = ('name', 'category__title')
     inlines = (ProductImagesInline, ProductFeatureInline, ProductDescriptionInline)
     # endregion ---------------------------------------------------------------------
+
+    @admin.display(description='изображение')
+    def list_images(self, obj: Product) -> Union[str, SafeString]:
+        """Отображение списка изображений."""
+        # Получаем фотографии товара
+        images_list = products.ProductImages.objects.filter(product_id=obj.pk)
+
+        # Выводим в админку только 3 изображения, если в `images_list` их будет
+        # больше 3, то на 4 изображении будем прерывать итерацию.
+        new_images_list = []
+        for image_obj in images_list:
+            if len(new_images_list) > 3:
+                break
+            new_images_list.append(f"<img src='{image_obj.image.url}' width='60' />")
+        if new_images_list:
+            return mark_safe(' '.join(new_images_list))
+        return 'Нет изображения'
 
 
 @admin.register(categories.Category)
@@ -106,16 +136,25 @@ class CategoryAdmin(ModelaAdminWithImage):
 
     Аттрибуты:
         * `list_display` (tuple[str]): отображение списка.
+        * `list_display_links` (tuple[str]): кликабельные названия.
+        * `list_per_page` (int): объектов на одной странице.
+        * `list_filter` (tuple[str]): фильтрация.
+        * `ordering` (tuple[str]): сортировка.
         * `fields` (tuple[str]): поля.
         * `readonly_fields` (tuple[str]): поля для чтения.
+        * `search_fields` (tuple[str]): поиск по полям.
         * `inlines` (tuple[inlines]): встроенные.
     """
 
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА КАТЕГОРИИ -----------------------
     list_display = ('id', 'title', 'image_show', 'description', 'parent')
-    list_display_links = ('id', 'title')
+    list_display_links = ('title',)
+    list_per_page = 10
+    list_filter = ('title', 'parent')
+    ordering = ('-id',)
     fields = ('title', 'image', 'image_show', 'description', 'parent')
     readonly_fields = ('image_show', 'parent')
+    search_fields = ('title',)
     inlines = (SubCategoryInline,)
     # endregion ---------------------------------------------------------------------
 
@@ -132,13 +171,14 @@ class ProviderAdmin(admin.ModelAdmin):
     """
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА ПОСТАВЩИКА ----------------------
     list_display = ('id', 'name', 'logo_show', 'email', 'phone_number')
-
+    list_display_links = ('name',)
     fields = ('name', 'logo', 'logo_show', 'email', 'phone_number')
     readonly_fields = ('logo_show',)
     # endregion ---------------------------------------------------------------------
 
     @admin.display(description='Логотип', ordering='logo')
     def logo_show(self, obj: Provider) -> Union[str, SafeString]:
+        """Отображение ссылки на картинку."""
         if obj.logo:
             return mark_safe(f"<img src='{obj.logo.url}' width='60' />")
         return 'Нет логотипа'
