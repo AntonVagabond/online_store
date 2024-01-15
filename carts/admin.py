@@ -6,6 +6,7 @@ from carts.models import carts
 from carts.models import orders
 
 
+# region ------------------------------- INLINE -------------------------------------
 class CartItemInline(admin.TabularInline):
     """
     Встраиваемая модель содержимого товара для CartAdmin.
@@ -25,6 +26,7 @@ class OrderItemInline(admin.TabularInline):
     fields = ('id', 'product', 'quantity')
     readonly_fields = ('product', 'quantity')
     search_fields = ('product__name',)
+# endregion -------------------------------------------------------------------------
 
 
 # region ----------------------------- MODEL ADMIN ----------------------------------
