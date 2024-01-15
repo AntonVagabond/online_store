@@ -172,7 +172,10 @@ class ProviderAdmin(admin.ModelAdmin):
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА ПОСТАВЩИКА ----------------------
     list_display = ('id', 'name', 'logo_show', 'email', 'phone_number')
     list_display_links = ('name',)
+    list_per_page = 10
+    ordering = ('-id',)
     fields = ('name', 'logo', 'logo_show', 'email', 'phone_number')
+    search_fields = ('name',)
     readonly_fields = ('logo_show',)
     # endregion ---------------------------------------------------------------------
 
