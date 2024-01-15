@@ -1,0 +1,90 @@
+[
+{
+  "model": "products.productimages",
+  "pk": 1,
+  "fields": {
+    "product": 5,
+    "image": "products/2024/01/15/31a78efc3ecd308499cd63c759775a1fb5bab29085c722c398e9cf359faf31a0.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 2,
+  "fields": {
+    "product": 5,
+    "image": "products/2024/01/15/c1ea53c9b3db8a2a07a0f0ab5c1a2083a534e012932e4b7e83f42b914c2d7f32.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 3,
+  "fields": {
+    "product": 5,
+    "image": "products/2024/01/15/f9f45a79222cb19bab5748be915dc551bd42233ff7a2e01ef73edf7b3b5c64dc.png"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 4,
+  "fields": {
+    "product": 3,
+    "image": "products/2024/01/15/ed266c733ddef33faa45b4b3a8b485cc766a923abb46cc2c523b041ddad4487d.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 5,
+  "fields": {
+    "product": 2,
+    "image": "products/2024/01/15/3ff65bca2c880416d2b51eec0a404afc7c373916c985ecbc3748c08bb42fec5f.png"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 6,
+  "fields": {
+    "product": 2,
+    "image": "products/2024/01/15/a0667439bdbc28d72d912ecd2d8a3f1d37107cfc31f57ff84a334527f5de7520.png"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 7,
+  "fields": {
+    "product": 2,
+    "image": "products/2024/01/15/d98bec3677aee19f4007e6723d8094f76e0c271ea22e1da8d77b32025e24e68b.png"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 8,
+  "fields": {
+    "product": 1,
+    "image": "products/2024/01/15/cff9946a99a3c8a641efcbc13ad4a6bef64b2d8972d98d50f1d448f688f38c6d.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 9,
+  "fields": {
+    "product": 1,
+    "image": "products/2024/01/15/7b44a7f9f138bbdd830e781bedbefea1133df3b4bc15803f7b58a2a542dd5442.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 10,
+  "fields": {
+    "product": 1,
+    "image": "products/2024/01/15/485258ce8b90372a00155588d39bccf45176117da6fed5395af47ad4a21faa11.jpg"
+  }
+},
+{
+  "model": "products.productimages",
+  "pk": 11,
+  "fields": {
+    "product": 4,
+    "image": "products/2024/01/15/7bc000be3fa3fddd6e56f1c1b02e64944a31653d016bc9c8e79528b87c8fc64c_1.jpg"
+  }
+}
+]
