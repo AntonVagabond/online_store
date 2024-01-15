@@ -22,6 +22,15 @@ class CartItemInline(admin.TabularInline):
 
 
 class OrderItemInline(admin.TabularInline):
+    """
+    Встраиваемая модель содержимого товара для CartAdmin.
+
+    Аттрибуты:
+        * `model` (OrderItem): модель для изображений товара.
+        * `fields` (tuple[str]): поля.
+        * `readonly_fields` (tuple[str]): поля для чтения.
+        * `search_fields` (tuple[str]): поля для поиска.
+    """
     model = orders.OrderItem
     fields = ('id', 'product', 'quantity')
     readonly_fields = ('product', 'quantity')
@@ -58,6 +67,13 @@ class CartAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     """
     Модель админа заказа.
+
+    Аттрибуты:
+        * `list_display` (tuple[str]): отображение списка.
+        * `list_display_links` (tuple[str]): список отображаемых ссылок.
+        * `fields` (tuple[str]): поля.
+        * `readonly_fields` (tuple[str]): поля только для чтения.
+        * `inlines` (tuple[inlines]): встроенные.
     """
     list_display = (
         'id',
