@@ -20,7 +20,7 @@ class OrderStatusUpdateSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance: Order, validated_data: dict):
-        instance.order_status = validated_data.get('order_status')
+        instance.order_status = validated_data['order_status']
         instance.save()
         return instance
 
