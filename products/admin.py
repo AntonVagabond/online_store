@@ -101,7 +101,15 @@ class ProductAdmin(admin.ModelAdmin):
         * `inlines` (tuple[inlines]): встроенные.
     """
     # region ----------------- АТРИБУТЫ МОДЕЛИ АДМИНА ТОВАРА ------------------------
-    list_display = ('id', 'name', 'list_images', 'price', 'category', 'is_available')
+    list_display = (
+        'id',
+        'name',
+        'list_images',
+        'price',
+        'quantity',
+        'category',
+        'is_available'
+    )
     list_display_links = ('name',)
     list_per_page = 10
     list_filter = ('name', 'category')
@@ -109,6 +117,7 @@ class ProductAdmin(admin.ModelAdmin):
     fields = ('name', 'quantity', 'price', 'is_available', 'category', 'provider')
     search_fields = ('name', 'category__title')
     inlines = (ProductImagesInline, ProductFeatureInline, ProductDescriptionInline)
+
     # endregion ---------------------------------------------------------------------
 
     @admin.display(description='изображение')
@@ -177,6 +186,7 @@ class ProviderAdmin(admin.ModelAdmin):
     fields = ('name', 'logo', 'logo_show', 'email', 'phone_number')
     search_fields = ('name',)
     readonly_fields = ('logo_show',)
+
     # endregion ---------------------------------------------------------------------
 
     @admin.display(description='Логотип', ordering='logo')
