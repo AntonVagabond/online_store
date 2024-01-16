@@ -93,6 +93,13 @@ class AddItemToOrderService:
             order_items.order = self._order
             self._save_order_items(order_items)
 
+    def _update_count_of_products(self):
+        """Обновление количества товаров на складе после заказа"""
+        items = self._order.order_items.all()
+        for item in items:
+            item.product.quantity -= item.quantity
+        item.product.save(update_fields=["quantity"])
+
     @staticmethod
     def _delete_cart(cart):
         """Удаление корзины, после добавления товара в заказ."""
@@ -105,3 +112,4 @@ class AddItemToOrderService:
             cart_items = self._get_item_from_this_cart(cart)
             self._add_product_an_order_items(cart_items)
             self._delete_cart(cart)
+            self._update_count_of_products()
