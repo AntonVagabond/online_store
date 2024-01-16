@@ -32,7 +32,6 @@ class OrderItemInline(admin.TabularInline):
     """
     model = orders.OrderItem
     fields = ('id', 'product', 'quantity')
-    readonly_fields = ('product', 'quantity')
 # endregion -------------------------------------------------------------------------
 
 
@@ -51,6 +50,8 @@ class CartAdmin(admin.ModelAdmin):
     """
     list_display = ('id', 'user',)
     list_display_links = ('id', 'user')
+    list_per_page = 10
+    ordering = ('-id',)
     fields = ('user', 'cart_price')
     readonly_fields = ('user', 'cart_price',)
     inlines = (CartItemInline,)
@@ -95,13 +96,9 @@ class OrderAdmin(admin.ModelAdmin):
         'order_date',
     )
     readonly_fields = (
-        'user',
         'sequence_number',
         'transaction_number',
-        'post_script',
         'order_amount',
-        'address',
-        'signer_mobile',
         'order_date',
     )
     inlines = (OrderItemInline,)
