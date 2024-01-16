@@ -167,6 +167,11 @@ class ProviderAdmin(admin.ModelAdmin):
     Аттрибуты:
         * `list_display` (tuple[str]): отображение списка.
         * `fields` (tuple[str]): поля.
+        * `list_display_links` (tuple[str]): кликабельные названия.
+        * `list_per_page` (int): объектов на одной странице.
+        * `list_filter` (tuple[str]): фильтрация.
+        * `ordering` (tuple[str]): сортировка.
+        * `search_fields` (tuple[str]): поиск по полям.
         * `readonly_fields` (tuple[str]): поля для чтения.
     """
     # region --------------- АТРИБУТЫ МОДЕЛИ АДМИНА ПОСТАВЩИКА ----------------------
