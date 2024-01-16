@@ -7,9 +7,9 @@ from carts.serializers.nested.orders import OrderItemNestedSerializer, \
 from carts.services.orders import OrderSequenceNumberService, OrderAmountService
 
 
-class OrderUpdateSerializer(serializers.ModelSerializer):
+class OrderStatusUpdateSerializer(serializers.ModelSerializer):
     """
-    Сериализатор для Изменения статуса заказа
+    Сериализатор для изменения статуса заказа
     """
 
     class Meta:

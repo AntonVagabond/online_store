@@ -39,7 +39,7 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
     multi_serializer_class = {
         'retrieve': orders_s.OrderRetrieveSerializer,
-        'partial_update': orders_s.OrderUpdateSerializer
+        'partial_update': orders_s.OrderStatusUpdateSerializer
     }
 
     http_method_names = ('get', 'patch', 'post', 'delete')
