@@ -13,13 +13,13 @@ class OrderStatusManager(models.Manager):
 
     def _first_order_status(self):
         """Из списка статусов, взять первый статус."""
-        order_status = self.all().first()
+        order_status = self.get(id=1)
         return order_status
 
     def get_first_status(self):
         """Получить первый статус."""
         # Проверка есть ли статусы заказа в базе данных.
-        if not self.all():
-            self._create_statuses()
+        # if not self.all():
+        #     self._create_statuses()
         status = self._first_order_status()
         return status
