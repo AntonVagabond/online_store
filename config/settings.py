@@ -245,27 +245,33 @@ AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
 # region ------------------------------- REDIS --------------------------------------
+REDIS_HOST = env.str(var='REDIS_HOST', default='localhost')
+REDIS_PORT = env.int(var='REDIS_PORT', default=6379)
 # Кэш с помощью => Redis.
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}',
     }
 }
 # endregion -------------------------------------------------------------------------
 
+# region ----------------------------- RABBITMQ -------------------------------------
+RABBIT_HOST = env.str(var='RABBIT_HOST', default='localhost')
+RABBIT_PORT = env.int(var='RABBIT_PORT', default=5672)
+# endregion -------------------------------------------------------------------------
 
 # region ------------------------------- CELERY -------------------------------------
 # Использование брокера сообщений для Celery на базе RabbitMQ.
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+CELERY_BROKER_URL = f'amqp://guest:guest@{RABBIT_HOST}:{RABBIT_PORT}'
 # Использование БД для Celery на базе Redis.
-result_backend = 'redis://127.0.0.1:6379'
-CELERY_TASK_TRACK_STARTED = True
+result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+CELERY_TASK_TRACK_STARTED = env.bool(var='CELERY_TASK_TRACK_STARTED', default=False)
 CELERY_TASK_TIME_LIMIT = 30 * 60
-accept_content = ['application/json']
-result_serializer = 'json'
-task_serializer = 'json'
-timezone = 'Europe/Moscow'
+accept_content = [env.str(var='ACCEPT_CONTENT', default='application/json')]
+result_serializer = env.str(var='RESULT_SERIALIZER', default='json')
+task_serializer = env.str(var='TASK_SERIALIZER', default='json')
+timezone = env.str(var='TIMEZONE', default='Europe/Moscow')
 
 # Резервная копия Базы Данных с помощью => Celery Beat.
 CELERY_BEAT_SCHEDULE = {
