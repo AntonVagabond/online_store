@@ -9,7 +9,7 @@
 [![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)](https://www.rabbitmq.com)
 [![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)](https://sentry.io)
 
->_Language: [Русский](README.md), [English](README.en.md)_ 
+>_Language: [Русский](README.md), [English](README.en.md)_ 🌍
 
 ### 📃 Содержание
 1. ✏️ [Описание проекта](#project_desc)
