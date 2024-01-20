@@ -98,7 +98,7 @@ class AddItemToOrderService:
         items = self._order.order_items.all()
         for item in items:
             item.product.quantity -= item.quantity
-        item.product.save(update_fields=["quantity"])
+        items[0].product.save(update_fields=["quantity"])
 
     @staticmethod
     def _delete_cart(cart):
