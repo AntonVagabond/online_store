@@ -13,7 +13,7 @@ class OrderStatusManager(models.Manager):
 
     def _first_order_status(self):
         """Из списка статусов, взять первый статус."""
-        order_status = self.get(id=1)
+        order_status = self.get(pk=1)
         return order_status
 
     def get_first_status(self):
