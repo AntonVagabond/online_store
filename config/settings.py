@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'phonenumber_field',
+    'debug_toolbar',
     # apps
     'api',
     'common',
@@ -49,7 +50,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
-    'crum.CurrentRequestUserMiddleware'
+    'crum.CurrentRequestUserMiddleware',
+
+    #package middlewares
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     # 'customers.middleware.ActiveUserMiddleware',
 ]
 
@@ -292,3 +296,10 @@ if DEBUG:
         profiles_sample_rate=1.0,
     )
     # endregion ---------------------------------------------------------------------
+
+
+# region ------------------------- DJANGO DEBUGGER ----------------------------------
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+# endregion -------------------------------------------------------------------------
