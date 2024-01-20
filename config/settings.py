@@ -52,8 +52,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'crum.CurrentRequestUserMiddleware',
 
-    #package middlewares
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # package middlewares
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     # 'customers.middleware.ActiveUserMiddleware',
 ]
 
@@ -306,6 +306,6 @@ if DEBUG:
 
 # region ------------------------- DJANGO DEBUGGER ----------------------------------
 INTERNAL_IPS = [
-    "127.0.0.1",
+    '127.0.0.1',
 ]
 # endregion -------------------------------------------------------------------------
