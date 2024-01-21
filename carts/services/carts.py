@@ -76,36 +76,38 @@ class CartItemService:
 
 
 class CartItemUpdateService:
-    """Сервисная часть для Содержимого Корзины."""
-
-    def __init__(self, cart_item: CartItem, validated_data: dict[str, int]) -> None:
-        """Инициализация товаров корзины"""
-        self.cart_item = cart_item
-        self.product = cart_item.product
-        self.price = self.product.price
-        self.quantity = validated_data['quantity']
-
-    # region --------------- METHODS CART ITEM UPDATE SERVICE -----------------------
-    def _is_product_quantity_less_zero(self) -> None:
-        """Проверка кол-ва товара меньше или больше нуля."""
-        if self.quantity <= 0:
-            raise ParseError('Значение кол-ва товара не может быть меньше единицы!')
-
-    def _is_cart_more_products_than_product(self) -> None:
-        """Проверка на количество товара в корзине и на складе."""
-        if self.quantity > self.product.quantity:
-            raise ParseError('Столько товара нету на складе!')
-
-    def _execute_update(self) -> CartItem:
-        """Обновление корзины."""
-        self.cart_item.total_price_product = self.price * self.quantity
-        self.cart_item.quantity = self.quantity
-        self.cart_item.save()
-        return self.cart_item
-
-    def update_cart_item(self) -> CartItem:
-        """Обновить и вернуть содержимое корзины, если данные корректны."""
-        self._is_product_quantity_less_zero()
-        self._is_cart_more_products_than_product()
-        return self._execute_update()
-    # endregion ---------------------------------------------------------------------
+	"""Сервисная часть для Содержимого Корзины."""
+	
+	def __init__(self, cart_item: CartItem, validated_data: dict[str, int]) -> None:
+		"""Инициализация товаров корзины"""
+		self.cart_item = cart_item
+		self.product = cart_item.product
+		self.price = self.product.price
+		self.quantity = validated_data['quantity']
+	
+	# region --------------- METHODS CART ITEM UPDATE SERVICE -----------------------
+	def _is_product_quantity_less_zero(self) -> None:
+		"""Проверка кол-ва товара меньше или больше нуля."""
+		if self.quantity <= 0:
+			raise ParseError(
+				'Значение кол-ва товара не может быть меньше единицы!'
+			)
+	
+	def _is_cart_more_products_than_product(self) -> None:
+		"""Проверка на количество товара в корзине и на складе."""
+		if self.quantity > self.product.quantity:
+			raise ParseError('Столько товара нету на складе!')
+	
+	def _execute_update(self) -> CartItem:
+		"""Обновление корзины."""
+		self.cart_item.total_price_product = self.price * self.quantity
+		self.cart_item.quantity = self.quantity
+		self.cart_item.save()
+		return self.cart_item
+	
+	def update_cart_item(self) -> CartItem:
+		"""Обновить и вернуть содержимое корзины, если данные корректны."""
+		self._is_product_quantity_less_zero()
+		self._is_cart_more_products_than_product()
+		return self._execute_update()
+# endregion ---------------------------------------------------------------------
