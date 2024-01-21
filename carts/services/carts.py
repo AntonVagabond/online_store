@@ -20,9 +20,9 @@ class CartItemService:
     """Сервисная часть для Содержимой Корзины."""
 
     def __init__(
-            self,
-            cart: Cart,
-            validated_data: dict[str, Union[Product, int]]
+                          self,
+                          cart: Cart,
+                          validated_data: dict[str, Union[Product, int]]
     ) -> None:
         """Инициализация содержимого корзины."""
         self.cart = cart
@@ -30,6 +30,7 @@ class CartItemService:
         self.product = validated_data['product']
         self.price = self.product.price
         self.quantity = validated_data['quantity']
+        self.product_quantity = validated_data['product'].quantity
 
     # region ----------------- METHODS CART ITEM SERVICE ----------------------------
     def _is_product_in_cart_items(self) -> None:
@@ -41,6 +42,9 @@ class CartItemService:
         """Проверка на правильность кол-ва товара при создании Корзины."""
         if self.quantity < 1:
             raise ParseError('Нельзя добавить товар с кол-вом меньше единицы!')
+        if self.quantity > self.product_quantity:
+            raise ParseError(
+                f'У продавца не хватит товаров для вас. В наличии: {self.product_quantity}')
 
     def _add_total_price_product(self) -> None:
         """Установить общую стоимость товара."""
@@ -61,6 +65,7 @@ class CartItemService:
 
 class CartItemUpdateService:
     """Сервисная часть для Содержимого Корзины."""
+
     def __init__(self, cart_item: CartItem, validated_data: dict[str, int]) -> None:
         """Инициализация товаров корзины"""
         self.cart_item = cart_item
