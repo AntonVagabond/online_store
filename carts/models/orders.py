@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from carts.managers.orders import OrderStatusManager
 from common.models.base import BaseModel
 
 
@@ -22,6 +24,13 @@ class Order(BaseModel):
         * `order_date` (DateTimeField): дата заказа.
     """
 
+    class Status(models.TextChoices):
+        """Статус заказа."""
+        AWAIT = 'AW', _('Ожидает оплаты.')
+        WORK = 'WO', _('В работе.')
+        COMPLETED = 'CO', _('Завершенный.')
+        CANCELLED = 'CA', _('Отмененный.')
+
     # region ------------------------- АТРИБУТЫ ЗАКАЗА ------------------------------
     user = models.ForeignKey(
         to='users.User',
@@ -31,13 +40,11 @@ class Order(BaseModel):
         null=True,
         blank=True,
     )
-    order_status = models.ForeignKey(
-        to='carts.OrderStatus',
-        on_delete=models.RESTRICT,
-        related_name='orders',
-        verbose_name='Статус',
-        null=True,
-        blank=True,
+    order_status = models.CharField(
+        verbose_name='Статус заказа',
+        max_length=2,
+        choices=Status.choices,
+        default=Status.AWAIT
     )
     sequence_number = models.CharField(
         verbose_name='Порядковый номер',
@@ -90,6 +97,12 @@ class Order(BaseModel):
     )
 
     # endregion ---------------------------------------------------------------------
+    def get_readable_status(self, status: str) -> str:
+        """Получение читабельного статуса."""
+        # Перебираю статусы, найдя нужный, возвращаю читабельный статус заказа.
+        for value, label in self.Status.choices:
+            if value == status:
+                return label
 
     class Meta:
         verbose_name = 'Заказ'
@@ -98,10 +111,6 @@ class Order(BaseModel):
 
     def __str__(self) -> str:
         return f'Заказ №{self.pk}'
-
-    def get_status(self):
-        status = OrderStatus.objects.get_first_status()
-        return status
 
 
 class OrderItem(BaseModel):
@@ -137,34 +146,3 @@ class OrderItem(BaseModel):
     class Meta:
         verbose_name = 'Позиция заказа'
         verbose_name_plural = 'Позиции заказов'
-
-
-class OrderStatus(BaseModel):
-    """
-    Модель статуса заказа.
-
-    Аттрибуты:
-        * `status` (CharField): статус.
-        * 'description' (CharField): описание состояния.
-    """
-    status = models.CharField(
-        'Название статуса',
-        max_length=30,
-        null=True,
-        blank=True,
-    )
-    description = models.CharField(
-        'Описание состояния заказа',
-        max_length=255,
-        null=True,
-        blank=True,
-    )
-
-    objects = OrderStatusManager()
-
-    class Meta:
-        verbose_name = 'Статус заказа'
-        verbose_name_plural = 'Статусы заказа'
-
-    def __str__(self):
-        return self.status
