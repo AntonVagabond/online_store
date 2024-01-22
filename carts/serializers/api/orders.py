@@ -4,6 +4,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from carts.models.orders import Order
+from carts.serializers.nested.delivers import DeliveryNestedSerializer
 from carts.serializers.nested.orders import OrderItemNestedSerializer
 from carts.services.orders import OrderSequenceNumberService, OrderAmountService
 
@@ -56,9 +57,9 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
         )
 
     @staticmethod
-    def get_status(obj: Order) -> str:
+    def get_status(instance: Order) -> str:
         """Получить статус."""
-        readable_status = obj.get_readable_status(obj.order_status)
+        readable_status = instance.get_readable_status(instance.order_status)
         return readable_status
 
 
@@ -73,6 +74,7 @@ class OrderSerializer(serializers.ModelSerializer):
         * `pay_time` (CharField): время оплаты.
     """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    delivery = DeliveryNestedSerializer()
 
     # Эта информация для заказа, ниже, не должна быть изменяема.
     order_status = serializers.CharField(read_only=True)
@@ -87,6 +89,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'user',
+            'delivery',
             'order_status',
             'sequence_number',
             'transaction_number',
