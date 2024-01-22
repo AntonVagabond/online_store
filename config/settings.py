@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'crum.CurrentRequestUserMiddleware',
 
-    #package middlewares
+    # package middlewares
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     # 'customers.middleware.ActiveUserMiddleware',
 ]
