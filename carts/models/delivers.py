@@ -114,7 +114,6 @@ class DeliveryStatus(BaseModel):
         blank=True,
     )
 
-
     class Meta:
         verbose_name = 'Статус'
         verbose_name_plural = 'Статусы'
