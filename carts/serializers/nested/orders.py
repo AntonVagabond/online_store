@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from carts.models.orders import OrderItem, OrderStatus
+from carts.models.orders import OrderItem
 from products.serializers.nested.products import ProductCartNestedSerializer
 
 
@@ -16,13 +16,4 @@ class OrderItemNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'quantity')
-
-
-class OrderStatusNestedSerializer(serializers.ModelSerializer):
-    """Вложенный преобразователь содержимого заказа."""
-
-    class Meta:
-        model = OrderStatus
-        fields = ('status', 'description')
-
+        fields = ('id', 'quantity', 'product')
