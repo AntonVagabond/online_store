@@ -75,6 +75,7 @@ class OrderSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     # Эта информация для заказа, ниже, не должна быть изменяема.
+    order_status = serializers.CharField(read_only=True)
     sequence_number = serializers.CharField(read_only=True)
     transaction_number = serializers.CharField(read_only=True)
     order_amount = serializers.CharField(read_only=True)
