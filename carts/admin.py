@@ -79,11 +79,13 @@ class OrderAdmin(admin.ModelAdmin):
         'id',
         'user',
         'order_status',
-        'transaction_number',
+        'sequence_number',
         'order_date',
         'order_amount',
     )
     list_display_links = ('id', 'user')
+    list_per_page = 10
+    ordering = ('-id',)
     fields = (
         'user',
         'order_status',
@@ -102,8 +104,5 @@ class OrderAdmin(admin.ModelAdmin):
         'order_date',
     )
     inlines = (OrderItemInline,)
-
-
-admin.site.register(orders.OrderStatus)
 
 # endregion -------------------------------------------------------------------------
