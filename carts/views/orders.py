@@ -1,3 +1,5 @@
+from typing import TypeAlias
+
 from crum import get_current_user
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
@@ -6,6 +8,8 @@ from carts.models.orders import Order
 from carts.serializers.api import orders as orders_s
 from carts.services.orders import AddItemToOrderService
 from common.views import mixins
+
+OrderSerializer: TypeAlias = orders_s.OrderSerializer
 
 
 @extend_schema_view(
@@ -44,7 +48,7 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
     http_method_names = ('get', 'patch', 'post', 'delete')
 
-    def perform_create(self, serializer: orders_s.OrderSerializer) -> Order:
+    def perform_create(self, serializer: OrderSerializer) -> Order:
         """Сохранение заказа."""
         user = get_current_user()
         order = serializer.save()
