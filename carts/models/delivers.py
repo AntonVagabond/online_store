@@ -1,5 +1,6 @@
 from typing import TypeAlias
 
+from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from common.models.base import BaseModel
@@ -14,6 +15,7 @@ class Delivery(BaseModel):
     Аттрибуты:
         * `order` (ForeignKey): заказ.
         * `address` (CharField): адрес куда доставят товар.
+        * `delivery_method` (CharField): способ доставки.
         * `delivery_status` (ForeignKey): статус доставки.
         * `created_at` (DateTimeField): дата создания доставки.
         * `update_at` (DateTimeField): дата изменения состояния доставки.
@@ -21,6 +23,12 @@ class Delivery(BaseModel):
         * `notes` (TextField): дополнительные примечания.
         * `total_cost` (DecimalField): общая стоимость доставки.
     """
+
+    class DeliveryMethod(models.TextChoices):
+        """Способ доставки заказа."""
+        PICKUP = 'PI', _('Самовывоз')
+        COURIER = 'CO', _('Доставка курьером')
+
     order = models.ForeignKey(
         to='carts.Order',
         on_delete=models.CASCADE,
@@ -33,6 +41,12 @@ class Delivery(BaseModel):
         verbose_name='Адрес куда доставят товар',
         max_length=255,
         default='',
+    )
+    delivery_method = models.CharField(
+        verbose_name='Способ доставки',
+        max_length=2,
+        choices=DeliveryMethod.choices,
+        default=DeliveryMethod.PICKUP
     )
     delivery_status = models.ForeignKey(
         to='carts.DeliveryStatus',
@@ -75,7 +89,7 @@ class Delivery(BaseModel):
         verbose_name_plural = 'Доставщики'
 
     def __str__(self) -> str:
-        return f'Доставщик {self.pk}'
+        return f'Доставка {self.pk}'
 
 
 class DeliveryStatus(BaseModel):
@@ -99,6 +113,7 @@ class DeliveryStatus(BaseModel):
         null=True,
         blank=True,
     )
+
 
     class Meta:
         verbose_name = 'Статус'
