@@ -68,7 +68,6 @@ class Delivery(BaseModel):
         verbose_name='Курьер',
         null=True,
         blank=True,
-        default='Самовызов'
     )
     notes = models.TextField(
         verbose_name='Дополнительные примечания',
@@ -78,6 +77,7 @@ class Delivery(BaseModel):
         verbose_name='Общая стоимость доставки',
         max_digits=10,
         decimal_places=2,
+        default=0.00
     )
 
     class Meta:
