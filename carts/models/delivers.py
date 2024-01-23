@@ -37,11 +37,6 @@ class Delivery(BaseModel):
         null=True,
         blank=True,
     )
-    address = models.CharField(
-        verbose_name='Адрес куда доставят товар',
-        max_length=255,
-        default='',
-    )
     delivery_method = models.CharField(
         verbose_name='Способ доставки',
         max_length=2,
@@ -73,6 +68,7 @@ class Delivery(BaseModel):
         verbose_name='Курьер',
         null=True,
         blank=True,
+        default='Самовызов'
     )
     notes = models.TextField(
         verbose_name='Дополнительные примечания',
