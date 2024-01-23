@@ -1,8 +1,10 @@
 from typing import Union
 
+from django.db import transaction
 from django.utils import timezone
 from rest_framework import serializers
 
+from carts.models.delivers import Delivery
 from carts.models.orders import Order
 from carts.serializers.nested.delivers import DeliveryNestedSerializer
 from carts.serializers.nested.orders import OrderItemNestedSerializer
@@ -74,7 +76,7 @@ class OrderSerializer(serializers.ModelSerializer):
         * `pay_time` (CharField): время оплаты.
     """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    delivery = DeliveryNestedSerializer()
+    delivery = DeliveryNestedSerializer(many=True)
 
     # Эта информация для заказа, ниже, не должна быть изменяема.
     order_status = serializers.CharField(read_only=True)
@@ -123,3 +125,18 @@ class OrderSerializer(serializers.ModelSerializer):
         attrs['order_amount'] = self._add_order_amount()
         attrs['order_date'] = timezone.now().astimezone()
         return attrs
+
+    # Сделать рефакторинг !!!
+    def create(self, validated_data: dict[str]):
+        delivery_data = validated_data.pop('delivery')[0]
+
+        with transaction.atomic():
+            instance: Order = super().create(validated_data)
+
+            value = instance.order_date
+            additional_attr = {key: value for key in ('created_at', 'update_at')}
+
+            delivery_data = delivery_data | additional_attr
+            Delivery.objects.create(order_id=instance.pk, **delivery_data)
+
+        return instance
