@@ -18,8 +18,5 @@ class OrderStatusManager(models.Manager):
 
     def get_first_status(self):
         """Получить первый статус."""
-        # Проверка есть ли статусы заказа в базе данных.
-        # if not self.all():
-        #     self._create_statuses()
         status = self._first_order_status()
         return status

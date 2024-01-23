@@ -9,6 +9,7 @@ from django.db import transaction
 
 from carts.models.carts import Cart, CartItem
 from carts.models.orders import OrderItem
+from products.models.products import Product
 
 if TYPE_CHECKING:
     from carts.models.orders import Order
@@ -98,7 +99,7 @@ class AddItemToOrderService:
         items = self._order.order_items.all()
         for item in items:
             item.product.quantity -= item.quantity
-        items[0].product.save(update_fields=['quantity'])
+        Product.save(update_fields=["quantity"])
 
     @staticmethod
     def _delete_cart(cart):
