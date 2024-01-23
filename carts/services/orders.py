@@ -9,7 +9,6 @@ from django.db import transaction
 
 from carts.models.carts import Cart, CartItem
 from carts.models.orders import OrderItem
-from products.models.products import Product
 
 if TYPE_CHECKING:
     from carts.models.orders import Order
@@ -21,7 +20,7 @@ User = get_user_model()
 class OrderSequenceNumberService:
     """Сервисная часть для порядкового номера заказа."""
 
-    def __init__(self, user: User):
+    def __init__(self, user: User) -> None:
         """Инициализация пользователя."""
         self._user = user
 
@@ -46,7 +45,7 @@ class OrderSequenceNumberService:
 
 class OrderAmountService:
     """Сервисная часть для суммы заказа."""
-    def __init__(self, user: User):
+    def __init__(self, user: User) -> None:
         self._user = user
 
     def _get_cart_current_user(self) -> Cart:
@@ -67,7 +66,7 @@ class OrderAmountService:
 class AddItemToOrderService:
     """Сервисная часть для добавления товара в заказ."""
 
-    def __init__(self, user: User, order: Order):
+    def __init__(self, user: User, order: Order) -> None:
         self._user = user
         self._order = order
 
@@ -80,11 +79,6 @@ class AddItemToOrderService:
         """Получить товар из этой корзины."""
         return CartItem.objects.filter(cart_id=cart.pk)
 
-    @staticmethod
-    def _save_order_items(order_items: OrderItem) -> None:
-        """Сохранение товара в OrderItem."""
-        order_items.save()
-
     def _add_product_an_order_items(self, cart_items: QuerySet[CartItem]) -> None:
         """Добавления товара в заказ."""
         for cart_item in cart_items:
@@ -92,17 +86,17 @@ class AddItemToOrderService:
             order_items.product = cart_item.product
             order_items.quantity = cart_item.quantity
             order_items.order = self._order
-            self._save_order_items(order_items)
+            order_items.save()
 
-    def _update_count_of_products(self):
+    def _update_count_of_products(self) -> None:
         """Обновление количества товаров на складе после заказа"""
         items = self._order.order_items.all()
         for item in items:
             item.product.quantity -= item.quantity
-        Product.save(update_fields=["quantity"])
+            items.product.save()
 
     @staticmethod
-    def _delete_cart(cart):
+    def _delete_cart(cart) -> None:
         """Удаление корзины, после добавления товара в заказ."""
         cart.delete()
 
@@ -112,5 +106,5 @@ class AddItemToOrderService:
             cart = self._get_cart_current_user()
             cart_items = self._get_item_from_this_cart(cart)
             self._add_product_an_order_items(cart_items)
-            self._delete_cart(cart)
             self._update_count_of_products()
+            self._delete_cart(cart)
