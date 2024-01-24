@@ -1,8 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Union, Optional
 
-from django.contrib.auth import get_user_model
-
 if TYPE_CHECKING:
     from django.urls import URLPattern
     from rest_framework.request import Request

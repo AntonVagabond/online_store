@@ -1,7 +1,7 @@
 # _Online Store_
 [![Static Badge](https://img.shields.io/badge/Python-blue?style=flat&logo=Python&labelColor=ffff99&color=0066ff)](https://www.python.org)
 [![Static Badge](https://img.shields.io/badge/-Django-006400?style=&logo=django)](https://www.djangoproject.com)
-[![Static Badge](https://img.shields.io/badge/Django%20Rest%20Framework-white?style=flat&logoColor=800080&labelColor=990000)](https://www.django-rest-framework.org)
+[![Static Badge](https://img.shields.io/badge/Django%20Rest%20Framework-FF4500?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgAQMAAABJtOi3AAAABlBMVEUAAACjAAB%2BWVr2AAAAAXRSTlMAQObYZgAAADBJREFUeAFjgAD2B0BC%2FgeQsP8DI%2Br%2FYSMQSmA6%2BD8ACeYDDHAA5oIlyDQU4iAwAAC4HiJpG4n1oQAAAABJRU5ErkJggg%3D%3D&labelColor=white)](https://www.django-rest-framework.org)
 [![Static Badge](https://img.shields.io/badge/Swagger-3CB371?logo=swagger&logoColor=black)](https://swagger.io)
 [![Static Badge](https://img.shields.io/badge/PostgreSQL-blue?style=flat&logo=postgresql&labelColor=white)](https://www.postgresql.org)
 [![Static Badge](https://img.shields.io/badge/Celery-006400?style=flat&logo=Celery&logoColor=green)](https://docs.celeryq.dev/en/stable/)
@@ -9,7 +9,7 @@
 [![Static Badge](https://img.shields.io/badge/RabbitMQ-white?style=flat&logo=RabbitMQ)](https://www.rabbitmq.com)
 [![Static Badge](https://img.shields.io/badge/Sentry-800080?style=flat&logo=Sentry&logoColor=800080&labelColor=white)](https://sentry.io)
 
->_Language: [Русский](README.md), [English](README.en.md)_ 
+>_Language: [Русский](README.md), [English](README.en.md)_ 🌍
 
 ### 📃 Content
 1. ✏️ [Project description](#project_desc)
@@ -99,7 +99,7 @@ Topics such as:
     - Delete the supplier. (_Admin_ / _Manager_ / _Provider_)
   - Search:
     - Search by suppliers.
-- Carts: 📲
+- Carts: 🛒
   - View:
     - View the cart
     - View the list of baskets. (_Admin_ / _Manager_)
@@ -156,7 +156,7 @@ Topics such as:
 ## 🔌 Installation and launch ##
 > [!WARNING]
 > If you **have** all the following on your computer, you can skip this warning.
-> - You may need to install [Sentry](https://sentry.io)
+> - You may need to register in [Sentry](https://sentry.io)
 > - You may need to install [Redis](https://redis.io/docs/install/install-redis/)
 > - You may need to install [RabbitMQ](https://www.rabbitmq.com/#getstarted)
 
@@ -191,6 +191,18 @@ EMAIL_PORT=
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
 EMAIL_USE_TLS=
+
+REDIS_HOST=
+REDIS_PORT=
+
+RABBIT_HOST=
+RABBIT_PORT=
+
+CELERY_TASK_TRACK_STARTED=
+ACCEPT_CONTENT=
+RESULT_SERIALIZER=
+TASK_SERIALIZER=
+TIMEZONE=
 ```
 
 <a name="installation_docker"></a>

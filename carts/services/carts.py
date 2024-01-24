@@ -46,10 +46,11 @@ class CartItemService:
             )
 
     def _is_product_quantity_enough(self) -> None:
-        """Проверка наличия заданного пользователем количества товаров у продавца"""
+        """Проверка наличия заданного пользователем количества товаров у продавца."""
         if self.quantity > self.product_quantity:
             raise ParseError(
-                f'У продавца не хватит товаров для вас. В наличии: {self.product_quantity}'
+                f'У продавца не хватит товаров для вас.'
+                f' В наличии: {self.product_quantity}'
             )
 
     def _add_total_price_product(self) -> None:
