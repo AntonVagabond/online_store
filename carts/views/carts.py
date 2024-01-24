@@ -20,8 +20,11 @@ class CartViewSet(mixins.RetrieveListViewSet):
     """Представление корзины."""
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-    queryset = Cart.objects.all()
+    # TODO: оптимизировать запросы
+    queryset = Cart.objects.all().prefetch_related(
+        'products',
+        'products_info',
+    )
     serializer_class = carts_s.CartListSerializer
 
     multi_serializer_class = {
