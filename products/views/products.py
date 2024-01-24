@@ -44,7 +44,13 @@ from products.serializers.api import products as products_s
 class ProductView(CRUDListViewSet):
     """Представление товара."""
 
-    permission_classes = (permissions.IsAdminUser,)
+    multi_permission_classes = {
+        'retrieve': (permissions.AllowAny,),
+        'create': (permissions.IsAdminUser,),
+        'partial_update': (permissions.IsAdminUser,),
+        'destroy': (permissions.IsAdminUser,),
+        'search': (permissions.AllowAny,),
+    }
 
     queryset = Product.objects.all().select_related(
         'category',
