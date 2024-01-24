@@ -46,7 +46,12 @@ class ProductView(CRUDListViewSet):
 
     permission_classes = (permissions.IsAdminUser,)
 
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().select_related(
+        'category',
+        'provider',
+        'product_description',
+        'product_feature'
+    )
     serializer_class = products_s.ProductListSerializer
 
     multi_serializer_class = {
