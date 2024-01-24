@@ -44,7 +44,7 @@ from products.serializers.api import products as products_s
 class ProductView(CRUDListViewSet):
     """Представление товара."""
 
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAdminUser,)
 
     queryset = Product.objects.all()
     serializer_class = products_s.ProductListSerializer
