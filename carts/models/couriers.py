@@ -50,3 +50,9 @@ class Courier(BaseModel):
         verbose_name='Доступен ли курьер для выполнения доставок',
         default=True,
     )
+    delivery_cost = models.DecimalField(
+        verbose_name='Стоимость доставки у курьера',
+        max_digits=10,
+        decimal_places=2,
+        default=0.00
+    )
