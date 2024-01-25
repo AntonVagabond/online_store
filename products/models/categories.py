@@ -16,7 +16,7 @@ class Category(BaseModel):
     """
     # region ---------------------- АТРИБУТЫ КАТЕГОРИИ ------------------------------
     title = models.CharField(
-        'Название категории',
+        verbose_name='Название категории',
         max_length=255,
         unique=True,
     )
