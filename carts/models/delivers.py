@@ -3,6 +3,7 @@ from typing import TypeAlias
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
+from carts.models.couriers import Courier
 from common.models.base import BaseModel
 
 CharField: TypeAlias = models.CharField
@@ -73,12 +74,6 @@ class Delivery(BaseModel):
         verbose_name='Дополнительные примечания',
         blank=True,
     )
-    total_cost = models.DecimalField(
-        verbose_name='Общая стоимость доставки',
-        max_digits=10,
-        decimal_places=2,
-        default=0.00
-    )
 
     class Meta:
         verbose_name = 'Доставщик'
@@ -86,6 +81,12 @@ class Delivery(BaseModel):
 
     def __str__(self) -> str:
         return f'Доставка {self.pk}'
+
+    @property
+    def delivery_cost(self):
+        if self.courier:
+            current_courier = Courier.objects.get(id=self.courier)
+            return current_courier
 
 
 class DeliveryStatus(BaseModel):
