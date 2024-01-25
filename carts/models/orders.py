@@ -86,7 +86,6 @@ class Order(BaseModel):
     )
     signer_mobile = PhoneNumberField(
         verbose_name='Контактный телефон',
-        unique=True,
         null=True,
         blank=True,
     )
