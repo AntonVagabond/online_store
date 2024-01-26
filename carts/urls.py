@@ -9,7 +9,7 @@ router = DefaultRouter()
 
 router.register(prefix='cart/item', viewset=carts.CartItemViewSet, basename='cart_item')
 router.register(prefix='cart', viewset=carts.CartViewSet, basename='cart')
-router.register(prefix='orders', viewset=orders.OrderViewSet, basename='orders')
+router.register(prefix='orderdetails', viewset=orders.OrderViewSet, basename='orders')
 router.register(prefix='couriers', viewset=couriers.CourierViewSet, basename='couriers')
 
 urlpatterns = []
