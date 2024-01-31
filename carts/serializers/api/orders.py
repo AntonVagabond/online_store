@@ -68,11 +68,30 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
         return readable_status
 
 
+class UserOrdersListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'user',
+            # 'delivers',
+            'order_status',
+            'sequence_number',
+            'transaction_number',
+            # 'post_script',
+            'order_amount',
+            'pay_time',
+            'address',
+            'signer_mobile',
+            'order_date',
+        )
+
+
 class OrderSerializer(serializers.ModelSerializer):
     """
     Преобразователь заказа.
 
-    Аттрибуты:
+    Атрибуты:
         * `user` (HiddenField): пользователь.
         * `sequence_number` (SerializerMethodField): получить порядковый номер заказа.
         * `transaction_number` (CharField): номер транзакции.
