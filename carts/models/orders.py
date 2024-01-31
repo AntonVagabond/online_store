@@ -11,7 +11,7 @@ class Order(BaseModel):
     """
     Модель Заказа.
 
-    Аттрибуты:
+    Атрибуты:
         * `user` (ForeignKey): пользователь.
         * `order_status` (ForeignKey): статус.
         * `sequence_number` (CharField): порядковый номер.
