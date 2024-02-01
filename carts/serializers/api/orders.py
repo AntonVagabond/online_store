@@ -68,23 +68,30 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
         return readable_status
 
 
-class UserOrdersListSerializer(serializers.ModelSerializer):
+class UserOrderListSerializer(serializers.ModelSerializer):
+
+    status = serializers.SerializerMethodField(method_name='get_status')
+
     class Meta:
         model = Order
         fields = (
             'id',
             'user',
-            # 'delivers',
-            'order_status',
             'sequence_number',
+            'status',
             'transaction_number',
-            # 'post_script',
             'order_amount',
             'pay_time',
             'address',
             'signer_mobile',
             'order_date',
         )
+
+    @staticmethod
+    def get_status(instance: Order) -> str:
+        """Получить статус."""
+        readable_status = instance.get_readable_status(instance.order_status)
+        return readable_status
 
 
 class OrderSerializer(serializers.ModelSerializer):
