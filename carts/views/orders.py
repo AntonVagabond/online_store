@@ -1,4 +1,6 @@
-from typing import TypeAlias
+from __future__ import annotations
+
+from typing import TypeAlias, TYPE_CHECKING
 
 from crum import get_current_user
 from drf_spectacular.utils import extend_schema_view, extend_schema
@@ -8,6 +10,9 @@ from carts.models.orders import Order
 from carts.serializers.api import orders as orders_s
 from carts.services.orders import AddItemToOrderService
 from common.views import mixins
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 OrderSerializer: TypeAlias = orders_s.OrderSerializer
 
@@ -59,28 +64,19 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
 
 @extend_schema_view(
-    retrieve=extend_schema(
+    list=extend_schema(
         summary='Посмотреть заказы пользователя',
         tags=['Заказ']
     )
 )
-class UserOrdersViewSet(mixins.RetrieveListViewSet):
+class UserOrdersViewSet(mixins.ListViewSet):
+    """Представление истории заказа пользователя."""
     permission_classes = (permissions.IsAuthenticated,)
 
-    queryset = Order.objects.all()
-
     serializer_class = orders_s.UserOrdersListSerializer
-    # Спросить про то как должно работать получение. В каком виде это надо сделать
 
-    http_method_names = ('get',)
-    def get_object(self):
-        queryset = Order.objects.all()
-        # queryset = Order.objects.filter(user_id=pk)
+    def get_queryset(self) -> QuerySet[Order]:
+        """Получаем список заказов у одного пользователя."""
+        user_id = self.request.user.pk
+        queryset = Order.objects.filter(user_id=user_id)
         return queryset
-    # @action(methods=['GET'], detail=False, url_path='order_list')
-    # def order_list(self, request, pk):
-    #     super(UserOrdersViewSet, self).retrieve(request)
-    #     queryset = Order.objects.filter(user_id=pk)
-    #     return queryset
-    # Логика правильная, но нужно поместить в другое место(возможно сериализатор)
-
