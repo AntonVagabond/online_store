@@ -53,7 +53,7 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
 
 @extend_schema_view(
-    list=extend_schema(
+    retrieve=extend_schema(
         summary='Посмотреть заказы пользователя',
         tags=['Заказ']
     )
