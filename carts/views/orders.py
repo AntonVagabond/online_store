@@ -59,28 +59,18 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
 
 @extend_schema_view(
-    retrieve=extend_schema(
+    list=extend_schema(
         summary='Посмотреть заказы пользователя',
         tags=['Заказ']
     )
 )
-class UserOrdersViewSet(mixins.RetrieveListViewSet):
+class UserOrdersViewSet(mixins.ListViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
-    queryset = Order.objects.all()
+    def get_queryset(self):
+        queryset = Order.objects.filter(user_id=self.request.user.pk)
+        return queryset
 
     serializer_class = orders_s.UserOrdersListSerializer
-    # Спросить про то как должно работать получение. В каком виде это надо сделать
 
     http_method_names = ('get',)
-    def get_object(self):
-        queryset = Order.objects.all()
-        # queryset = Order.objects.filter(user_id=pk)
-        return queryset
-    # @action(methods=['GET'], detail=False, url_path='order_list')
-    # def order_list(self, request, pk):
-    #     super(UserOrdersViewSet, self).retrieve(request)
-    #     queryset = Order.objects.filter(user_id=pk)
-    #     return queryset
-    # Логика правильная, но нужно поместить в другое место(возможно сериализатор)
-
