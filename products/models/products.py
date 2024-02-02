@@ -162,8 +162,8 @@ class ProductImages(BaseModel):
     # endregion ---------------------------------------------------------------------
 
     class Meta:
-        verbose_name = 'Изображении товара'
-        verbose_name_plural = 'Изображении товаров'
+        verbose_name = 'Изображение товара'
+        verbose_name_plural = 'Изображения товаров'
 
     def __str__(self) -> str:
         return f'Фотография №{self.pk}'
