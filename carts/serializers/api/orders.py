@@ -7,10 +7,11 @@ from rest_framework import serializers
 from carts.models.orders import Order
 from carts.serializers.nested.delivers import DeliveryNestedSerializer
 from carts.serializers.nested.orders import OrderItemNestedSerializer
+from carts.services.delivers import DeliveryCreateService
 from carts.services.orders import (
     OrderSequenceNumberService,
     OrderAmountService,
-    OrderCreateService,
+    AddItemToOrderService,
 )
 
 
@@ -157,13 +158,17 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict[str]) -> Order:
         """Создание заказа."""
+        user = validated_data['user']
         delivery_data = validated_data.pop('delivers')[0]
 
         with transaction.atomic():
             instance: Order = super().create(validated_data)
 
-            order_create = OrderCreateService(
-                order=instance, delivery_data=delivery_data
-            )
+            add_item_to_order_service = AddItemToOrderService(user, instance)
+            # Добавление товара в заказ.
+            add_item_to_order_service.execute()
+
+            order_create = DeliveryCreateService(instance, delivery_data)
+            # Создание доставки.
             order_create.execute()
         return instance
