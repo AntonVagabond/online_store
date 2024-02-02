@@ -288,6 +288,10 @@ CELERY_BEAT_SCHEDULE = {
 }
 # endregion -------------------------------------------------------------------------
 
+# region ------------------------------ YOOKASSA ------------------------------------
+YOOKASSA_SHOP_ID = env.int(var='YOOKASSA_SHOP_ID')
+YOOKASSA_SECRET_KEY = env.str(var='YOOKASSA_SECRET_KEY')
+# endregion -------------------------------------------------------------------------
 
 if DEBUG:
     # region ------------------------- SENTRY ---------------------------------------
