@@ -96,13 +96,6 @@ class Order(BaseModel):
     )
 
     # endregion ---------------------------------------------------------------------
-    def get_readable_status(self, status: str) -> str:
-        """Получение читабельного статуса."""
-        # Перебираю статусы, найдя нужный, возвращаю читабельный статус заказа.
-        for value, label in self.Status.choices:
-            if value == status:
-                return label
-
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
@@ -110,6 +103,13 @@ class Order(BaseModel):
 
     def __str__(self) -> str:
         return f'Заказ №{self.pk}'
+
+    def get_readable_status(self, status: str) -> str:
+        """Получение читабельного статуса."""
+        # Перебираю статусы, найдя нужный, возвращаю читабельный статус заказа.
+        for value, label in self.Status.choices:
+            if value == status:
+                return label
 
 
 class OrderItem(BaseModel):
