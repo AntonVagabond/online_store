@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import TypeAlias, TYPE_CHECKING
 
-from crum import get_current_user
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
 
 from carts.models.orders import Order
 from carts.serializers.api import orders as orders_s
-from carts.services.orders import AddItemToOrderService
 from common.views import mixins
 
 if TYPE_CHECKING:
@@ -53,15 +51,6 @@ class OrderViewSet(mixins.CRUDListViewSet):
 
     http_method_names = ('get', 'patch', 'post', 'delete')
 
-    def perform_create(self, serializer: OrderSerializer) -> Order:
-        """Сохранение заказа."""
-        user = get_current_user()
-        order = serializer.save()
-        add_item_to_order_service = AddItemToOrderService(user=user, order=order)
-        # Добавление товара в заказ.
-        add_item_to_order_service.execute()
-        return order
-
 
 @extend_schema_view(
     list=extend_schema(
@@ -73,7 +62,7 @@ class UserOrdersViewSet(mixins.ListViewSet):
     """Представление истории заказа пользователя."""
     permission_classes = (permissions.IsAuthenticated,)
 
-    serializer_class = orders_s.UserOrdersListSerializer
+    serializer_class = orders_s.UserOrderListSerializer
 
     def get_queryset(self) -> QuerySet[Order]:
         """Получаем список заказов у одного пользователя."""
