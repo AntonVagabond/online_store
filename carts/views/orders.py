@@ -67,5 +67,7 @@ class UserOrdersViewSet(mixins.ListViewSet):
     def get_queryset(self) -> QuerySet[Order]:
         """Получаем список заказов у одного пользователя."""
         user_id = self.request.user.pk
-        queryset = Order.objects.filter(user_id=user_id)
+        queryset = Order.objects.filter(user_id=user_id).prefetch_related(
+            'order_items'
+        )
         return queryset
