@@ -26,10 +26,10 @@ class Order(BaseModel):
 
     class Status(models.TextChoices):
         """Статус заказа."""
-        AWAIT = 'AW', _('Ожидает оплаты.')
+        CREATE = 'CR', _('Заказ создан')
         WORK = 'WO', _('В работе.')
-        COMPLETED = 'CO', _('Завершенный.')
-        CANCELLED = 'CA', _('Отмененный.')
+        COMPLETED = 'CO', _('Завершенный')
+        CANCELLED = 'CA', _('Отмененный')
 
     # region ------------------------- АТРИБУТЫ ЗАКАЗА ------------------------------
     user = models.ForeignKey(
@@ -44,7 +44,7 @@ class Order(BaseModel):
         verbose_name='Статус заказа',
         max_length=2,
         choices=Status.choices,
-        default=Status.AWAIT
+        default=Status.CREATE,
     )
     sequence_number = models.CharField(
         verbose_name='Порядковый номер',
@@ -63,17 +63,6 @@ class Order(BaseModel):
     post_script = models.CharField(
         verbose_name='Сообщение о заказе',
         max_length=200,
-    )
-    order_amount = models.DecimalField(
-        verbose_name='Сумма заказа',
-        default=0,
-        max_digits=10,
-        decimal_places=2,
-        null=True,
-        blank=True,
-    )
-    pay_time = models.DateTimeField(
-        verbose_name='Время оплаты',
         null=True,
         blank=True,
     )
