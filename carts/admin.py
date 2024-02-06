@@ -68,9 +68,10 @@ class OrderAdmin(admin.ModelAdmin):
     """
     Модель админа заказа.
 
-    Аттрибуты:
+    Атрибуты:
         * `list_display` (tuple[str]): отображение списка.
         * `list_display_links` (tuple[str]): список отображаемых ссылок.
+        * 'list_per_page' (int): количество отображаемых заказов на странице.
         * `fields` (tuple[str]): поля.
         * `readonly_fields` (tuple[str]): поля только для чтения.
         * `inlines` (tuple[inlines]): встроенные.
