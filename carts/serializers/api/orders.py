@@ -1,24 +1,21 @@
-from typing import Union
-
 from django.db import transaction
-from django.utils import timezone
 from rest_framework import serializers
 
 from carts.models.orders import Order
-from carts.serializers.nested.delivers import DeliveryNestedSerializer
-from carts.serializers.nested.orders import OrderItemNestedSerializer
-from carts.services.delivers import DeliveryCreateService
-from carts.services.orders import (
-    OrderSequenceNumberService,
-    OrderAmountService,
-    AddItemToOrderService,
+from carts.serializers.nested.delivers import (
+    DeliveryCreateNestedSerializer,
+    DeliveryRetrieveNestedSerializer,
 )
+from carts.serializers.nested.orders import OrderItemNestedSerializer
+from carts.serializers.nested.payments import (
+    PaymentCreateNestedSerializer,
+    PaymentRetrieveNestedSerializer,
+)
+from carts.services.orders import OrderCreateService
 
 
 class OrderStatusUpdateSerializer(serializers.ModelSerializer):
-    """
-    Сериализатор для изменения статуса заказа.
-    """
+    """Сериализатор для изменения статуса заказа."""
 
     class Meta:
         model = Order
@@ -44,6 +41,8 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
 
     order_items = OrderItemNestedSerializer(many=True)
     status = serializers.SerializerMethodField(method_name='get_status')
+    payment = PaymentRetrieveNestedSerializer()
+    delivers = DeliveryRetrieveNestedSerializer(many=True)
 
     class Meta:
         model = Order
@@ -51,11 +50,11 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'status',
+            'payment',
+            'delivers',
             'sequence_number',
             'transaction_number',
             'post_script',
-            'order_amount',
-            'pay_time',
             'address',
             'signer_mobile',
             'order_date',
@@ -70,7 +69,6 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
 
 
 class UserOrderListSerializer(serializers.ModelSerializer):
-
     status = serializers.SerializerMethodField(method_name='get_status')
 
     class Meta:
@@ -81,8 +79,6 @@ class UserOrderListSerializer(serializers.ModelSerializer):
             'sequence_number',
             'status',
             'transaction_number',
-            'order_amount',
-            'pay_time',
             'address',
             'signer_mobile',
             'order_date',
@@ -106,14 +102,13 @@ class OrderSerializer(serializers.ModelSerializer):
         * `pay_time` (CharField): время оплаты.
     """
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    delivers = DeliveryNestedSerializer(many=True)
+    delivers = DeliveryCreateNestedSerializer()
+    payment = PaymentCreateNestedSerializer()
 
     # Эта информация для заказа, ниже, не должна быть изменяема.
     order_status = serializers.CharField(read_only=True)
     sequence_number = serializers.CharField(read_only=True)
     transaction_number = serializers.CharField(read_only=True)
-    order_amount = serializers.CharField(read_only=True)
-    pay_time = serializers.CharField(read_only=True)
     order_date = serializers.DateTimeField(read_only=True)
 
     class Meta:
@@ -122,53 +117,29 @@ class OrderSerializer(serializers.ModelSerializer):
             'id',
             'user',
             'delivers',
+            'payment',
             'order_status',
             'sequence_number',
             'transaction_number',
             'post_script',
-            'order_amount',
-            'pay_time',
             'address',
             'signer_mobile',
             'order_date',
         )
 
-    def _add_sequence_number(self) -> str:
-        """Добавить порядковый номер заказа."""
-        seq_number_service = OrderSequenceNumberService(self.context['request'].user)
-        return seq_number_service.execute()
-
-    def _add_order_amount(self) -> str:
-        """Добавить сумму заказа."""
-        order_amount_service = OrderAmountService(self.context['request'].user)
-        return order_amount_service.execute()
-
-    def validate(
-            self,
-            attrs: dict[str, Union[str, int]],
-    ) -> dict[str, Union[str, int]]:
-        """
-        Добавление порядкового номера, суммы заказа,
-        дата создания заказа в преобразователь.
-        """
-        attrs['sequence_number'] = self._add_sequence_number()
-        attrs['order_amount'] = self._add_order_amount()
-        attrs['order_date'] = timezone.now().astimezone()
-        return attrs
-
     def create(self, validated_data: dict[str]) -> Order:
         """Создание заказа."""
         user = validated_data['user']
-        delivery_data = validated_data.pop('delivers')[0]
+        payment_data = validated_data.pop('payment')
+        delivery_data = validated_data.pop('delivers')
 
         with transaction.atomic():
             instance: Order = super().create(validated_data)
-
-            add_item_to_order_service = AddItemToOrderService(user, instance)
-            # Добавление товара в заказ.
-            add_item_to_order_service.execute()
-
-            order_create = DeliveryCreateService(instance, delivery_data)
-            # Создание доставки.
+            order_create = OrderCreateService(
+                user=user,
+                order=instance,
+                payment_data=payment_data,
+                delivery_data=delivery_data,
+            )
             order_create.execute()
         return instance

@@ -82,7 +82,6 @@ class OrderAdmin(admin.ModelAdmin):
         'order_status',
         'sequence_number',
         'order_date',
-        'order_amount',
     )
     list_display_links = ('id', 'user')
     list_per_page = 10
@@ -101,7 +100,6 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = (
         'sequence_number',
         'transaction_number',
-        'order_amount',
         'order_date',
     )
     inlines = (OrderItemInline,)
