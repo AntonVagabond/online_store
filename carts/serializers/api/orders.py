@@ -126,20 +126,3 @@ class OrderSerializer(serializers.ModelSerializer):
             'signer_mobile',
             'order_date',
         )
-
-    def create(self, validated_data: dict[str]) -> Order:
-        """Создание заказа."""
-        user = validated_data['user']
-        payment_data = validated_data.pop('payment')
-        delivery_data = validated_data.pop('delivers')
-
-        with transaction.atomic():
-            instance: Order = super().create(validated_data)
-            order_create = OrderCreateService(
-                user=user,
-                order=instance,
-                payment_data=payment_data,
-                delivery_data=delivery_data,
-            )
-            order_create.execute()
-        return instance
