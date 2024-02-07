@@ -1,5 +1,6 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
+from rest_framework_simplejwt import authentication
 
 from carts.models.carts import Cart, CartItem
 from carts.serializers.api import carts as carts_s
@@ -20,6 +21,7 @@ class CartViewSet(mixins.RetrieveListViewSet):
     """Представление корзины."""
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    authentication_classes = (authentication.JWTAuthentication,)
     # TODO: оптимизировать запросы
     queryset = Cart.objects.all().prefetch_related(
         'products',
@@ -51,6 +53,7 @@ class CartItemViewSet(mixins.CUDViewSet):
     """Представление содержимого корзины."""
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    authentication_classes = (authentication.JWTAuthentication,)
 
     queryset = CartItem.objects.all()
     serializer_class = carts_s.CartItemSerializer
