@@ -15,7 +15,6 @@ class Delivery(BaseModel):
 
     Аттрибуты:
         * `order` (ForeignKey): заказ.
-        * `address` (CharField): адрес куда доставят товар.
         * `delivery_method` (CharField): способ доставки.
         * `delivery_status` (ForeignKey): статус доставки.
         * `created_at` (DateTimeField): дата создания доставки.
@@ -93,7 +92,7 @@ class DeliveryStatus(BaseModel):
     """
     Модель статуса доставки.
 
-    Аттрибуты:
+    Атрибуты:
         * `name` (CharField): пользователь.
         * `description` (CharField): статус.
     """
