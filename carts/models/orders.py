@@ -17,8 +17,6 @@ class Order(BaseModel):
         * `sequence_number` (CharField): порядковый номер.
         * `transaction_number` (CharField): номер транзакции.
         * `post_script` (PositiveSmallIntegerField): сообщение о заказе.
-        * `order_amount` (DecimalField): сумма заказа.
-        * `pay_time` (DateTimeField): время оплаты.
         * `address` (CharField): адрес доставки.
         * `signer_mobile` (PhoneNumberField): контактный телефон.
         * `order_date` (DateTimeField): дата заказа.
