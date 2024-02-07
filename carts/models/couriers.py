@@ -8,7 +8,7 @@ class Courier(BaseModel):
     """
     Модель курьера.
 
-    Аттрибуты:
+    Атрибуты:
         * `name` (CharField): название курьера.
         * `phone_number` (PhoneNumberField): номер телефона курьера.
         * `email` (EmailField): почта курьера.
