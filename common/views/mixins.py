@@ -75,6 +75,11 @@ class ListViewSet(ExtendedGenericViewSet, mixins.ListModelMixin):
     pass
 
 
+class CreateViewSet(ExtendedGenericViewSet, mixins.CreateModelMixin):
+    """Класс представления включающий в себя Create mixins."""
+    pass
+
+
 class RetrieveListViewSet(ExtendedGenericViewSet,
                           mixins.RetrieveModelMixin,
                           mixins.ListModelMixin):
@@ -100,6 +105,16 @@ class CUDViewSet(ExtendedGenericViewSet,
                  mixins.DestroyModelMixin):
     """
     Класс представления включающий в себя базовые операции, кроме RetrieveModelMixin.
+    """
+    pass
+
+
+class RUDViewSet(ExtendedGenericViewSet,
+                 mixins.RetrieveModelMixin,
+                 mixins.UpdateModelMixin,
+                 mixins.DestroyModelMixin):
+    """
+    Класс представления включающий в себя базовые операции, кроме CreateModelMixin.
     """
     pass
 
