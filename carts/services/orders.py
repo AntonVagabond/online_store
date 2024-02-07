@@ -10,7 +10,7 @@ from django.utils import timezone
 from carts.models.carts import Cart, CartItem
 from carts.models.orders import OrderItem, Order
 from carts.services.delivers import _DeliveryCreateService
-from carts.services.payments import _PaymentAmountService
+from carts.services.payments import _PaymentService
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -126,17 +126,17 @@ class OrderCreateService:
     ):
         # Композиция
         self.__order_sequence_number = _OrderSequenceNumberService(user, order)
-        self.__payment_amount = _PaymentAmountService(user, order, payment_data)
+        self.__payment_amount = _PaymentService(user, order, payment_data)
         self.__add_item_to_order = _AddItemToOrderService(user, order)
         self.__delivery_create = _DeliveryCreateService(order, delivery_data)
 
-    def execute(self):
+    def execute(self) -> ...:
         """Выполнить создание заказа."""
         # Добавляем порядковый номер в заказ.
         self.__order_sequence_number.execute_add_sequence_number()
-        # Добавляем сумму оплаты заказа.
-        self.__payment_amount.execute_add_amount()
         # Добавляем товары в заказ.
         self.__add_item_to_order.execute_add_item_to_order()
         # Создание доставки.
         self.__delivery_create.execute_create_delivery()
+        # Создание платежа.
+        return self.__payment_amount.execute_payment_and_get_address()

@@ -25,6 +25,12 @@ class OrderPayment(BaseModel):
         NOT_PAID = 0, _('Не оплачено')
         PAID = 1, _('Оплачено')
 
+    payment_id = models.UUIDField(
+        verbose_name='ID платежа',
+        unique=True,
+        null=True,
+        blank=True,
+    )
     order = models.OneToOneField(
         to='carts.Order',
         on_delete=models.CASCADE,
