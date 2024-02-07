@@ -8,16 +8,16 @@ class Courier(BaseModel):
     """
     Модель курьера.
 
-    Аттрибуты:
+    Атрибуты:
         * `name` (CharField): название курьера.
         * `phone_number` (PhoneNumberField): номер телефона курьера.
         * `email` (EmailField): почта курьера.
         * `address` (CharField): адрес курьера.
-        * `vehicle_type` (CharField): тип транспортного средства.
+        * `vehicle` (ManyToManyField): транспортное средство.
         * `is_available` (BooleanField): доступен ли курьер для выполнения доставок.
     """
     name = models.CharField(
-        verbose_name='Название курьера',
+        verbose_name='Название организации',
         max_length=100,
         null=True,
         blank=True,
@@ -40,11 +40,13 @@ class Courier(BaseModel):
         null=True,
         blank=True,
     )
-    vehicle_type = models.CharField(
-        verbose_name='Тип транспортного средства',
-        max_length=50,
-        null=True,
+    vehicle = models.ManyToManyField(
+        to='carts.Vehicle',
+        verbose_name='Транспорт',
         blank=True,
+        default='Пешком',
+        related_name='vehicle'
+
     )
     is_available = models.BooleanField(
         verbose_name='Доступен ли курьер для выполнения доставок',
@@ -56,3 +58,24 @@ class Courier(BaseModel):
         decimal_places=2,
         default=0.00
     )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Курьер'
+        verbose_name_plural = 'Курьеры'
+
+
+class Vehicle(BaseModel):
+    name = models.CharField(
+        max_length=70,
+        verbose_name='Название транспорта'
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Транспорт'
+        verbose_name_plural = 'Транспорты'

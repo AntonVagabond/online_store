@@ -76,11 +76,11 @@ class Delivery(BaseModel):
     )
 
     class Meta:
-        verbose_name = 'Доставщик'
-        verbose_name_plural = 'Доставщики'
+        verbose_name = 'Доставка'
+        verbose_name_plural = 'Доставки'
 
     def __str__(self) -> str:
-        return f'Доставка {self.pk}'
+        return f'Доставка №{self.pk}'
 
     @property
     def delivery_cost(self):
@@ -112,8 +112,8 @@ class DeliveryStatus(BaseModel):
     )
 
     class Meta:
-        verbose_name = 'Статус'
-        verbose_name_plural = 'Статусы'
+        verbose_name = 'Статус доставки'
+        verbose_name_plural = 'Статусы доставки'
 
     def __str__(self) -> CharField:
         return self.name

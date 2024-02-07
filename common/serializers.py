@@ -12,8 +12,8 @@ class BaseCategorySerializer(serializers.ModelSerializer):
         abstract = True
 
     def to_representation(self,
-                          obj: Category) -> OrderedDict[str, Union[int, str, None]]:
+                          instance: Category) -> OrderedDict[str, Union[int, str, None]]:
         # Добавляем поле 'children' и его полное значение.
         self.fields['children'] = self.__class__(many=True)
         # Повторяется этот процесс, пока есть вложенность.
-        return super().to_representation(obj)
+        return super().to_representation(instance)
