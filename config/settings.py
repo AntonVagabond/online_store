@@ -291,6 +291,7 @@ CELERY_BEAT_SCHEDULE = {
 # region ------------------------------ YOOKASSA ------------------------------------
 YOOKASSA_SHOP_ID = env.int(var='YOOKASSA_SHOP_ID')
 YOOKASSA_SECRET_KEY = env.str(var='YOOKASSA_SECRET_KEY')
+YOOKASSA_RETURN_URL = env.str(var='YOOKASSA_RETURN_URL')
 # endregion -------------------------------------------------------------------------
 
 if DEBUG:
