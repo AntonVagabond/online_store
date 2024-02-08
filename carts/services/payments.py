@@ -52,7 +52,7 @@ class _PaymentService(_PaymentBaseService):
             payment_data: dict[str, str],
     ) -> None:
         super().__init__()
-        self._user: User = user
+        self.__user: User = user
         self.__order: Order = order
         self.__payment_data: dict[str, str] = payment_data
         self.__cart: Optional[Cart] = None
@@ -60,7 +60,7 @@ class _PaymentService(_PaymentBaseService):
 
     def __get_cart_current_user(self) -> None:
         """Получить корзину текущего пользователя."""
-        self.__cart = Cart.objects.filter(user=self._user).first()
+        self.__cart = Cart.objects.filter(user=self.__user).first()
 
     def __get_cart_price(self) -> None:
         """Получить сумму заказа."""
@@ -104,7 +104,6 @@ class _PaymentService(_PaymentBaseService):
                 },
                 idempotency_key=str(uuid.uuid4()),
             )
-            self.__payment_response = payment_response
         except RequestException as error:
             raise ParseError(
                 detail='Ошибка на стороне Yookassa при создании платежа', code=error,
@@ -112,10 +111,10 @@ class _PaymentService(_PaymentBaseService):
 
     def __add_and_save_payment_id(self) -> None:
         """Добавить и сохранить `id` платежа в таблицу `OrderPayment`."""
-        self.__order_payment.payment_id = self.__payment_response.payment_method.id
+        self.__order_payment.payment_id = self.__payment_response.id
         self.__order_payment.save()
 
-    def execute_payment_and_get_address(self) -> ...:
+    def execute_payment_and_get_address(self) -> str:
         """Выполнить платеж и получить url-адрес подтверждения."""
         self.__get_cart_current_user()
         self.__get_cart_price()
@@ -125,10 +124,6 @@ class _PaymentService(_PaymentBaseService):
         self._setting_an_account()
         self.__create_and_get_payment_with_yookassa()
         self.__add_and_save_payment_id()
-        print(
-            self.__payment_response.confirmation.confirmation_url,
-            type(self.__payment_response.confirmation.confirmation_url)
-        )
         return self.__payment_response.confirmation.confirmation_url
 
 

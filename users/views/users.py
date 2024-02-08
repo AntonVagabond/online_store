@@ -119,8 +119,6 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
     @action(methods=['POST'], detail=False)
     def activation(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Метод для активации пользователя."""
-        # Все изменения будут сохранены в базе данных только в том случае,
-        # если все операции прошли успешно.
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.user
