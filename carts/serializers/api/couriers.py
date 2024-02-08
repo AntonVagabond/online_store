@@ -8,7 +8,7 @@ class CourierSearchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Courier
-        fields = ('id', 'name', 'vehicle_type', 'is_available')
+        fields = ('id', 'name', 'vehicle', 'is_available')
 
 
 class CourierListSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class CourierListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Courier
-        fields = ('id', 'name', 'vehicle_type', 'is_available')
+        fields = ('id', 'name', 'vehicle', 'is_available')
 
 
 class CourierRetrieveSerializer(serializers.ModelSerializer):
@@ -40,7 +40,7 @@ class CourierRetrieveSerializer(serializers.ModelSerializer):
             'phone_number',
             'email',
             'address',
-            'vehicle_type',
+            'vehicle',
             'is_available',
         )
 
@@ -56,7 +56,7 @@ class CourierCreateSerializer(serializers.ModelSerializer):
             'phone_number',
             'email',
             'address',
-            'vehicle_type',
+            'vehicle',
             'is_available',
         )
 
@@ -72,6 +72,6 @@ class CourierUpdateSerializer(serializers.ModelSerializer):
             'phone_number',
             'email',
             'address',
-            'vehicle_type',
+            'vehicle',
             'is_available',
         )
