@@ -60,9 +60,6 @@ class _PaymentService(_PaymentBaseService):
 
     def __get_cart_current_user(self) -> None:
         """Получить корзину текущего пользователя."""
-        a = Cart.objects.all()
-        b = Cart.objects.filter(user__id=self._user.id).first()
-        c = b
         self.__cart = Cart.objects.filter(user=self._user).first()
 
     def __get_cart_price(self) -> None:

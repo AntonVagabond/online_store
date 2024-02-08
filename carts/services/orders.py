@@ -98,6 +98,7 @@ class _AddItemToOrderService(_OrderBaseService):
             item.product.quantity -= item.quantity
             item.product.save()
 
+    # TODO: Перенести метод удаления корзины в класс _PaymentService
     @staticmethod
     def __delete_cart(cart) -> None:
         """Удаление корзины, после добавления товара в заказ."""
@@ -126,9 +127,9 @@ class OrderCreateService:
     ):
         # Композиция
         self.__order_sequence_number = _OrderSequenceNumberService(user, order)
-        self.__payment_amount = _PaymentService(user, order, payment_data)
         self.__add_item_to_order = _AddItemToOrderService(user, order)
         self.__delivery_create = _DeliveryCreateService(order, delivery_data)
+        self.__payment_amount = _PaymentService(user, order, payment_data)
 
     def execute(self) -> ...:
         """Выполнить создание заказа."""
