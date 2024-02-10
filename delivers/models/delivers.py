@@ -44,7 +44,7 @@ class Delivery(BaseModel):
         default=DeliveryMethod.PICKUP
     )
     delivery_status = models.ForeignKey(
-        to='orders.DeliveryStatus',
+        to='delivers.DeliveryStatus',
         on_delete=models.RESTRICT,
         related_name='delivers',
         verbose_name='Состояние доставки',
