@@ -1,7 +1,11 @@
+from typing import TypeAlias
+
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from common.models.base import BaseModel
+
+CharField: TypeAlias = models.CharField
 
 
 class Courier(BaseModel):
@@ -59,7 +63,7 @@ class Courier(BaseModel):
         default=0.00
     )
 
-    def __str__(self):
+    def __str__(self) -> CharField:
         return self.name
 
     class Meta:
@@ -73,9 +77,9 @@ class Vehicle(BaseModel):
         verbose_name='Название транспорта'
     )
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'Транспорт'
         verbose_name_plural = 'Транспорты'
+
+    def __str__(self) -> CharField:
+        return self.name
