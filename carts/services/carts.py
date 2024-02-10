@@ -3,7 +3,7 @@ from typing import Union
 from rest_framework.exceptions import ParseError
 from rest_framework.request import Request
 
-from carts.models.carts import Cart, CartItem
+from ..models.carts import Cart, CartItem
 from products.models.products import Product
 
 

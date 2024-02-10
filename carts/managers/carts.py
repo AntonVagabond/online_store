@@ -9,7 +9,7 @@ from django.db.models import F
 from rest_framework.request import Request
 
 if TYPE_CHECKING:
-    from carts.models.carts import Cart
+    from ..models.carts import Cart
     from django.db.models import QuerySet
     from decimal import Decimal
 

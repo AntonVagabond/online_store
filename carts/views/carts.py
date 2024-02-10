@@ -2,8 +2,8 @@ from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
 from rest_framework_simplejwt import authentication
 
-from carts.models.carts import Cart, CartItem
-from carts.serializers.api import carts as carts_s
+from ..models.carts import Cart, CartItem
+from ..serializers.api import carts as carts_s
 from common.views import mixins
 
 

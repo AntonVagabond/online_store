@@ -3,9 +3,9 @@ from typing import Union
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from carts.models.carts import Cart, CartItem
-from carts.serializers.nested.carts import CartItemsNestedSerializer
-from carts.services.carts import CartService, CartItemService, CartItemUpdateService
+from ...models.carts import Cart, CartItem
+from ..nested.carts import CartItemsNestedSerializer
+from ...services.carts import CartService, CartItemService, CartItemUpdateService
 from products.models.products import Product
 from users.serializers.nested.users import UserNestedSerializer
 

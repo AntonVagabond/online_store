@@ -1,6 +1,6 @@
 from django.db import models
 
-from carts.managers.carts import CartManager
+from ..managers.carts import CartManager
 from common.models.base import BaseModel
 
 
