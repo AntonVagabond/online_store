@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'users',
     'products',
     'carts',
+    'delivers',
+    'orders',
+    'payments',
     # after apps
     'drf_spectacular',
 ]
