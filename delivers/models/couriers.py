@@ -45,7 +45,7 @@ class Courier(BaseModel):
         blank=True,
     )
     vehicle = models.ManyToManyField(
-        to='carts.Vehicle',
+        to='delivers.Vehicle',
         verbose_name='Транспорт',
         blank=True,
         default='Пешком',
