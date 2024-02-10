@@ -32,7 +32,7 @@ class OrderPayment(BaseModel):
         blank=True,
     )
     order = models.OneToOneField(
-        to='carts.Order',
+        to='orders.Order',
         on_delete=models.CASCADE,
         related_name='payment',
         verbose_name='Заказ',
