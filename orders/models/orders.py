@@ -109,7 +109,7 @@ class OrderItem(BaseModel):
         * `quantity` (PositiveSmallIntegerField): количество товара.
     """
     order = models.ForeignKey(
-        to='carts.Order',
+        to='orders.Order',
         on_delete=models.RESTRICT,
         related_name='order_items',
         verbose_name='Заказ',
