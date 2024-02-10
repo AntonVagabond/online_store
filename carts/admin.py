@@ -18,6 +18,8 @@ class CartItemInline(admin.TabularInline):
     model = carts.CartItem
     fields = ('id', 'product', 'quantity', 'total_price_product')
     readonly_fields = ('product', 'quantity', 'total_price_product')
+
+
 # endregion -------------------------------------------------------------------------
 
 
