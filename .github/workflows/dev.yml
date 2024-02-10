@@ -21,8 +21,4 @@ jobs:
           cd ${{ secrets.PATH }}
           source venv/bin/activate
           git pull
-          pip install -r requirements.txt
-          python manage.py makemigrations
-          python manage.py migrate
-          sudo service ${{ secrets.GUNICORN }} restart
-          sudo service nginx restart
+          docker-compose up -d --build
