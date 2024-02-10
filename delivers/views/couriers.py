@@ -7,8 +7,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from common.views.mixins import CRUDListViewSet
-from carts.models.couriers import Courier
-from carts.serializers.api import couriers as couriers_s
+from ..models.couriers import Courier
+from ..serializers.api import couriers as couriers_s
 
 
 @extend_schema_view(

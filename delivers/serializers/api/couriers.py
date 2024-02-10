@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from carts.models.couriers import Courier
+from ...models.couriers import Courier
 
 
 class CourierSearchSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from carts.models.delivers import Delivery
+from ...models.delivers import Delivery
 
 
 class DeliveryCreateNestedSerializer(serializers.ModelSerializer):

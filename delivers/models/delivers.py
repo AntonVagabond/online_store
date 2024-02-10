@@ -3,7 +3,7 @@ from typing import TypeAlias
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-from carts.models.couriers import Courier
+from .couriers import Courier
 from common.models.base import BaseModel
 
 CharField: TypeAlias = models.CharField

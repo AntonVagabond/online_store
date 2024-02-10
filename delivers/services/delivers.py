@@ -1,8 +1,14 @@
-from carts.models.delivers import Delivery
-from carts.models.orders import Order
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from ..models.delivers import Delivery
+
+if TYPE_CHECKING:
+    from orders.models.orders import Order
 
 
-class _DeliveryCreateService:
+class DeliveryCreateService:
     """
     Компонентный класс.
     Сервисная часть для создания доставки.
