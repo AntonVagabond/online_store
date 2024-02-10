@@ -171,8 +171,8 @@ SPECTACULAR_SETTINGS = {
     ],
 
     'SWAGGER_UI_SETTINGS': {
-        'DeepLinking': True,
-        'DisplayOperationId': True,
+        'deepLinking': True,
+        'displayOperationId': True,
         'syntaxHighlight.active': True,
         'syntaxHighlight.theme': 'arta',
         'defaultModelsExpandDepth': -1,
