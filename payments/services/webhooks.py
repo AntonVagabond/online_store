@@ -97,6 +97,10 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
     def __is_status_succeeded(self) -> None:
         """Является ли статус успешным."""
         if not self._payment_response.status == 'succeeded':
+            logger.error(
+                msg={f'Ошибка на стороне Yookassa. Платежа {self.__payment_id} '
+                     f'не переведен в статус succeeded': ParseError}
+            )
             raise ParseError(
                 f'Ошибка на стороне Yookassa. Платежа {self.__payment_id}'
                 f' не переведен в статус succeeded'
