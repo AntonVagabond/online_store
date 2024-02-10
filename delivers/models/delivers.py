@@ -30,7 +30,7 @@ class Delivery(BaseModel):
         COURIER = 'CO', _('Доставка курьером')
 
     order = models.ForeignKey(
-        to='carts.Order',
+        to='orders.Order',
         on_delete=models.CASCADE,
         related_name='delivers',
         verbose_name='Заказ',
@@ -44,7 +44,7 @@ class Delivery(BaseModel):
         default=DeliveryMethod.PICKUP
     )
     delivery_status = models.ForeignKey(
-        to='carts.DeliveryStatus',
+        to='orders.DeliveryStatus',
         on_delete=models.RESTRICT,
         related_name='delivers',
         verbose_name='Состояние доставки',
@@ -62,7 +62,7 @@ class Delivery(BaseModel):
         blank=True,
     )
     courier = models.ForeignKey(
-        to='carts.Courier',
+        to='delivers.Courier',
         on_delete=models.CASCADE,
         related_name='delivers',
         verbose_name='Курьер',
