@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,11 +53,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    # package middlewares
     'corsheaders.middleware.CorsMiddleware',
     'crum.CurrentRequestUserMiddleware',
-
-    # package middlewares
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
     # 'customers.middleware.ActiveUserMiddleware',
 ]
 
@@ -297,6 +297,8 @@ YOOKASSA_SECRET_KEY = env.str(var='YOOKASSA_SECRET_KEY')
 YOOKASSA_RETURN_URL = env.str(var='YOOKASSA_RETURN_URL')
 # endregion -------------------------------------------------------------------------
 
+
+# region ------------------------- DJANGO DEBUGGER ----------------------------------
 if DEBUG:
     # region ------------------------- SENTRY ---------------------------------------
     sentry_sdk.init(
@@ -311,9 +313,63 @@ if DEBUG:
     )
     # endregion ---------------------------------------------------------------------
 
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
+# endregion -------------------------------------------------------------------------
 
-# region ------------------------- DJANGO DEBUGGER ----------------------------------
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+
+# region ------------------------------- LOGGING ------------------------------------
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'logstash': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        },
+        'json': {
+            '()': 'pythonjsonlogger.jsonlogger.JsonFormatter',
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'json_indent': None,
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'logstash': {
+            'level': 'INFO',
+            'formatter': 'json',
+            'class': 'logstash.TCPLogstashHandler',
+            'host': 'localhost',
+            'port': 50000,  # Значение по умолчанию: 5959
+            'version': 1,
+            'message_type': 'django',
+            'fqdn': False,  # Полное доменное имя. Значение по умолчанию: false.
+            'tags': ['django.request'],  # Список тегов. По умолчанию: None.
+        },
+
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'request_logging': {
+            'handlers': ['console', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
 # endregion -------------------------------------------------------------------------
