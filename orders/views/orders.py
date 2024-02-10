@@ -7,17 +7,17 @@ from django.db import transaction
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, status
 from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
 
-from carts.models.orders import Order
-from carts.serializers.api import orders as orders_s
-from carts.services.orders import OrderCreateService
-from carts.services.payments import PaymentConfirmWebHookService
 from common.views import mixins
+from ..models.orders import Order
+from ..serializers.api import orders as orders_s
+from ..services.orders import OrderCreateService
+from payments.services.webhooks import PaymentConfirmWebHookService
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
-    from rest_framework.response import Response
     from rest_framework.request import Request
 
 OrderSerializer: TypeAlias = orders_s.OrderSerializer
@@ -28,7 +28,7 @@ OrderSerializer: TypeAlias = orders_s.OrderSerializer
         summary='Создать заказ',
         tags=['Заказ'],
     ),
-    payment_webhook_handler=extend_schema(
+    payment_confirmation=extend_schema(
         summary='Обработать платеж с помощью WebHook',
         tags=['Заказ'],
     ),
@@ -40,6 +40,11 @@ class OrderMakingViewSet(mixins.CreateViewSet):
 
     queryset = Order.objects.all()
     serializer_class = orders_s.OrderSerializer
+
+    # multi_serializer_class = {
+    #     'create': orders_s.OrderSerializer,
+    #     'payment_confirmation': payments_s.PaymentConfirmWebHookSerializer,
+    # }
 
     def create(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Создание заказа."""
@@ -61,15 +66,23 @@ class OrderMakingViewSet(mixins.CreateViewSet):
             confirmation_url = order_create.execute()
         return Response(
             data={'confirmation_url': confirmation_url},
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
     @action(methods=['POST'], detail=False)
-    def payment_webhook_handler(self, request: Request):
+    def payment_confirmation(self, request: Request) -> Response:
         """Обработка платежа с помощью webhook-а."""
-        payment_confirm_webhook = PaymentConfirmWebHookService(request)
-        payment_confirm_webhook.execute()
-        return Response(status=status.HTTP_200_OK)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        with transaction.atomic():
+            serializer.save()
+            payment_confirm_webhook = PaymentConfirmWebHookService(request=request)
+            payment_confirm_webhook.execute()
+
+        return Response(
+            data={'answer': 'Подтверждение оплаты прошло успешно!'},
+            status=status.HTTP_200_OK,
+        )
 
 
 @extend_schema_view(

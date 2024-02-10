@@ -1,17 +1,15 @@
-from django.db import transaction
 from rest_framework import serializers
 
-from carts.models.orders import Order
-from carts.serializers.nested.delivers import (
+from ...models.orders import Order
+from delivers.serializers.nested.delivers import (
     DeliveryCreateNestedSerializer,
     DeliveryRetrieveNestedSerializer,
 )
-from carts.serializers.nested.orders import OrderItemNestedSerializer
-from carts.serializers.nested.payments import (
+from ..nested.orders import OrderItemNestedSerializer
+from payments.serializers.nested.payments import (
     PaymentCreateNestedSerializer,
     PaymentRetrieveNestedSerializer,
 )
-from carts.services.orders import OrderCreateService
 
 
 class OrderStatusUpdateSerializer(serializers.ModelSerializer):
