@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from carts.models.payments import OrderPayment
+from ...models.payments import OrderPayment
 
 
 class PaymentCreateNestedSerializer(serializers.ModelSerializer):
