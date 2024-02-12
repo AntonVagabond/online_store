@@ -25,7 +25,7 @@ class Order(BaseModel):
     class Status(models.TextChoices):
         """Статус заказа."""
         CREATE = 'CR', _('Заказ создан')
-        WORK = 'WO', _('В работе.')
+        WORK = 'WO', _('В работе')
         COMPLETED = 'CO', _('Завершенный')
         CANCELLED = 'CA', _('Отмененный')
 
