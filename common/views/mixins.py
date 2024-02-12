@@ -2,6 +2,7 @@ from typing import Optional, Union
 
 from djoser.views import UserViewSet
 from rest_framework import mixins
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
@@ -64,6 +65,11 @@ class ExtendedGenericViewSet(ExtendedView, GenericViewSet):
 
 class ExtendedUserViewSet(ExtendedView, UserViewSet):
     """Расширенное представление пользователя."""
+    pass
+
+
+class ExtendedCreateAPIView(ExtendedView, CreateAPIView):
+    """Расширенное представление для создания."""
     pass
 
 
