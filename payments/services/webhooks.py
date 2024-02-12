@@ -121,5 +121,6 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
         self.__is_such_payment_in_database()
         self.__get_current_payment()
         self.__confirm_payment()
+        self.__check_payment_status_with_get_request()
         self.__is_status_succeeded()
         self.__update_status_payment()
