@@ -96,7 +96,7 @@ class PaymentService(_PaymentBaseService):
                         'type': "redirect",
                         'return_url': YOOKASSA_RETURN_URL,
                     },
-                    'capture': True,
+                    'capture': False,
                     'description': f'Оплата заказа на {self.__price} руб.',
                     'metadata': {
                         'order_id': self.__order.pk,
@@ -113,9 +113,12 @@ class PaymentService(_PaymentBaseService):
                 detail='Ошибка на стороне Yookassa при создании платежа', code=error,
             )
 
-    def __add_and_save_payment_id(self) -> None:
-        """Добавить и сохранить `id` платежа в таблицу `OrderPayment`."""
+    def __add_payment_id(self) -> None:
+        """Добавить `id` платежа в таблицу `OrderPayment`."""
         self._order_payment.payment_id = self._payment_response.id
+
+    def __save_payment_id(self) -> None:
+        """Сохранить `id` платежа в таблицу `OrderPayment`."""
         self._order_payment.save()
 
     def execute_payment_and_get_address(self) -> str:
@@ -127,5 +130,6 @@ class PaymentService(_PaymentBaseService):
         self.__create_payment()
         self._setting_an_account()
         self.__create_and_get_payment_with_yookassa()
-        self.__add_and_save_payment_id()
+        self.__add_payment_id()
+        self.__save_payment_id()
         return self._payment_response.confirmation.confirmation_url

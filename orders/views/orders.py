@@ -6,7 +6,6 @@ from crum import get_current_user
 from django.db import transaction
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt import authentication
 
@@ -14,7 +13,6 @@ from common.views import mixins
 from ..models.orders import Order
 from ..serializers.api import orders as orders_s
 from ..services.orders import OrderCreateService
-from payments.services.webhooks import PaymentConfirmWebHookService
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -26,10 +24,6 @@ OrderSerializer: TypeAlias = orders_s.OrderSerializer
 @extend_schema_view(
     create=extend_schema(
         summary='Создать заказ',
-        tags=['Заказ'],
-    ),
-    payment_confirmation=extend_schema(
-        summary='Обработать платеж с помощью WebHook',
         tags=['Заказ'],
     ),
 )
@@ -62,21 +56,6 @@ class OrderMakingViewSet(mixins.CreateViewSet):
         return Response(
             data={'confirmation_url': confirmation_url},
             status=status.HTTP_201_CREATED,
-        )
-
-    @action(methods=['POST'], detail=False)
-    def payment_confirmation(self, request: Request) -> Response:
-        """Обработка платежа с помощью webhook-а."""
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        with transaction.atomic():
-            serializer.save()
-            payment_confirm_webhook = PaymentConfirmWebHookService(request=request)
-            payment_confirm_webhook.execute()
-
-        return Response(
-            data={'answer': 'Подтверждение оплаты прошло успешно!'},
-            status=status.HTTP_200_OK,
         )
 
 

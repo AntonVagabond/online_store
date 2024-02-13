@@ -10,6 +10,7 @@ from rest_framework.exceptions import ParseError
 from yookassa import Payment
 from yookassa.domain.notification import PaymentWebhookNotification
 
+from orders.models.orders import Order
 from .payments import _PaymentBaseService
 from ..models.payments import OrderPayment
 
@@ -97,6 +98,10 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
     def __is_status_succeeded(self) -> None:
         """Является ли статус успешным."""
         if not self._payment_response.status == 'succeeded':
+            logger.error(
+                msg={f'Ошибка на стороне Yookassa. Платежа {self.__payment_id} '
+                     f'не переведен в статус succeeded': ParseError}
+            )
             raise ParseError(
                 f'Ошибка на стороне Yookassa. Платежа {self.__payment_id}'
                 f' не переведен в статус succeeded'
@@ -108,6 +113,12 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
             is_paid=OrderPayment.Status.PAID,
         )
 
+    def __update_status_order(self) -> None:
+        """Обновить статус заказа."""
+        Order.objects.filter(id=self._order_payment.pk).update(
+            order_status=Order.Status.WORK,
+        )
+
     def execute(self) -> None:
         """Выполнить обработку webhook-а."""
         self._setting_an_account()
@@ -117,5 +128,7 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
         self.__is_such_payment_in_database()
         self.__get_current_payment()
         self.__confirm_payment()
+        self.__check_payment_status_with_get_request()
         self.__is_status_succeeded()
         self.__update_status_payment()
+        self.__update_status_order()

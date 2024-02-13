@@ -4,6 +4,7 @@ from products.urls import urlpatterns as product_urls
 from carts.urls import urlpatterns as cart_urls
 from delivers.urls import urlpatterns as deliver_urls
 from orders.urls import urlpatterns as order_urls
+from payments.urls import urlpatterns as payments_urls
 
 
 app_name = 'api'
@@ -16,3 +17,4 @@ urlpatterns += product_urls
 urlpatterns += cart_urls
 urlpatterns += deliver_urls
 urlpatterns += order_urls
+urlpatterns += payments_urls

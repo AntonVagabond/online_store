@@ -1,21 +1,10 @@
 from rest_framework import serializers
 
+from payments.models.payments import OrderPayment
 
-class PaymentConfirmWebHookSerializer(serializers.Serializer):
-    """
-    Сериализатор подтверждения платежа с помощью WebHook-а.
 
-    Атрибуты:
-        * `product` (PrimaryKeyRelatedField): товар.
-        * `quantity` (IntegerField): количество одного товара.
-    """
-    id = serializers.UUIDField(
-        required=True,
-        label='Идентификатор webhook',
-    )
-    status = serializers.CharField(
-        label='Статус платежа',
-        default='succeeded',
-        read_only=True,
-    )
-
+class EmptyPaymentSerializer(serializers.ModelSerializer):
+    """Пустой сериализатор для подтверждения заказа с помощью webhook-а."""
+    class Meta:
+        model = OrderPayment
+        fields = ('order_id',)
