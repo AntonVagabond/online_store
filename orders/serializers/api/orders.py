@@ -75,7 +75,7 @@ class UserOrderListSerializer(serializers.ModelSerializer):
 
         Атрибуты:
             * `status` (SerializerMethodField): метод получения статуса.
-        """
+    """
 
     status = serializers.SerializerMethodField(method_name='get_status')
 
