@@ -62,7 +62,7 @@ class Delivery(BaseModel):
         null=True,
         blank=True,
     )
-    update_at = models.DateTimeField(
+    updated_at = models.DateTimeField(
         verbose_name='Дата изменения состояния доставки',
         null=True,
         blank=True,
