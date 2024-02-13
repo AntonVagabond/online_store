@@ -33,8 +33,11 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
     """
     Преобразователь детали заказа.
 
-    Аттрибуты:
-        * `order_item` (OrderItemNestedSerializer): содержимое заказа.
+    Атрибуты:
+        * `order_items` (OrderItemNestedSerializer): содержимое заказа.
+        * 'status' (SerializerMethodField): метод получения статуса.
+        * 'payment' (PaymentRetrieveNestedSerializer): оплата.
+        * 'delivers' (DeliveryRetrieveNestedSerializer): доставки.
     """
 
     order_items = OrderItemNestedSerializer(many=True)
@@ -67,6 +70,13 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
 
 
 class UserOrderListSerializer(serializers.ModelSerializer):
+    """
+        Преобразователь заказов текущего пользователя.
+
+        Атрибуты:
+            * `status` (SerializerMethodField): метод получения статуса.
+    """
+
     status = serializers.SerializerMethodField(method_name='get_status')
 
     class Meta:

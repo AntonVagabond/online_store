@@ -29,6 +29,14 @@ class Delivery(BaseModel):
         PICKUP = 'PI', _('Самовывоз')
         COURIER = 'CO', _('Доставка курьером')
 
+    class Status(models.TextChoices):
+        """Статус доставки."""
+        WORK = 'WO', _('В работе.')
+        PACKED = 'PA', _('Собрано продавцом.')
+        DELIVERS = 'DL', _('В службе доставки.')
+        DELIVERED = 'DD', _('В пункте выдачи.')
+        RECEIVED = 'RE', _('Получено.')
+
     order = models.ForeignKey(
         to='orders.Order',
         on_delete=models.CASCADE,
@@ -43,20 +51,18 @@ class Delivery(BaseModel):
         choices=DeliveryMethod.choices,
         default=DeliveryMethod.PICKUP
     )
-    delivery_status = models.ForeignKey(
-        to='delivers.DeliveryStatus',
-        on_delete=models.RESTRICT,
-        related_name='delivers',
+    delivery_status = models.CharField(
         verbose_name='Состояние доставки',
-        null=True,
-        blank=True,
+        max_length=2,
+        choices=Status.choices,
+        default=Status.WORK
     )
     created_at = models.DateTimeField(
         verbose_name='Дата создания доставки',
         null=True,
         blank=True,
     )
-    update_at = models.DateTimeField(
+    updated_at = models.DateTimeField(
         verbose_name='Дата изменения состояния доставки',
         null=True,
         blank=True,
@@ -87,32 +93,9 @@ class Delivery(BaseModel):
             current_courier = Courier.objects.get(id=self.courier)
             return current_courier
 
-
-class DeliveryStatus(BaseModel):
-    """
-    Модель статуса доставки.
-
-    Атрибуты:
-        * `name` (CharField): пользователь.
-        * `description` (CharField): статус.
-    """
-
-    name = models.CharField(
-        verbose_name='Название статуса',
-        max_length=50,
-        null=True,
-        blank=True,
-    )
-    description = models.CharField(
-        verbose_name='Описание статуса',
-        max_length=100,
-        null=True,
-        blank=True,
-    )
-
-    class Meta:
-        verbose_name = 'Статус доставки'
-        verbose_name_plural = 'Статусы доставки'
-
-    def __str__(self) -> CharField:
-        return self.name
+    def get_readable_status(self, status: str) -> str:
+        """Получение читабельного статуса."""
+        # Перебираю статусы, найдя нужный, возвращаю читабельный статус заказа.
+        for value, label in self.Status.choices:
+            if value == status:
+                return label
