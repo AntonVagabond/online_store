@@ -2,16 +2,14 @@ from __future__ import annotations
 
 import json
 import logging
-import uuid
 from typing import TYPE_CHECKING, Optional
 
-from requests import RequestException
 from rest_framework.exceptions import ParseError
-from yookassa import Payment
 from yookassa.domain.notification import PaymentWebhookNotification
 
 from orders.models.orders import Order
 from .payments import _PaymentBaseService
+from .tasks import tasks
 from ..models.payments import OrderPayment
 
 if TYPE_CHECKING:
@@ -62,38 +60,16 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
 
     def __confirm_payment(self) -> None:
         """Подтверждение платежа."""
-        try:
-            Payment.capture(
-                payment_id=self.__payment_id,
-                params={
-                    'amount': {
-                        'value': str(self._order_payment.payment_amount),
-                        'currency': 'RUB',
-                    },
-                },
-                idempotency_key=str(uuid.uuid4())
-            )
-        except RequestException as error:
-            logger.error(msg={f'Ошибка на стороне Yookassa при'
-                              f' подтверждении платежа {self.__payment_id}': error})
-            raise ParseError(
-                detail=f'Ошибка на стороне Yookassa при'
-                       f' подтверждении платежа {self.__payment_id}',
-                code=error,
-            )
+        tasks.payment_capture_task(
+            payment_id=self.__payment_id,
+            payment_amount=self._order_payment.payment_amount,
+        )
 
     def __check_payment_status_with_get_request(self) -> None:
         """Проверка статуса платежа с помощью GET-запроса."""
-        try:
-            self._payment_response = Payment.find_one(payment_id=self.__payment_id)
-        except RequestException as error:
-            logger.error(msg={f'Ошибка на стороне Yookassa при проверка'
-                              f' статуса платежа {self.__payment_id}': error})
-            raise ParseError(
-                detail=f'Ошибка на стороне Yookassa при проверка'
-                       f' статуса платежа {self.__payment_id}',
-                code=error
-            )
+        self._payment_response = tasks.payment_find_one_task(
+            payment_id=self.__payment_id,
+        )
 
     def __is_status_succeeded(self) -> None:
         """Является ли статус успешным."""
