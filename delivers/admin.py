@@ -78,13 +78,13 @@ class DeliveryAdmin(admin.ModelAdmin):
         'delivery_method',
         'delivery_status',
         'created_at',
-        'update_at',
+        'updated_at',
         'courier',
         'notes',
     )
     readonly_fields = (
         'created_at',
-        'update_at',
+        'updated_at',
     )
     ordering = ('-id',)
 
