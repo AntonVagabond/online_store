@@ -29,6 +29,14 @@ class Delivery(BaseModel):
         PICKUP = 'PI', _('Самовывоз')
         COURIER = 'CO', _('Доставка курьером')
 
+    class Status(models.TextChoices):
+        """Статус доставки."""
+        WORK = 'WO', _('В работе.')
+        PACKED = 'PA', _('Собрано продавцом.')
+        DELIVERS = 'DL', _('В службе доставки.')
+        DELIVERED = 'DD', _('В пункте выдачи.')
+        RECEIVED = 'RE', _('Получено.')
+
     order = models.ForeignKey(
         to='orders.Order',
         on_delete=models.CASCADE,
@@ -43,13 +51,11 @@ class Delivery(BaseModel):
         choices=DeliveryMethod.choices,
         default=DeliveryMethod.PICKUP
     )
-    delivery_status = models.ForeignKey(
-        to='delivers.DeliveryStatus',
-        on_delete=models.RESTRICT,
-        related_name='delivers',
+    delivery_status = models.CharField(
         verbose_name='Состояние доставки',
-        null=True,
-        blank=True,
+        max_length=2,
+        choices=Status.choices,
+        default=Status.WORK
     )
     created_at = models.DateTimeField(
         verbose_name='Дата создания доставки',
