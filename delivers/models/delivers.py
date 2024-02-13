@@ -93,32 +93,9 @@ class Delivery(BaseModel):
             current_courier = Courier.objects.get(id=self.courier)
             return current_courier
 
-
-class DeliveryStatus(BaseModel):
-    """
-    Модель статуса доставки.
-
-    Атрибуты:
-        * `name` (CharField): пользователь.
-        * `description` (CharField): статус.
-    """
-
-    name = models.CharField(
-        verbose_name='Название статуса',
-        max_length=50,
-        null=True,
-        blank=True,
-    )
-    description = models.CharField(
-        verbose_name='Описание статуса',
-        max_length=100,
-        null=True,
-        blank=True,
-    )
-
-    class Meta:
-        verbose_name = 'Статус доставки'
-        verbose_name_plural = 'Статусы доставки'
-
-    def __str__(self) -> CharField:
-        return self.name
+    def get_readable_status(self, status: str) -> str:
+        """Получение читабельного статуса."""
+        # Перебираю статусы, найдя нужный, возвращаю читабельный статус заказа.
+        for value, label in self.Status.choices:
+            if value == status:
+                return label
