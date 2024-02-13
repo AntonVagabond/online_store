@@ -41,11 +41,6 @@ class OrderMakingViewSet(mixins.CreateViewSet):
     queryset = Order.objects.all()
     serializer_class = orders_s.OrderSerializer
 
-    # multi_serializer_class = {
-    #     'create': orders_s.OrderSerializer,
-    #     'payment_confirmation': payments_s.PaymentConfirmWebHookSerializer,
-    # }
-
     def create(self, request: Request, *args: None, **kwargs: None) -> Response:
         """Создание заказа."""
         serializer = self.get_serializer(data=request.data)
