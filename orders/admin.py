@@ -48,7 +48,6 @@ class OrderAdmin(admin.ModelAdmin):
         'sequence_number',
         'transaction_number',
         'post_script',
-        'order_amount',
         'address',
         'signer_mobile',
         'order_date',
