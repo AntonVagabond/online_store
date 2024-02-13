@@ -1,21 +1,15 @@
 from __future__ import annotations
 
 import logging
-import uuid
 from typing import TYPE_CHECKING, Optional
 
-from requests import RequestException
-from rest_framework.exceptions import ParseError
-from yookassa import Payment, Configuration
+from yookassa import Configuration
 
 from carts.models.carts import Cart
-from config.settings import (
-    YOOKASSA_SHOP_ID,
-    YOOKASSA_SECRET_KEY,
-    YOOKASSA_RETURN_URL,
-)
+from config.settings import YOOKASSA_SHOP_ID, YOOKASSA_SECRET_KEY
 from orders.models.orders import Order
 from users.models.users import User
+from .tasks import tasks
 from ..models.payments import OrderPayment
 
 if TYPE_CHECKING:
@@ -85,33 +79,9 @@ class PaymentService(_PaymentBaseService):
     def __create_and_get_payment_with_yookassa(self) -> None:
         """Создать и получить ответ платежа с помощью yookassa."""
         # Создаем заявку на оплату на внешнем сервисе.
-        try:
-            payment_response = Payment.create(
-                params={
-                    'amount': {
-                        'value': self.__price,
-                        'currency': 'RUB',
-                    },
-                    'confirmation': {
-                        'type': "redirect",
-                        'return_url': YOOKASSA_RETURN_URL,
-                    },
-                    'capture': False,
-                    'description': f'Оплата заказа на {self.__price} руб.',
-                    'metadata': {
-                        'order_id': self.__order.pk,
-                    },
-                },
-                idempotency_key=str(uuid.uuid4()),
-            )
-            self._payment_response = payment_response
-        except RequestException as error:
-            logger.error(
-                msg={'Ошибка на стороне Yookassa при создании платежа': error}
-            )
-            raise ParseError(
-                detail='Ошибка на стороне Yookassa при создании платежа', code=error,
-            )
+        self._payment_response = tasks.payment_create_task(
+            price=self.__price, order_id=self.__order.pk,
+        )
 
     def __add_payment_id(self) -> None:
         """Добавить `id` платежа в таблицу `OrderPayment`."""
