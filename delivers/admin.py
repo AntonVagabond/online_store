@@ -88,22 +88,4 @@ class DeliveryAdmin(admin.ModelAdmin):
     )
     ordering = ('-id',)
 
-
-@admin.register(delivers.DeliveryStatus)
-class DeliveryStatusAdmin(admin.ModelAdmin):
-    """
-        Модель админа Статуса доставки.
-
-        Атрибуты:
-            * `fields` (tuple[str]): поля.
-            * `list_display` (tuple[str]): отображаемые поля в списке.
-    """
-    fields = (
-        'name',
-        'description',
-    )
-    list_display = (
-        'id',
-        'name'
-    )
 # endregion -------------------------------------------------------------------------
