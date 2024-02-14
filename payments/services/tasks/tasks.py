@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 from requests import RequestException
 from yookassa import Payment
+from yookassa.domain.notification import PaymentWebhookNotification
 
 from config.celery import app
 from config.settings import YOOKASSA_RETURN_URL
@@ -45,10 +46,32 @@ def payment_create_task(
         )
         return payment_response
     except RequestException as exc:
-        logger.error(
-            msg={'Ошибка на стороне Yookassa при создании платежа. При 3-ёх '
-                 'неудачных попыток пересоздать платеж, задача прекратится.': exc}
-        )
+        logger.error(msg={
+            'Ошибка на стороне Yookassa при создании платежа. При 3-ёх неудачных '
+            'попыток пересоздать платеж, задача прекратится.': exc
+        })
+        raise self.retry(exc=exc, countdown=60)
+
+
+# endregion -------------------------------------------------------------------------
+
+
+# region ----------------------- WEBHOOK NOTIFICATIONS ------------------------------
+@app.task(bind=True, max_retries=3)
+def payment_webhook_notification_task(
+        self: payment_webhook_notification_task,
+        event_json: str,
+) -> PaymentWebhookNotification:
+    """Задача для получения объекта уведомления."""
+    try:
+        notification_object = PaymentWebhookNotification(event_json)
+        return notification_object
+    except Exception as exc:
+        logger.error(msg={
+            'Не удалось получить данные из `json` при обработке webhook от Yookassa.'
+            ' При 3-ёх неудачных попыток получить объект уведомления, задача '
+            'прекратится.': exc
+        })
         raise self.retry(exc=exc, countdown=60)
 
 
