@@ -62,7 +62,7 @@ class OrderPayment(BaseModel):
         null=True,
         blank=True,
     )
-    update_at = models.DateTimeField(
+    updated_at = models.DateTimeField(
         verbose_name='Дата изменения состояния оплаты',
         null=True,
         blank=True,
