@@ -21,7 +21,7 @@ class DeliveryCreateService:
     def __add_order_creation_time(self) -> None:
         """Добавление времени у создания заказа."""
         date = self._order.order_date
-        additional_data = {key: date for key in ('created_at', 'update_at')}
+        additional_data = {key: date for key in ('created_at', 'updated_at')}
         self._delivery_data |= additional_data
 
     def __create_delivery(self) -> None:
