@@ -2,29 +2,34 @@ from __future__ import annotations
 
 import logging
 import uuid
-from typing import TYPE_CHECKING
 
 from requests import RequestException
-from yookassa import Payment
+from yookassa import Payment, Configuration
 from yookassa.domain.notification import PaymentWebhookNotification
 
 from config.celery import app
-from config.settings import YOOKASSA_RETURN_URL
-
-if TYPE_CHECKING:
-    from yookassa.domain.response import PaymentResponse
+from config.settings import (
+    YOOKASSA_RETURN_URL,
+    YOOKASSA_SECRET_KEY,
+    YOOKASSA_SHOP_ID,
+)
 
 logger = logging.getLogger('__name__')
 
+# Задать учетную запись.
+Configuration.configure(
+    account_id=YOOKASSA_SHOP_ID, secret_key=YOOKASSA_SECRET_KEY,
+)
+
 
 # region -------------------------------- CREATE ------------------------------------
-@app.task(bind=True, max_retries=3)
+@app.task(bind=True, trail=True, max_retries=3)
 def payment_create_task(
         self: payment_create_task,
         price: str,
         order_id: int,
-) -> PaymentResponse:
-    """Задача на создание заявки на оплату платежа на внешнем сервисе."""
+) -> tuple[str, str]:
+    """Задача на создание заявки об оплате заказа на внешнем сервисе."""
     try:
         payment_response = Payment.create(
             params={
@@ -44,7 +49,7 @@ def payment_create_task(
             },
             idempotency_key=str(uuid.uuid4()),
         )
-        return payment_response
+        return payment_response.id, payment_response.confirmation.confirmation_url
     except RequestException as exc:
         logger.error(msg={
             'Ошибка на стороне Yookassa при создании платежа. При 3-ёх неудачных '
@@ -61,11 +66,11 @@ def payment_create_task(
 def payment_webhook_notification_task(
         self: payment_webhook_notification_task,
         event_json: str,
-) -> PaymentWebhookNotification:
+) -> str:
     """Задача для получения объекта уведомления."""
     try:
         notification_object = PaymentWebhookNotification(event_json)
-        return notification_object
+        return notification_object.object.id
     except Exception as exc:
         logger.error(msg={
             'Не удалось получить данные из `json` при обработке webhook от Yookassa.'
@@ -112,11 +117,11 @@ def payment_capture_task(
 def payment_find_one_task(
         self: payment_find_one_task,
         payment_id: str,
-) -> PaymentResponse:
+) -> str:
     """Задача на проверку статуса, используя GET-запрос."""
     try:
         payment_response = Payment.find_one(payment_id=payment_id)
-        return payment_response
+        return payment_response.status
     except RequestException as exc:
         logger.error(msg={
             f'Ошибка на стороне Yookassa при проверка статуса платежа {payment_id}.'
