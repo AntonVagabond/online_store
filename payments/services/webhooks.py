@@ -8,39 +8,42 @@ from rest_framework.exceptions import ParseError
 from yookassa.domain.notification import PaymentWebhookNotification
 
 from orders.models.orders import Order
-from .payments import _PaymentBaseService
 from .tasks import tasks
 from ..models.payments import OrderPayment
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
+    from celery.result import AsyncResult
 
 logger = logging.getLogger('__name__')
 
 
-class PaymentConfirmWebHookService(_PaymentBaseService):
+class PaymentConfirmWebHookService:
     """Сервисная часть для подтверждения платежа с помощью webhook."""
 
     def __init__(self, request: Request) -> None:
-        super().__init__()
         self.__request: Request = request
+        self.__order_payment: Optional[OrderPayment] = None
         self.__event_json: Optional[str] = None
         self.__notification_object: Optional[PaymentWebhookNotification] = None
         self.__payment_id: Optional[str] = None
+        self.__task_result: Optional[AsyncResult] = None
+        self.__payment_status: Optional[str] = None
 
     def __get_json_request_body(self) -> None:
         """Получить тело запроса в формате `json`."""
         self.__event_json = json.loads(self.__request.body)
 
-    def __get_notification_object(self) -> None:
-        """Получить объект уведомления."""
-        self.__notification_object = tasks.payment_webhook_notification_task(
+    def __run_task_to_receive_notification_object(self) -> None:
+        """Запустить задачу на получения объекта уведомления."""
+        self.__task_result = tasks.payment_webhook_notification_task.delay(
             event_json=self.__event_json,
         )
 
     def __get_payment_id(self) -> None:
         """Получить `id` платежа."""
-        self.__payment_id = self.__notification_object.object.id
+        payment_id = self.__task_result.get()
+        self.__payment_id = payment_id
 
     def __is_such_payment_in_database(self) -> None:
         """Проверка есть ли такой платеж в базе данных."""
@@ -49,24 +52,29 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
 
     def __get_current_payment(self) -> None:
         """Получить текущий платеж заказа."""
-        self._order_payment = OrderPayment.objects.get(payment_id=self.__payment_id)
+        self.__order_payment = OrderPayment.objects.get(payment_id=self.__payment_id)
 
-    def __confirm_payment(self) -> None:
-        """Подтверждение платежа."""
-        tasks.payment_capture_task(
+    def __run_task_to_confirm_payment(self) -> None:
+        """Запустить задачу для подтверждения платежа."""
+        tasks.payment_capture_task.delay(
             payment_id=self.__payment_id,
-            payment_amount=self._order_payment.payment_amount,
+            payment_amount=self.__order_payment.payment_amount,
         )
 
-    def __check_payment_status_with_get_request(self) -> None:
-        """Проверка статуса платежа с помощью GET-запроса."""
-        self._payment_response = tasks.payment_find_one_task(
+    def __run_task_to_check_payment_status(self) -> None:
+        """Запустить задачу на проверку статуса платежа."""
+        self.__task_result = tasks.payment_find_one_task.delay(
             payment_id=self.__payment_id,
         )
+
+    def __get_payment_status(self) -> None:
+        """Получить статус платежа."""
+        payment_status = self.__task_result.get()
+        self.__payment_status = payment_status
 
     def __is_status_succeeded(self) -> None:
         """Является ли статус успешным."""
-        if not self._payment_response.status == 'succeeded':
+        if not self.__payment_status == 'succeeded':
             logger.error(
                 msg={f'Ошибка на стороне Yookassa. Платежа {self.__payment_id} '
                      f'не переведен в статус succeeded': ParseError}
@@ -84,20 +92,20 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
 
     def __update_status_order(self) -> None:
         """Обновить статус заказа."""
-        Order.objects.filter(id=self._order_payment.pk).update(
+        Order.objects.filter(id=self.__order_payment.pk).update(
             order_status=Order.Status.WORK,
         )
 
     def execute(self) -> None:
         """Выполнить обработку webhook-а."""
-        self._setting_an_account()
         self.__get_json_request_body()
-        self.__get_notification_object()
+        self.__run_task_to_receive_notification_object()
         self.__get_payment_id()
         self.__is_such_payment_in_database()
         self.__get_current_payment()
-        self.__confirm_payment()
-        self.__check_payment_status_with_get_request()
+        self.__run_task_to_confirm_payment()
+        self.__run_task_to_check_payment_status()
+        self.__get_payment_status()
         self.__is_status_succeeded()
         self.__update_status_payment()
         self.__update_status_order()
