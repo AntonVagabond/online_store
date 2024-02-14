@@ -272,7 +272,7 @@ RABBIT_PORT = env.int(var='RABBIT_PORT', default=5672)
 # Использование брокера сообщений для Celery на базе RabbitMQ.
 CELERY_BROKER_URL = f'amqp://guest:guest@{RABBIT_HOST}:{RABBIT_PORT}'
 # Использование БД для Celery на базе Redis.
-result_backend = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_TASK_TRACK_STARTED = env.bool(var='CELERY_TASK_TRACK_STARTED', default=False)
 CELERY_TASK_TIME_LIMIT = 30 * 60
 accept_content = [env.str(var='ACCEPT_CONTENT', default='application/json')]
