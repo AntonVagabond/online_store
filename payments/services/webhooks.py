@@ -34,16 +34,9 @@ class PaymentConfirmWebHookService(_PaymentBaseService):
 
     def __get_notification_object(self) -> None:
         """Получить объект уведомления."""
-        try:
-            notification_object = PaymentWebhookNotification(self.__event_json)
-            self.__notification_object = notification_object
-        except Exception as error:
-            logger.error(msg={'Не удалось получить данные из `json` при'
-                              ' обработке webhook от Yookassa': error})
-            raise ParseError(
-                detail='Не удалось получить данные из `json` при обработке'
-                       'webhook от Yookassa', code=error
-            )
+        self.__notification_object = tasks.payment_webhook_notification_task(
+            event_json=self.__event_json,
+        )
 
     def __get_payment_id(self) -> None:
         """Получить `id` платежа."""
