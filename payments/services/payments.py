@@ -67,7 +67,7 @@ class PaymentService(_PaymentBaseService):
     def __add_payment_creation_time(self) -> None:
         """Добавление времени у создания платежа."""
         date = self.__order.order_date
-        additional_data = {key: date for key in ('created_at', 'update_at')}
+        additional_data = {key: date for key in ('created_at', 'updated_at')}
         self.__payment_data.update(additional_data)
 
     def __create_payment(self) -> None:
