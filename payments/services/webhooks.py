@@ -5,7 +5,6 @@ import logging
 from typing import TYPE_CHECKING, Optional
 
 from rest_framework.exceptions import ParseError
-from yookassa.domain.notification import PaymentWebhookNotification
 
 from orders.models.orders import Order
 from .tasks import tasks
@@ -25,7 +24,6 @@ class PaymentConfirmWebHookService:
         self.__request: Request = request
         self.__order_payment: Optional[OrderPayment] = None
         self.__event_json: Optional[str] = None
-        self.__notification_object: Optional[PaymentWebhookNotification] = None
         self.__payment_id: Optional[str] = None
         self.__task_result: Optional[AsyncResult] = None
         self.__payment_status: Optional[str] = None
