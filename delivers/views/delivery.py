@@ -30,10 +30,19 @@ from delivers.serializers.api import delivery as delivery_s
 )
 class DeliveryViewSet(CRUDListViewSet):
     """Представление доставки."""
-
     queryset = Delivery.objects.all()
 
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsAuthenticated,)
+
+    multi_permission_classes = {
+        'create': (permissions.IsAdminUser,),
+        'retrieve': (permissions.AllowAny,),
+        'partial_update': (permissions.IsAdminUser,),
+        'destroy': (permissions.IsAdminUser,),
+        'list': (permissions.AllowAny,)
+    }
+
+    serializer_class = delivery_s.DeliveryListSerializer
 
     http_method_names = ('get', 'post', 'patch', 'delete')
 
@@ -41,5 +50,6 @@ class DeliveryViewSet(CRUDListViewSet):
         'create': delivery_s.DeliveryCreateSerializer,
         'retrieve': delivery_s.DeliveryRetrieveSerializer,
         'partial_update': delivery_s.DeliveryStatusUpdateSerializer,
-        'destroy': delivery_s.DeliveryDeleteSerializer
+        'destroy': delivery_s.DeliveryDeleteSerializer,
+        'list': delivery_s.DeliveryListSerializer
     }
