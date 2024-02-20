@@ -21,6 +21,36 @@ class DeliveryStatusUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
+class DeliveryListSerializer(serializers.ModelSerializer):
+    """
+    Преобразователь списка доставок.
+
+    Атрибуты:
+        * 'delivery_status' (SerializerMethodField): метод получения статуса.
+    """
+
+    delivery_status = serializers.SerializerMethodField(method_name='get_status')
+
+    class Meta:
+        model = Delivery
+        fields = (
+            'id',
+            'order',
+            'delivery_method',
+            'delivery_status',
+            'created_at',
+            'updated_at',
+            'courier',
+            'notes'
+        )
+
+    @staticmethod
+    def get_status(instance: Delivery) -> str:
+        """Получить статус."""
+        readable_status = instance.get_readable_status(instance.delivery_status)
+        return readable_status
+
+
 class DeliveryCreateSerializer(serializers.ModelSerializer):
     """
         Преобразователь создания доставки.

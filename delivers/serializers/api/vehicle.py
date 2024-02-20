@@ -3,9 +3,20 @@ from rest_framework import serializers
 from delivers.models.couriers import Vehicle
 
 
+class VehicleListSerializer(serializers.ModelSerializer):
+    """Преобразователь списка транспорта."""
+
+    class Meta:
+        model = Vehicle
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class VehicleRetrieveSerializer(serializers.ModelSerializer):
     """
-        Преобразователь детали транспорта.
+    Преобразователь детали транспорта.
     """
 
     class Meta:
@@ -18,10 +29,10 @@ class VehicleRetrieveSerializer(serializers.ModelSerializer):
 
 class VehicleCreateSerializer(serializers.ModelSerializer):
     """
-        Преобразователь создания транспорта.
+    Преобразователь создания транспорта.
 
-        Атрибуты:
-            * `name` (CharField): поле названия транспорта.
+    Атрибуты:
+        * `name` (CharField): поле названия транспорта.
 
     """
     name = serializers.CharField(max_length=40)
@@ -36,7 +47,7 @@ class VehicleCreateSerializer(serializers.ModelSerializer):
 
 class VehicleDeleteSerializer(serializers.ModelSerializer):
     """
-        Преобразователь удаления транспорта.
+    Преобразователь удаления транспорта.
     """
 
     class Meta:

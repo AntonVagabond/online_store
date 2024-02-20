@@ -31,10 +31,21 @@ class VehicleViewSet(CRDListViewSet):
 
     permission_classes = (permissions.IsAuthenticated,)
 
+    multi_permission_classes = {
+        'create': (permissions.IsAdminUser,),
+        'retrieve': (permissions.AllowAny,),
+        'destroy': (permissions.IsAdminUser,),
+        'list': (permissions.AllowAny,)
+
+    }
+
     http_method_names = ('get', 'post', 'delete')
+
+    serializer_class = vehicle_s.VehicleListSerializer
 
     multi_serializer_class = {
         'create': vehicle_s.VehicleCreateSerializer,
         'retrieve': vehicle_s.VehicleRetrieveSerializer,
-        'destroy': vehicle_s.VehicleDeleteSerializer
+        'destroy': vehicle_s.VehicleDeleteSerializer,
+        'list': vehicle_s.VehicleListSerializer
     }
