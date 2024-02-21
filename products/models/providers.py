@@ -9,6 +9,7 @@ class Provider(BaseModel):
     Модель Поставщика.
 
     Аттрибуты:
+        * `user` (ForeignKey): пользователь.
         * `name` (CharField): название поставщика.
         * `email` (EmailField): почта поставщика.
         * `phone_number` (PhoneNumberField): телефон поставщика.
@@ -16,12 +17,20 @@ class Provider(BaseModel):
         * `products` (Product): товары.
     """
     # region ------------------------ АТРИБУТЫ ПОСТАВЩИКА ---------------------------
+    user = models.ForeignKey(
+        to='users.User',
+        on_delete=models.RESTRICT,
+        related_name='providers',
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+    )
     name = models.CharField(
-        'Название поставщика',
+        verbose_name='Название поставщика',
         max_length=30,
     )
     email = models.EmailField(
-        'Почта поставщика',
+        verbose_name='Почта поставщика',
         unique=True,
         null=True,
         blank=True,
