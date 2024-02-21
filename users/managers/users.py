@@ -64,7 +64,7 @@ class CustomUserManager(BaseUserManager):
             email: Optional[str] = None,
             password: Optional[str] = None,
             username: Optional[str] = None,
-            **extra_fields: Union[str, bool]
+            **extra_fields: Union[str, bool],
     ) -> User:
         """Создание пользователя."""
         extra_fields.setdefault('is_superuser', False)
