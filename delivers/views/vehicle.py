@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions
 
-from common.views.mixins import CRDListViewSet
+from common.views.mixins import CRUDListViewSet
 from delivers.models.couriers import Vehicle
 from delivers.serializers.api import vehicle as vehicle_s
 
@@ -15,6 +15,10 @@ from delivers.serializers.api import vehicle as vehicle_s
         summary='Добавить транспорт',
         tags=['Транспорт']
     ),
+    partial_update=extend_schema(
+        summary='Изменить транспорт',
+        tags=['Транспорт']
+    ),
     retrieve=extend_schema(
         summary='Посмотреть транспорт',
         tags=['Транспорт']
@@ -24,7 +28,7 @@ from delivers.serializers.api import vehicle as vehicle_s
         tags=['Транспорт']
     )
 )
-class VehicleViewSet(CRDListViewSet):
+class VehicleViewSet(CRUDListViewSet):
     """Представление транспорта."""
 
     queryset = Vehicle.objects.all()
@@ -34,18 +38,19 @@ class VehicleViewSet(CRDListViewSet):
     multi_permission_classes = {
         'create': (permissions.IsAdminUser,),
         'retrieve': (permissions.AllowAny,),
+        'partial_update': (permissions.IsAdminUser,),
         'destroy': (permissions.IsAdminUser,),
         'list': (permissions.AllowAny,)
-
     }
 
-    http_method_names = ('get', 'post', 'delete')
+    http_method_names = ('get', 'patch', 'post', 'delete')
 
     serializer_class = vehicle_s.VehicleListSerializer
 
     multi_serializer_class = {
         'create': vehicle_s.VehicleCreateSerializer,
         'retrieve': vehicle_s.VehicleRetrieveSerializer,
+        'partial_update': vehicle_s.VehicleUpdateSerializer,
         'destroy': vehicle_s.VehicleDeleteSerializer,
         'list': vehicle_s.VehicleListSerializer
     }
