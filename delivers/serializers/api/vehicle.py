@@ -27,6 +27,19 @@ class VehicleRetrieveSerializer(serializers.ModelSerializer):
         )
 
 
+class VehicleUpdateSerializer(serializers.ModelSerializer):
+    """
+    Преобразователь детали транспорта.
+    """
+
+    class Meta:
+        model = Vehicle
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class VehicleCreateSerializer(serializers.ModelSerializer):
     """
     Преобразователь создания транспорта.
