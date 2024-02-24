@@ -21,14 +21,14 @@ class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
     @staticmethod
-    def _check_email_or_phone_number(
+    def __check_email_or_phone_number(
             email: str,
             phone_number: str
     ) -> Optional[str]:
         """Проверка есть ли почта либо номер телефона."""
         return email or phone_number
 
-    def _create_user(
+    def __create_user(
             self,
             phone_number: Optional[str] = None,
             email: Optional[str] = None,
@@ -45,7 +45,7 @@ class CustomUserManager(BaseUserManager):
             email = self.normalize_email(email)
 
         if not username:
-            value = self._check_email_or_phone_number(email, phone_number)
+            value = self.__check_email_or_phone_number(email, phone_number)
             username = value.split('@')[0] if '@' in value else value
 
         user = self.model(username=username, **extra_fields)
@@ -53,6 +53,8 @@ class CustomUserManager(BaseUserManager):
             user.email = email
         if phone_number:
             user.phone_number = phone_number
+        if user.is_superuser:
+            user.role = user.Role.ADMIN
 
         user.set_password(password)
         user.save(using=self._db)
@@ -71,7 +73,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', True)
 
-        return self._create_user(
+        return self.__create_user(
             phone_number, email, password, username, **extra_fields
         )
 
@@ -91,6 +93,6 @@ class CustomUserManager(BaseUserManager):
         if not extra_fields.get('is_superuser'):
             raise ValueError('is_superuser must be True')
 
-        return self._create_user(
+        return self.__create_user(
             phone_number, email, password, username, **extra_fields
         )
