@@ -5,15 +5,20 @@ from rest_framework import mixins
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
+from rest_framework_simplejwt import authentication
 
 
 class ExtendedView:
     """Расширенное представление"""
+    authentication_classes = (authentication.JWTAuthentication,)
+    multi_authentication_classes = None
+
     permission_classes = (AllowAny,)
     multi_permission_classes = None
 
     multi_serializer_class = None
     serializer_class = None
+
     request = None
 
     def _get_action_or_method(self) -> str:
@@ -22,9 +27,25 @@ class ExtendedView:
             return self.action
         return self.request.method
 
-    def get_permissions(self) -> Union[permission_classes]:
-        """Получить класс разрешения"""
+    def get_authenticators(self):
+        """Получить класс аутентификации."""
+        assert self.authentication_classes or self.multi_authentication_classes, (
+                '"%s" должен либо включать `authentication_classes`, '
+                '`multi_authentication_classes`, атрибут, либо переопределять '
+                '`get_authenticators()` метод.' % self.__class__.__name__
+        )
+        if not self.multi_authentication_classes:
+            return [auth() for auth in self.authentication_classes]
 
+        # Определить действие или метод запроса.
+        action = self._get_action_or_method()
+        authentications = self.multi_authentication_classes.get(action)
+        if authentications:
+            return [auth() for auth in authentications]
+        return [auth() for auth in self.authentication_classes]
+
+    def get_permissions(self) -> Union[permission_classes]:
+        """Получить класс разрешения."""
         assert self.permission_classes or self.multi_permission_classes, (
                 '"%s" должен либо включать `permission_classes`, '
                 '`multi_permission_classes`, атрибут, либо переопределять '
@@ -42,7 +63,6 @@ class ExtendedView:
 
     def get_serializer_class(self) -> Optional[serializer_class]:
         """Получить класс преобразователя."""
-
         # Если не будет этих двух условий, то выскачет ошибка.
         assert self.serializer_class or self.multi_serializer_class, (
                 '"%s" должен либо включать `serializer_class`, '
@@ -53,7 +73,6 @@ class ExtendedView:
             return self.serializer_class
 
         action = self._get_action_or_method()
-
         # Пытаюсь получить преобразователь действий или значение по умолчанию.
         return self.multi_serializer_class.get(action) or self.serializer_class
 
