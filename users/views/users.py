@@ -1,23 +1,27 @@
+from typing import TypeAlias
+
 from crum import get_current_user
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions, status
+from rest_framework import permissions, status, authentication
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework_simplejwt import authentication
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from djoser import permissions as djoser_permissions
 from djoser.conf import settings
 
 from common.views import mixins
-from users.serializers.api import users as user_s
-from users.services import users as users_services
-from users.services.utils import get_context
+from ..serializers.api import users as user_s
+from ..services import users as users_services
+from ..services.utils import get_context
 
 User = get_user_model()
+
+RegistrationSerializer: TypeAlias = user_s.RegistrationSerializer
 
 
 @extend_schema_view(
@@ -49,6 +53,10 @@ User = get_user_model()
         summary='Частично изменить профиль пользователя',
         tags=['Пользователь'],
     ),
+    edit_role=extend_schema(
+        summary='Обновить роль пользователя',
+        tags=['Пользователь']
+    )
 )
 class CustomUserViewSet(mixins.ExtendedUserViewSet):
     """
@@ -56,20 +64,22 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
     В представлении авторизация и регистрация пользователя.
     Сюда же входит информация пользователя и его изменения.
     """
-    permission_classes = (djoser_permissions.CurrentUserOrAdmin,)
-    authentication_classes = (authentication.JWTAuthentication,)
-
     queryset = User.objects.all()
-    serializer_class = user_s.UserSerializer
 
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
+    multi_authentication_classes = {
+        'registration': (authentication.BasicAuthentication,),
+        'activation': (authentication.BasicAuthentication,),
+    }
+
+    permission_classes = (djoser_permissions.CurrentUserOrAdmin,)
     multi_permission_classes = {
         'registration': (permissions.AllowAny,),
         'activation': (permissions.AllowAny,),
-        'change_password': (djoser_permissions.CurrentUserOrAdmin,),
-        'reset_password': (permissions.AllowAny,),
-        'reset_password_confirm': (permissions.AllowAny,),
+        'edit_role': (permissions.IsAdminUser,),
     }
 
+    serializer_class = user_s.UserSerializer
     multi_serializer_class = {
         'registration': user_s.RegistrationSerializer,
         'activation': user_s.CustomActivationSerializer,
@@ -78,6 +88,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         'reset_password_confirm': user_s.CustomPasswordResetConfirmSerializer,
         'me': user_s.UserSerializer,
         'edit': user_s.UserUpdateSerializer,
+        'edit_role': user_s.UserUpdateRoleSerializer,
     }
 
     def get_object(self) -> User:
@@ -86,7 +97,7 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
 
     def perform_create(
             self,
-            serializer: user_s.RegistrationSerializer,
+            serializer: RegistrationSerializer,
             **kwargs: None,
     ) -> None:
         """Выполнить задание по отправке сообщения о создании пользователя."""
@@ -95,19 +106,6 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
             context = get_context(user, self.request, settings.SEND_ACTIVATION_EMAIL)
             registration = users_services.UserRegistrationService(user, context)
             registration.execute()
-
-    @action(methods=['GET'], detail=False)
-    def me(self, request: Request, *args: None, **kwargs: None) -> Response:
-        """Метод для просмотра пользователя."""
-        return self.retrieve(request, *args, **kwargs)
-
-    @action(methods=['PUT', 'PATCH'], detail=False)
-    def edit(self, request: Request, *args: None, **kwargs: None) -> Response:
-        """Метод для редактирования пользователя."""
-        dict_methods = {'PUT': self.update, 'PATCH': self.partial_update}
-        for method, func in dict_methods.items():
-            if request.method == method:
-                return func(*args, **kwargs)
 
     @action(methods=['POST'], detail=False)
     def registration(
@@ -169,6 +167,24 @@ class CustomUserViewSet(mixins.ExtendedUserViewSet):
         reset_password_confirm.execute()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(methods=['GET'], detail=False)
+    def me(self, request: Request, *args: None, **kwargs: None) -> Response:
+        """Метод для просмотра пользователя."""
+        return self.retrieve(request, *args, **kwargs)
+
+    @action(methods=['PUT', 'PATCH'], detail=False)
+    def edit(self, request: Request, *args: None, **kwargs: None) -> Response:
+        """Метод для редактирования пользователя."""
+        dict_methods = {'PUT': self.update, 'PATCH': self.partial_update}
+        for method, func in dict_methods.items():
+            if request.method == method:
+                return func(*args, **kwargs)
+
+    @action(methods=['PATCH'], detail=True)
+    def edit_role(self, request: Request, *args: None, **kwargs: None) -> Response:
+        """Метод для редактирования роли у пользователя."""
+        return self.partial_update(request, *args, **kwargs)
+
 
 @extend_schema_view(
     list=extend_schema(
@@ -183,3 +199,4 @@ class UserListSearchView(mixins.ListViewSet):
     serializer_class = user_s.UserListSearchSerializer
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('first_name', 'last_name', 'email', 'username')
+    ordering = ('username', '-id')
