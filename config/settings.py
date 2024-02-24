@@ -104,6 +104,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATED_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication'
     ],
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
