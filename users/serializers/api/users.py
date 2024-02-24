@@ -9,11 +9,8 @@ from rest_framework.exceptions import ParseError
 
 from djoser import serializers as djoser_serializers
 
-from users.models.profile import Profile
-from users.serializers.nested.profile import (
-    ProfileShortSerializer,
-    ProfileUpdateSerializer,
-)
+from ...models.profile import Profile
+from ..nested.profile import ProfileShortSerializer, ProfileUpdateSerializer
 
 User = get_user_model()
 
@@ -21,7 +18,7 @@ User = get_user_model()
 # region -------------------- AUTHORISATION AND REGISTRATION ------------------------
 class RegistrationSerializer(djoser_serializers.UserCreateSerializer):
     """
-    Преобразователь регистрации пользователей.
+    Сериализатор регистрации пользователей.
 
     Аттрибуты:
         * `email` (EmailField): почта.
@@ -49,13 +46,13 @@ class RegistrationSerializer(djoser_serializers.UserCreateSerializer):
 
 
 class CustomActivationSerializer(djoser_serializers.ActivationSerializer):
-    """Преобразователь для активации пользователя"""
+    """Сериализатор для активации пользователя"""
     pass
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     """
-    Преобразователь смены пароля.
+    Сериализатор смены пароля.
 
     Аттрибуты:
         * `old_password` (CharField): старый пароль.
@@ -93,22 +90,24 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class PasswordResetSerializer(djoser_serializers.SendEmailResetSerializer):
-    """Преобразователь для запроса о новом пароле на почту."""
+    """Сериализатор для запроса о новом пароле на почту."""
     pass
 
 
 class CustomPasswordResetConfirmSerializer(
     djoser_serializers.PasswordResetConfirmSerializer
 ):
-    """Преобразователь для сброса пароля"""
+    """Сериализатор для сброса пароля"""
     pass
+
+
 # endregion -------------------------------------------------------------------------
 
 
 # region --------------------------------- USER -------------------------------------
 class UserSerializer(serializers.ModelSerializer):
     """
-    Преобразователь пользователя.
+    Сериализатор пользователя.
 
     Аттрибуты:
         * `profile` (ProfileShortSerializer): профиль.
@@ -132,7 +131,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     """
-    Преобразователь обновления пользователя.
+    Сериализатор обновления пользователя.
 
     Аттрибуты:
         * `profile` (ProfileShortSerializer): профиль.
@@ -180,8 +179,26 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserUpdateRoleSerializer(serializers.ModelSerializer):
+    """Сериализатор обновления роли."""
+
+    class Meta:
+        model = User
+        fields = ('id', 'role')
+
+    def update(self, instance: User, validated_data: dict[str, str]) -> User:
+        """Обновление роли пользователя."""
+        current_role = validated_data.pop('role')
+        # Проверка на существующую роль.
+        if not any((current_role == role for role, _ in instance.Role.choices)):
+            ParseError('Такой роли не существует!')
+        instance.role = current_role
+        instance.save()
+        return instance
+
+
 class UserListSearchSerializer(serializers.ModelSerializer):
-    """Преобразователь поиска пользователей."""
+    """Сериализатор поиска пользователей."""
 
     class Meta:
         model = User
