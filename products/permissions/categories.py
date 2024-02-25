@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from products.views.categories import CategoryView
 
 
-class IsManagerOrAdmin(BasePermission):
+class IsStaffOrReadOnly(BasePermission):
     """
     Класс разрешения для проверки прав пользователя с ролями Менеджера или Админа.
     """

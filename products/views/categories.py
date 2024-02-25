@@ -54,7 +54,7 @@ class CategoryView(CRUDListViewSet):
         'search': (authentication.BasicAuthentication,)
     }
 
-    permission_classes = (permissions_cat.IsManagerOrAdmin,)
+    permission_classes = (permissions_cat.IsStaffOrReadOnly,)
 
     serializer_class = categories_s.CategoryListSerializer
     multi_serializer_class = {
