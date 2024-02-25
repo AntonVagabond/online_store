@@ -1,13 +1,15 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions
+from rest_framework import authentication
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
 from products.models.categories import Category
+from products.permissions import categories as permissions_cat
 from products.serializers.api import categories as categories_s
 
 
@@ -42,20 +44,25 @@ from products.serializers.api import categories as categories_s
 )
 class CategoryView(CRUDListViewSet):
     """Представление категории."""
-
-    permission_classes = (permissions.AllowAny,)
-
-    # Фильтрация убирает дубликаты подкатегорий в разделе категорий.
+    # Фильтрация убирает дубликаты подкатегорий в области категорий.
     queryset = Category.objects.filter(parent=None)
-    serializer_class = categories_s.CategoryListSerializer
 
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
+    multi_authentication_classes = {
+        'list': (authentication.BasicAuthentication,),
+        'retrieve': (authentication.BasicAuthentication,),
+        'search': (authentication.BasicAuthentication,)
+    }
+
+    permission_classes = (permissions_cat.IsManagerOrAdmin,)
+
+    serializer_class = categories_s.CategoryListSerializer
     multi_serializer_class = {
         'list': categories_s.CategoryListSerializer,
         'retrieve': categories_s.CategoryRetrieveSerializer,
         'create': categories_s.CategoryCreateSerializer,
         'partial_update': categories_s.CategoryUpdateSerializer,
         'search': categories_s.CategorySearchSerializer,
-        # 'destroy': categories_s.CategoryDestroySerializer
     }
 
     http_method_names = ('get', 'post', 'patch', 'delete')
@@ -66,6 +73,7 @@ class CategoryView(CRUDListViewSet):
         SearchFilter,
     )
     ordering = ('title',)
+    search_fields = ('title',)
 
     @action(methods=['GET'], detail=False, url_path='search')
     def search(self, request: Request, *args: None, **kwargs: None) -> Response:
