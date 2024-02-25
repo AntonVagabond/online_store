@@ -192,8 +192,9 @@ class UserUpdateRoleSerializer(serializers.ModelSerializer):
         # Проверка на существующую роль.
         if not any((current_role == role for role, _ in instance.Role.choices)):
             ParseError('Такой роли не существует!')
+        if current_role in (instance.Role.ADMIN, instance.Role.MANAGER):
+            instance.is_staff = True
         instance.role = current_role
-        instance.is_staff = True
         instance.save()
         return instance
 
