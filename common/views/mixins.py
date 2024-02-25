@@ -1,16 +1,15 @@
 from typing import Optional, Union
 
 from djoser.views import UserViewSet
-from rest_framework import mixins
+from rest_framework import mixins, authentication
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_simplejwt import authentication
 
 
 class ExtendedView:
     """Расширенное представление"""
-    authentication_classes = (authentication.JWTAuthentication,)
+    authentication_classes = (authentication.BasicAuthentication,)
     multi_authentication_classes = None
 
     permission_classes = (AllowAny,)
@@ -20,6 +19,7 @@ class ExtendedView:
     serializer_class = None
 
     request = None
+    action_map = None
 
     def _get_action_or_method(self) -> str:
         """Получить действие или метод запроса."""
@@ -36,10 +36,14 @@ class ExtendedView:
         )
         if not self.multi_authentication_classes:
             return [auth() for auth in self.authentication_classes]
-
-        # Определить действие или метод запроса.
-        action = self._get_action_or_method()
-        authentications = self.multi_authentication_classes.get(action)
+        
+        # Вывод текущего метода.
+        method = self.request.method
+        # Поиск действия по текущему методу, если он есть.
+        action = self.action_map.get(method.lower())
+        authentications = self.multi_authentication_classes.get(
+            action if action else method
+        )
         if authentications:
             return [auth() for auth in authentications]
         return [auth() for auth in self.authentication_classes]
