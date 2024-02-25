@@ -28,7 +28,7 @@ class IsManagerOrAdmin(BasePermission):
         почитать здесь -> https://developer.mozilla.org/ru/docs/Glossary/Safe.
         """
         if request.method in SAFE_METHODS:
-            return bool(request.user and request.user.is_authenticated)
+            return True
         return bool(
             request.user.is_authenticated and
             request.user.is_staff or
