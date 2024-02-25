@@ -1,5 +1,12 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from rest_framework.request import Request
+
+if TYPE_CHECKING:
+    from products.views.categories import CategoryView
 
 
 class IsManagerOrAdmin(BasePermission):
@@ -8,7 +15,7 @@ class IsManagerOrAdmin(BasePermission):
         'только Менеджеру либо Администратору!'
     )
 
-    def has_permission(self, request: Request, view) -> bool:
+    def has_permission(self, request: Request, view: CategoryView) -> bool:
         """
         Проверка пользователя на доступ к определённому методу. В том случае, когда
         пользователь запрашивает не безопасный метод, проверяется его роль.
