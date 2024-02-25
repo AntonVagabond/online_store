@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from rest_framework.request import Request
 
 if TYPE_CHECKING:
+    from rest_framework.request import Request
     from products.views.categories import CategoryView
 
 
