@@ -10,38 +10,6 @@ if TYPE_CHECKING:
     from products.models.products import Product
 
 
-class IsProviderOrStaffOrReadOnly(BasePermission):
-    """
-    Класс разрешения. Дает доступ только для чтения. Если запрос на изменение, то
-    будет проверка прав пользователя с нужными ролями Поставщика либо Персонала.
-    """
-    message = (
-        'Вам не доступно данное действие. Это действие доступно '
-        'только Поставщику либо Персоналу магазина!'
-    )
-
-    def has_permission(self, request: Request, view: ProductView) -> bool:
-        """
-        Проверка пользователя на доступ к определённому методу. К не безопасным
-        методам разрешено обращаться только пользователям с ролью Поставщика либо
-        быть персоналом магазина.
-
-        О безопасных и не безопасных методах можно
-        почитать здесь -> https://developer.mozilla.org/ru/docs/Glossary/Safe.
-        """
-        if request.method in SAFE_METHODS:
-            return True
-
-        if request.user.role == request.user.Role.PROVIDER:
-            return bool(request.user and request.user.is_authenticated)
-
-        return bool(
-            request.user.is_authenticated and
-            request.user.is_staff or
-            request.user.is_superuser
-        )
-
-
 class IsProductProviderOrStaff(IsAuthenticated):
     """
     Класс разрешения. Проверяет права пользователя с нужными
@@ -50,6 +18,12 @@ class IsProductProviderOrStaff(IsAuthenticated):
     И проверяет Поставщика, является ли он поставщиком текущего товара. Если да, то
     он сможет изменить текущий товар. Если нет, то в доступе откажет.
     """
+    message = (
+        'Вам не разрешено изменять текущее состояние товара! Это разрешение '
+        'доступно только Поставщику, который создал данный товар '
+        'либо Персоналу магазина!'
+    )
+
     def has_object_permission(
             self,
             request: Request,
