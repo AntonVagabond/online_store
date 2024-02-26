@@ -10,6 +10,7 @@ from rest_framework_simplejwt import authentication as jwt_authentication
 from common.views.mixins import CRUDListViewSet
 from products.models.products import Product
 from products.permissions import products as permissions_prod
+from products.permissions import providers as permissions_prov
 from products.serializers.api import products as products_s
 
 
@@ -58,7 +59,7 @@ class ProductView(CRUDListViewSet):
         'search': (authentication.BasicAuthentication,)
     }
 
-    permission_classes = (permissions_prod.IsProviderOrStaffOrReadOnly,)
+    permission_classes = (permissions_prov.IsProviderOrStaffOrReadOnly,)
     multi_permission_classes = {
         'partial_update': (permissions_prod.IsProductProviderOrStaff,),
         'destroy': (permissions_prod.IsProductProviderOrStaff,),
