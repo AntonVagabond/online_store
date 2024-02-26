@@ -1,10 +1,14 @@
-from typing import Optional, Union
+from typing import Optional, Union, Generator, TypeVar
 
 from djoser.views import UserViewSet
 from rest_framework import mixins, authentication
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
+
+TAuth = TypeVar('TAuth')
+TPermission = TypeVar('TPermission')
+TSerializer = TypeVar('TSerializer')
 
 
 class ExtendedView:
@@ -21,13 +25,23 @@ class ExtendedView:
     request = None
     action_map = None
 
-    def _get_action_or_method(self) -> str:
+    def __get_action_or_method(self) -> str:
         """Получить действие или метод запроса."""
         if hasattr(self, 'action') and self.action:
             return self.action
         return self.request.method
 
-    def get_authenticators(self):
+    def __auth_initialize(self, authentications: Optional[tuple[TAuth]] = None) -> list[TAuth]:
+        """Инициализация аутентификации."""
+        auth_classes = self.authentication_classes if authentications is None else authentications
+        return [auth() for auth in auth_classes]
+
+    def __permission_initialize(self, permissions: Optional[tuple[TPermission]] = None) -> list[TPermission]:
+        """Инициализация разрешения."""
+        perm_classes = self.permission_classes if permissions is None else permissions
+        return [permission() for permission in perm_classes]
+
+    def get_authenticators(self) -> list[TAuth]:
         """Получить класс аутентификации."""
         assert self.authentication_classes or self.multi_authentication_classes, (
                 '"%s" должен либо включать `authentication_classes`, '
@@ -35,8 +49,11 @@ class ExtendedView:
                 '`get_authenticators()` метод.' % self.__class__.__name__
         )
         if not self.multi_authentication_classes:
-            return [auth() for auth in self.authentication_classes]
-        
+            return self.__auth_initialize()
+
+        if self.request is None:
+            return self.__auth_initialize()
+
         # Вывод текущего метода.
         method = self.request.method
         # Поиск действия по текущему методу, если он есть.
@@ -45,10 +62,10 @@ class ExtendedView:
             action if action else method
         )
         if authentications:
-            return [auth() for auth in authentications]
-        return [auth() for auth in self.authentication_classes]
+            return self.__auth_initialize(authentications=authentications)
+        return self.__auth_initialize()
 
-    def get_permissions(self) -> Union[permission_classes]:
+    def get_permissions(self) -> list[TPermission]:
         """Получить класс разрешения."""
         assert self.permission_classes or self.multi_permission_classes, (
                 '"%s" должен либо включать `permission_classes`, '
@@ -56,16 +73,16 @@ class ExtendedView:
                 '`get_permissions()` метод.' % self.__class__.__name__
         )
         if not self.multi_permission_classes:
-            return [permission() for permission in self.permission_classes]
+            return self.__permission_initialize()
 
         # Определить действие или метод запроса.
-        action = self._get_action_or_method()
+        action = self.__get_action_or_method()
         permissions = self.multi_permission_classes.get(action)
         if permissions:
-            return [permission() for permission in permissions]
-        return [permission() for permission in self.permission_classes]
+            return self.__permission_initialize(permissions=permissions)
+        return self.__permission_initialize()
 
-    def get_serializer_class(self) -> Optional[serializer_class]:
+    def get_serializer_class(self) -> TSerializer:
         """Получить класс преобразователя."""
         # Если не будет этих двух условий, то выскачет ошибка.
         assert self.serializer_class or self.multi_serializer_class, (
@@ -76,7 +93,7 @@ class ExtendedView:
         if not self.multi_serializer_class:
             return self.serializer_class
 
-        action = self._get_action_or_method()
+        action = self.__get_action_or_method()
         # Пытаюсь получить преобразователь действий или значение по умолчанию.
         return self.multi_serializer_class.get(action) or self.serializer_class
 
