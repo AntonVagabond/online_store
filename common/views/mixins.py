@@ -1,4 +1,4 @@
-from typing import Optional, Union, Generator, TypeVar
+from typing import Optional, TypeVar
 
 from djoser.views import UserViewSet
 from rest_framework import mixins, authentication
