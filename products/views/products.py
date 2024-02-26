@@ -51,7 +51,7 @@ class ProductView(CRUDListViewSet):
         'product_feature'
     )
 
-    authentication_classes = jwt_authentication.JWTAuthentication
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
     multi_authentication_classes = {
         'list': (authentication.BasicAuthentication,),
         'retrieve': (authentication.BasicAuthentication,),
