@@ -31,14 +31,22 @@ class ExtendedView:
             return self.action
         return self.request.method
 
-    def __auth_initialize(self, authentications: Optional[tuple[TAuth]] = None) -> list[TAuth]:
+    def __auth_initialize(
+            self,
+            authentications: Optional[tuple[TAuth]] = None,
+    ) -> list[TAuth]:
         """Инициализация аутентификации."""
-        auth_classes = self.authentication_classes if authentications is None else authentications
+        auth_classes = (self.authentication_classes if authentications is None
+                        else authentications)
         return [auth() for auth in auth_classes]
 
-    def __permission_initialize(self, permissions: Optional[tuple[TPermission]] = None) -> list[TPermission]:
+    def __permission_initialize(
+            self,
+            permissions: Optional[tuple[TPermission]] = None,
+    ) -> list[TPermission]:
         """Инициализация разрешения."""
-        perm_classes = self.permission_classes if permissions is None else permissions
+        perm_classes = (self.permission_classes if permissions is None
+                        else permissions)
         return [permission() for permission in perm_classes]
 
     def get_authenticators(self) -> list[TAuth]:
