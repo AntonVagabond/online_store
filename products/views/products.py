@@ -8,10 +8,10 @@ from rest_framework.response import Response
 from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
-from products.models.products import Product
-from products.permissions import products as permissions_prod
-from products.permissions import providers as permissions_prov
-from products.serializers.api import products as products_s
+from ..models.products import Product
+from ..permissions import products as permissions_prod
+from ..permissions import providers as permissions_prov
+from ..serializers.api import products as products_s
 
 
 @extend_schema_view(
