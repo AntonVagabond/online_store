@@ -52,7 +52,7 @@ class CartItemViewSet(mixins.CUDViewSet):
     """Представление содержимого корзины."""
 
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    authentication_classes = (authentication.JWTAuthentication,)
+    authentication_classes = (authentication.BasicAuthentication,)
 
     queryset = CartItem.objects.all()
     serializer_class = carts_s.CartItemSerializer
