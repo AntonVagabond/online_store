@@ -7,7 +7,7 @@ from django.db import transaction
 from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import permissions, status
 from rest_framework.response import Response
-from rest_framework_simplejwt import authentication
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views import mixins
 from ..models.orders import Order
@@ -29,10 +29,9 @@ OrderSerializer: TypeAlias = orders_s.OrderSerializer
 )
 class OrderMakingViewSet(mixins.CreateViewSet):
     """Представление оформления заказа."""
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (authentication.JWTAuthentication,)
-
     queryset = Order.objects.all()
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
     serializer_class = orders_s.OrderSerializer
 
     def create(self, request: Request, *args: None, **kwargs: None) -> Response:
@@ -97,6 +96,8 @@ class OrderDetailViewSet(mixins.RUDViewSet):
 )
 class UserOrdersViewSet(mixins.ListViewSet):
     """Представление истории заказа пользователя."""
+    authentication_classes = jwt_authentication.JWTAuthentication
+
     permission_classes = (permissions.IsAuthenticated,)
 
     serializer_class = orders_s.UserOrderListSerializer
