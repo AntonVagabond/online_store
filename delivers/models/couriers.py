@@ -13,6 +13,7 @@ class Courier(BaseModel):
     Модель курьера.
 
     Атрибуты:
+        * `user` (ForeignKey): пользователь.
         * `name` (CharField): название курьера.
         * `phone_number` (PhoneNumberField): номер телефона курьера.
         * `email` (EmailField): почта курьера.
@@ -20,6 +21,15 @@ class Courier(BaseModel):
         * `vehicle` (ManyToManyField): транспортное средство.
         * `is_available` (BooleanField): доступен ли курьер для выполнения доставок.
     """
+    # region ------------------------- АТРИБУТЫ КУРЬЕРА -----------------------------
+    user = models.ForeignKey(
+        to='users.User',
+        on_delete=models.RESTRICT,
+        related_name='couriers',
+        verbose_name='Пользователь',
+        null=True,
+        blank=True,
+    )
     name = models.CharField(
         verbose_name='Название организации',
         max_length=100,
@@ -62,6 +72,7 @@ class Courier(BaseModel):
         decimal_places=2,
         default=0.00
     )
+    # endregion ---------------------------------------------------------------------
 
     def __str__(self) -> CharField:
         return self.name
