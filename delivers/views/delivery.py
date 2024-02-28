@@ -1,9 +1,10 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
-from delivers.models.delivers import Delivery
-from delivers.serializers.api import delivery as delivery_s
+from ..models.delivers import Delivery
+from ..permission import delivers as permissions_del
+from ..serializers.api import delivery as delivery_s
 
 
 @extend_schema_view(
@@ -32,20 +33,18 @@ class DeliveryViewSet(CRUDListViewSet):
     """Представление доставки."""
     queryset = Delivery.objects.all()
 
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
 
+    permission_classes = (permissions_del.IsCourierOrStaff,)
     multi_permission_classes = {
-        'create': (permissions.IsAdminUser,),
-        'retrieve': (permissions.AllowAny,),
-        'partial_update': (permissions.IsAdminUser,),
-        'destroy': (permissions.IsAdminUser,),
-        'list': (permissions.AllowAny,)
+        'create': (permissions_del.IsCourierOrStaff,),
+        'retrieve': (permissions_del.IsCourierOrStaff,),
+        'partial_update': (permissions_del.IsCurrentCourierOrStaff,),
+        'destroy': (permissions_del.IsCurrentCourierOrStaff,),
+        'list': (permissions_del.IsCourierOrStaff,)
     }
 
     serializer_class = delivery_s.DeliveryListSerializer
-
-    http_method_names = ('get', 'post', 'patch', 'delete')
-
     multi_serializer_class = {
         'create': delivery_s.DeliveryCreateSerializer,
         'retrieve': delivery_s.DeliveryRetrieveSerializer,
@@ -53,3 +52,5 @@ class DeliveryViewSet(CRUDListViewSet):
         'destroy': delivery_s.DeliveryDeleteSerializer,
         'list': delivery_s.DeliveryListSerializer
     }
+
+    http_method_names = ('get', 'post', 'patch', 'delete')
