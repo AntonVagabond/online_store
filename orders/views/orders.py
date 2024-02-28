@@ -13,6 +13,7 @@ from common.views import mixins
 from ..models.orders import Order
 from ..serializers.api import orders as orders_s
 from ..services.orders import OrderCreateService
+from ..permissions import orders as permissions_ord
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -74,12 +75,12 @@ class OrderMakingViewSet(mixins.CreateViewSet):
 )
 class OrderDetailViewSet(mixins.RUDViewSet):
     """Представление информации заказа."""
-
-    permission_classes = (permissions.IsAuthenticated,)
-
     queryset = Order.objects.all()
-    serializer_class = orders_s.OrderSerializer
 
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
+    permission_classes = (permissions_ord.CurrentUserOrStaff,)
+
+    serializer_class = orders_s.OrderSerializer
     multi_serializer_class = {
         'retrieve': orders_s.OrderRetrieveSerializer,
         'partial_update': orders_s.OrderStatusUpdateSerializer
@@ -96,10 +97,8 @@ class OrderDetailViewSet(mixins.RUDViewSet):
 )
 class UserOrdersViewSet(mixins.ListViewSet):
     """Представление истории заказа пользователя."""
-    authentication_classes = jwt_authentication.JWTAuthentication
-
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-
     serializer_class = orders_s.UserOrderListSerializer
 
     def get_queryset(self) -> QuerySet[Order]:
