@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 if TYPE_CHECKING:
     from rest_framework.request import Request
     from delivers.models.delivers import Delivery
-    from delivers.views.delivery import DeliveryViewSet
+    from delivers.views.delivers import DeliveryViewSet
 
 
 class IsCourierOrStaff(IsAuthenticated):

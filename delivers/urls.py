@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import couriers
-from .views import delivery
+from .views import delivers
 from .views import vehicle
 
 router = DefaultRouter()
