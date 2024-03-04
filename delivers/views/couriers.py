@@ -1,13 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
 from ..models.couriers import Courier
+from ..permission import couriers as permissions_cour
 from ..serializers.api import couriers as couriers_s
 
 
@@ -42,12 +43,17 @@ from ..serializers.api import couriers as couriers_s
 )
 class CourierViewSet(CRUDListViewSet):
     """Представление курьера."""
-
-    permission_classes = (permissions.AllowAny,)
-
     queryset = Courier.objects.all()
-    serializer_class = couriers_s.CourierListSerializer
 
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
+
+    permission_classes = (permissions_cour.IsCourierOrStaff,)
+    multi_permission_classes = {
+        'partial_update': (permissions_cour.IsCurrentCourierOrStaff,),
+        'destroy': (permissions_cour.IsCurrentCourierOrStaff,),
+    }
+
+    serializer_class = couriers_s.CourierListSerializer
     multi_serializer_class = {
         'list': couriers_s.CourierListSerializer,
         'retrieve': couriers_s.CourierRetrieveSerializer,
