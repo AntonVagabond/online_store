@@ -37,11 +37,8 @@ class DeliveryViewSet(CRUDListViewSet):
 
     permission_classes = (permissions_cour.IsCourierOrStaff,)
     multi_permission_classes = {
-        'create': (permissions_cour.IsCourierOrStaff,),
-        'retrieve': (permissions_cour.IsCourierOrStaff,),
         'partial_update': (permissions_cour.IsCurrentCourierOrStaff,),
         'destroy': (permissions_cour.IsCurrentCourierOrStaff,),
-        'list': (permissions_cour.IsCourierOrStaff,)
     }
 
     serializer_class = delivery_s.DeliveryListSerializer
