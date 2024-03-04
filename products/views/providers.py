@@ -1,6 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions, authentication
+from rest_framework import authentication
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.request import Request
@@ -9,8 +9,8 @@ from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
 from products.models.providers import Provider
-from products.serializers.api import providers as providers_s
 from products.permissions import providers as permissions_prov
+from products.serializers.api import providers as providers_s
 
 
 @extend_schema_view(
