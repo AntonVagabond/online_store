@@ -1,9 +1,10 @@
 from drf_spectacular.utils import extend_schema_view, extend_schema
-from rest_framework import permissions
+from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
-from delivers.models.couriers import Vehicle
-from delivers.serializers.api import vehicle as vehicle_s
+from ..models.couriers import Vehicle
+from ..permission import couriers as permissions_cour
+from ..serializers.api import vehicle as vehicle_s
 
 
 @extend_schema_view(
@@ -30,11 +31,17 @@ from delivers.serializers.api import vehicle as vehicle_s
 )
 class VehicleViewSet(CRUDListViewSet):
     """Представление транспорта."""
-
     queryset = Vehicle.objects.all()
 
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (jwt_authentication.JWTAuthentication,)
 
+    permission_classes = (permissions_cour.IsCourierOrStaff,)
+    multi_permission_classes = {
+        'partial_update': (permissions_cour.IsCurrentCourierOrStaff,),
+        'destroy': (permissions_cour.IsCurrentCourierOrStaff,),
+    }
+
+    permission_classes = (permissions.IsAuthenticated,)
     multi_permission_classes = {
         'create': (permissions.IsAdminUser,),
         'retrieve': (permissions.AllowAny,),
@@ -43,10 +50,7 @@ class VehicleViewSet(CRUDListViewSet):
         'list': (permissions.AllowAny,)
     }
 
-    http_method_names = ('get', 'patch', 'post', 'delete')
-
     serializer_class = vehicle_s.VehicleListSerializer
-
     multi_serializer_class = {
         'create': vehicle_s.VehicleCreateSerializer,
         'retrieve': vehicle_s.VehicleRetrieveSerializer,
@@ -54,3 +58,4 @@ class VehicleViewSet(CRUDListViewSet):
         'destroy': vehicle_s.VehicleDeleteSerializer,
         'list': vehicle_s.VehicleListSerializer
     }
+    http_method_names = ('get', 'patch', 'post', 'delete')
