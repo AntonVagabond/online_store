@@ -41,15 +41,6 @@ class VehicleViewSet(CRUDListViewSet):
         'destroy': (permissions_cour.IsCurrentCourierOrStaff,),
     }
 
-    permission_classes = (permissions.IsAuthenticated,)
-    multi_permission_classes = {
-        'create': (permissions.IsAdminUser,),
-        'retrieve': (permissions.AllowAny,),
-        'partial_update': (permissions.IsAdminUser,),
-        'destroy': (permissions.IsAdminUser,),
-        'list': (permissions.AllowAny,)
-    }
-
     serializer_class = vehicle_s.VehicleListSerializer
     multi_serializer_class = {
         'create': vehicle_s.VehicleCreateSerializer,
