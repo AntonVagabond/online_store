@@ -8,7 +8,7 @@ from .views import vehicle
 router = DefaultRouter()
 
 router.register(prefix='couriers', viewset=couriers.CourierViewSet, basename='couriers')
-router.register(prefix='delivery', viewset=delivery.DeliveryViewSet, basename='delivery')
+router.register(prefix='delivery', viewset=delivers.DeliveryViewSet, basename='delivers')
 router.register(prefix='vehicle', viewset=vehicle.VehicleViewSet, basename='vehicle')
 
 urlpatterns = []
