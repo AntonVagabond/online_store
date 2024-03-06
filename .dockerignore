@@ -1,0 +1,10 @@
+Dockerfile
+.idea
+.env.example
+.gitignore
+.github
+*.md
+.tox
+LICENSE
+Makefile
+table.png
