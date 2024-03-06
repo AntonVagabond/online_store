@@ -2,43 +2,10 @@ version: '3.11'
 
 services:
 
-  db:
-    image: postgres:14-alpine
-    container_name: db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=${PG_USER}
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
-      - POSTGRES_DB=${PG_DATABASE}
-
-  redis:
-    image: redis:latest
-    container_name: redis
-
-
-  rabbitmq:
-    image: rabbitmq:latest
-    container_name: rabbitmq
-
-  celery:
-    restart: always
-    build:
-      context: ./
-    command: celery -A online_store worker -l INFO
-    volumes:
-      - ./:/usr/src/app/
-    container_name: celery
-    depends_on:
-      - db
-      - redis
-      - rabbitmq
-      - web
-
   web:
     build: ./
     command: python manage.py runserver 0.0.0.0:8000
-    container_name: online_store
+    container_name: web-online-store
     volumes:
       - ./:/usr/src/app/
       - /var/www/back/static/:/usr/src/app/static/
@@ -52,6 +19,53 @@ services:
       - redis
       - rabbitmq
       - celery
+      - celery-beat
+
+  db:
+    image: postgres:14-alpine
+    container_name: db-store
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DATABASE}
+
+  redis:
+    image: redis:latest
+    container_name: redis-store
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq-store
+
+  celery:
+    restart: always
+    build:
+      context: ./
+    command: celery -A online_store worker -l INFO
+    volumes:
+      - ./:/usr/src/app/
+    container_name: celery-store
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+      - web
+
+  celery-beat:
+    restart: always
+    build:
+      context: ./
+    command: celery -A backend beat -l info
+    volumes:
+      - ./:/usr/src/app/
+    container_name: celery-beat-store
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+      - web
 
 volumes:
   postgres_data:
