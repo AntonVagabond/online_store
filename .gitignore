@@ -120,7 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+src/.env
 .venv
 env/
 venv/
@@ -167,9 +167,10 @@ media/
 /media/
 */media/
 
+migrations/
 */migrations/*
 !*/migrations/__init__.py
 
-/.env
+/src/.env
 /.env.docker
 /.idea/
