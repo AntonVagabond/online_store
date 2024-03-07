@@ -7,11 +7,11 @@ class Category(BaseModel):
     """
     Модель Категории товара.
 
-    Аттрибуты:
+    Атрибуты:
         * `title` (CharField): название категории.
         * `image` (ImageField): изображение категории.
         * `description` (CharField): описание категории.
-        * `parent_category` (ForeignKey): подкатегория.
+        * `parent` (ForeignKey): подкатегория.
         * `products` (Product): модель товара.
     """
     # region ---------------------- АТРИБУТЫ КАТЕГОРИИ ------------------------------
