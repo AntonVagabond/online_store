@@ -3,7 +3,7 @@ from typing import Union, TypeAlias
 from django.contrib import admin
 from django.utils.safestring import mark_safe, SafeString
 
-from common.admin import ModelAdminWithImage
+from common.admin import ModelaAdminWithImage
 from products.models import products, categories, providers
 
 Provider: TypeAlias = providers.Provider
