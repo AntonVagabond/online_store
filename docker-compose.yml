@@ -13,7 +13,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ./.env
+      - src/.env
     depends_on:
       - db
       - redis
