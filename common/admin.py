@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe, SafeString
 from products.models.categories import Category
 
 
-class ModelaAdminWithImage(admin.ModelAdmin):
+class ModelAdminWithImage(admin.ModelAdmin):
     """Общая модель админа для отображения ссылок изображения."""
 
     @admin.display(description='Изображение', ordering='image')
