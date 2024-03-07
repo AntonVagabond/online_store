@@ -22,7 +22,10 @@ class IsCourierOrStaff(IsAuthenticated):
 
     def has_permission(self, request: Request, view: DeliveryViewSet):
         """Проверка пользователя, на права Курьера либо Персонала."""
-        if request.user.role == request.user.Role.COURIER:
+        if (
+                super().has_permission(request, view) and
+                request.user.role == request.user.Role.COURIER
+        ):
             return True
         return bool(request.user.is_staff or request.user.is_superuser)
 
