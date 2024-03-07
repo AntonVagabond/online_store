@@ -37,6 +37,9 @@ class IsProviderOrStaffOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
 
+        if request.user.is_anonymous:
+            return False
+
         if request.user.role == request.user.Role.PROVIDER:
             return bool(request.user and request.user.is_authenticated)
 
@@ -70,6 +73,8 @@ class IsCurrentProviderOrStaff(IsAuthenticated):
         Проверка пользователя на доступ к конкретному Поставщику.
         Если это персонал, то доступ на изменение модели Поставщика разрешит.
         """
+        if not request.user.is_authenticated and request.user.is_anonymous:
+            return False
         if request.user.is_staff or request.user.is_superuser:
             return True
         if request.user == obj.user:

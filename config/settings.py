@@ -253,27 +253,25 @@ AUTHENTICATION_BACKENDS = ('users.backends.AuthBackend',)
 # endregion -------------------------------------------------------------------------
 
 # region ------------------------------- REDIS --------------------------------------
-REDIS_HOST = env.str(var='REDIS_HOST', default='localhost')
-REDIS_PORT = env.int(var='REDIS_PORT', default=6379)
+REDIS_URL = env.str(var='REDIS_URL', default='redis://localhost:6379/0')
 # Кэш с помощью => Redis.
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}',
+        'LOCATION': REDIS_URL,
     }
 }
 # endregion -------------------------------------------------------------------------
 
 # region ----------------------------- RABBITMQ -------------------------------------
-RABBIT_HOST = env.str(var='RABBIT_HOST', default='localhost')
-RABBIT_PORT = env.int(var='RABBIT_PORT', default=5672)
+RABBIT_URL = env.str(var='RABBITMQ_URL', default='amqp://guest:guest@localhost:5672')
 # endregion -------------------------------------------------------------------------
 
 # region ------------------------------- CELERY -------------------------------------
 # Использование брокера сообщений для Celery на базе RabbitMQ.
-CELERY_BROKER_URL = f'amqp://guest:guest@{RABBIT_HOST}:{RABBIT_PORT}'
+CELERY_BROKER_URL = RABBIT_URL
 # Использование БД для Celery на базе Redis.
-CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_TASK_TRACK_STARTED = env.bool(var='CELERY_TASK_TRACK_STARTED', default=False)
 CELERY_TASK_TIME_LIMIT = 30 * 60
 accept_content = [env.str(var='ACCEPT_CONTENT', default='application/json')]

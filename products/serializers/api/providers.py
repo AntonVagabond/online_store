@@ -45,9 +45,11 @@ class ProviderRetrieveSerializer(serializers.ModelSerializer):
 class ProviderCreateSerializer(serializers.ModelSerializer):
     """Преобразователь создания товара."""
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Provider
-        fields = ('id', 'name', 'email', 'phone_number', 'logo')
+        fields = ('id', 'user', 'name', 'email', 'phone_number', 'logo')
 
 
 class ProviderUpdateSerializer(serializers.ModelSerializer):

@@ -48,10 +48,13 @@ class CourierRetrieveSerializer(serializers.ModelSerializer):
 class CourierCreateSerializer(serializers.ModelSerializer):
     """Сериализатор создания курьера."""
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Courier
         fields = (
             'id',
+            'user',
             'name',
             'phone_number',
             'email',

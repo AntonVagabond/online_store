@@ -34,6 +34,8 @@ class IsProductProviderOrStaff(IsAuthenticated):
         Проверка поставщика на доступ к конкретному товару.
         Если это персонал, то доступ на изменение товара разрешит.
         """
+        if not request.user.is_authenticated:
+            return False
         if request.user.is_staff or request.user.is_superuser:
             return True
         if request.user == obj.provider.user:

@@ -3,7 +3,7 @@ from rest_framework_simplejwt import authentication as jwt_authentication
 
 from common.views.mixins import CRUDListViewSet
 from ..models.delivers import Delivery
-from ..permission import delivers as permissions_del
+from ..permission import couriers as permissions_cour
 from ..serializers.api import delivery as delivery_s
 
 
@@ -35,13 +35,10 @@ class DeliveryViewSet(CRUDListViewSet):
 
     authentication_classes = (jwt_authentication.JWTAuthentication,)
 
-    permission_classes = (permissions_del.IsCourierOrStaff,)
+    permission_classes = (permissions_cour.IsCourierOrStaff,)
     multi_permission_classes = {
-        'create': (permissions_del.IsCourierOrStaff,),
-        'retrieve': (permissions_del.IsCourierOrStaff,),
-        'partial_update': (permissions_del.IsCurrentCourierOrStaff,),
-        'destroy': (permissions_del.IsCurrentCourierOrStaff,),
-        'list': (permissions_del.IsCourierOrStaff,)
+        'partial_update': (permissions_cour.IsCurrentCourierOrStaff,),
+        'destroy': (permissions_cour.IsCurrentCourierOrStaff,),
     }
 
     serializer_class = delivery_s.DeliveryListSerializer
