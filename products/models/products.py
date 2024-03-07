@@ -47,7 +47,7 @@ class Product(BaseModel):
         to='products.Category',
         on_delete=models.RESTRICT,
         related_name='products',
-        verbose_name='Категория',
+        verbose_name='Категории',
     )
     provider = models.ForeignKey(
         to='products.Provider',
