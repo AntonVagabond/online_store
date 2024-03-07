@@ -73,6 +73,8 @@ class IsCurrentProviderOrStaff(IsAuthenticated):
         Проверка пользователя на доступ к конкретному Поставщику.
         Если это персонал, то доступ на изменение модели Поставщика разрешит.
         """
+        if not request.user.is_authenticated and request.user.is_anonymous:
+            return False
         if request.user.is_staff or request.user.is_superuser:
             return True
         if request.user == obj.user:

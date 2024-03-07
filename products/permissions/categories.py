@@ -30,7 +30,7 @@ class IsStaffOrReadOnly(BasePermission):
         """
         if request.method in SAFE_METHODS:
             return True
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             return False
         return bool(
             request.user.is_authenticated and

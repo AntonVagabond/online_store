@@ -32,6 +32,8 @@ class CurrentUserOrStaff(IsAuthenticated):
         Проверка пользователя на доступ к конкретному заказу.
         Если это персонал, то доступ на изменение товара разрешит.
         """
+        if request.user.is_anonymous:
+            return False
         if request.user.is_staff or request.user.is_superuser:
             return True
         if request.user == obj.user:
