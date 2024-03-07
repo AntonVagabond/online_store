@@ -37,6 +37,9 @@ class IsProviderOrStaffOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
 
+        if request.user.is_anonymous:
+            return False
+
         if request.user.role == request.user.Role.PROVIDER:
             return bool(request.user and request.user.is_authenticated)
 
