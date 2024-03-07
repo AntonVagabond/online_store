@@ -12,7 +12,7 @@ Product: TypeAlias = products.Product
 SubCategory: TypeAlias = categories.Category
 
 
-# region ----------------------------- INLINE ---------------------------------------
+# region ----------------------------- PRODUCT INLINE -----------------------------
 class ProductFeatureInline(admin.StackedInline):
     """
     Встраиваемая модель хар-ик для ProductAdmin.
@@ -39,28 +39,6 @@ class ProductDescriptionInline(admin.StackedInline):
     fields = ('description',)
 
 
-class SubCategoryInline(admin.StackedInline):
-    """
-    Встраиваемая модель подкатегорий для CategoryAdmin.
-
-    Аттрибуты:
-        * `model` (Category): модель категории товара.
-        * `fields` (tuple[str]): поля.
-        * `readonly_fields` (tuple[str]): поля для чтения.
-    """
-
-    model = categories.Category
-    fields = ('title', 'image_show', 'image', 'description')
-    readonly_fields = ('image_show',)
-
-    @admin.display(description='Логотип', ordering='logo')
-    def image_show(self, obj: SubCategory) -> Union[str, SafeString]:
-        """Отображение ссылки на картинку."""
-        if obj.image:
-            return mark_safe(f"<img src='{obj.image.url}' width='60' />")
-        return 'Нет логотипа'
-
-
 class ProductImagesInline(admin.TabularInline):
     """
     Встраиваемая модель изображений товара для ProductAdmin.
@@ -84,7 +62,32 @@ class ProductImagesInline(admin.TabularInline):
 
 # endregion -------------------------------------------------------------------------
 
-# region -------------------------- MODEL ADMIN -------------------------------------
+# region ----------------------------- CATEGORY INLINE -----------------------------
+class SubCategoryInline(admin.StackedInline):
+    """
+    Встраиваемая модель подкатегорий для CategoryAdmin.
+
+    Аттрибуты:
+        * `model` (Category): модель категории товара.
+        * `fields` (tuple[str]): поля.
+        * `readonly_fields` (tuple[str]): поля для чтения.
+    """
+
+    model = categories.Category
+    fields = ('title', 'image_show', 'image', 'description')
+    readonly_fields = ('image_show',)
+
+    @admin.display(description='Логотип', ordering='logo')
+    def image_show(self, obj: SubCategory) -> Union[str, SafeString]:
+        """Отображение ссылки на картинку."""
+        if obj.image:
+            return mark_safe(f"<img src='{obj.image.url}' width='60' />")
+        return 'Нет логотипа'
+
+
+# endregion -------------------------------------------------------------------------
+
+# region -------------------------- PRODUCT ADMIN -----------------------------------
 @admin.register(products.Product)
 class ProductAdmin(admin.ModelAdmin):
     """
@@ -138,8 +141,11 @@ class ProductAdmin(admin.ModelAdmin):
         return 'Нет изображения'
 
 
+# endregion -------------------------------------------------------------------------
+
+# region -------------------------- CATEGORY ADMIN -----------------------------------
 @admin.register(categories.Category)
-class CategoryAdmin(ModelaAdminWithImage):
+class CategoryAdmin(ModelAdminWithImage):
     """
     Модель админа категории.
 
@@ -168,6 +174,9 @@ class CategoryAdmin(ModelaAdminWithImage):
     # endregion ---------------------------------------------------------------------
 
 
+# endregion -------------------------------------------------------------------------
+
+# region ----------------------------- PROVIDER ADMIN -----------------------------
 @admin.register(providers.Provider)
 class ProviderAdmin(admin.ModelAdmin):
     """
