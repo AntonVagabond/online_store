@@ -16,29 +16,30 @@ class Category(BaseModel):
     """
     # region ---------------------- АТРИБУТЫ КАТЕГОРИИ ------------------------------
     title = models.CharField(
-        verbose_name='Название категории',
         max_length=255,
         unique=True,
+        verbose_name='Название категории',
     )
     image = models.ImageField(
-        verbose_name='Изображение категории',
         upload_to='orders/categories/%Y/%m/%d',
         null=True,
         blank=True,
+        verbose_name='Изображение категории',
     )
     description = models.CharField(
-        verbose_name='Описание категории',
         max_length=500,
         null=True,
         blank=True,
+        verbose_name='Описание категории',
     )
     parent = models.ForeignKey(
         to='self',
-        on_delete=models.SET_NULL,
-        related_name='children',
-        verbose_name='Родительская категория',
+        on_delete=models.CASCADE,
+        db_index=True,
         null=True,
         blank=True,
+        related_name='children',
+        verbose_name='Родительская категория',
     )
     # endregion ---------------------------------------------------------------------
 
