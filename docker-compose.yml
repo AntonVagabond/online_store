@@ -43,7 +43,7 @@ services:
     restart: always
     build:
       context: ./
-    command: celery -A online_store worker -l INFO
+    command: celery --app=config worker --loglevel=info --pool=solo
     volumes:
       - ./:/usr/src/app/
     container_name: celery-store
@@ -57,7 +57,7 @@ services:
     restart: always
     build:
       context: ./
-    command: celery -A backend beat -l info
+    command: celery -A config beat -l info
     volumes:
       - ./:/usr/src/app/
     container_name: celery-beat-store
