@@ -3,7 +3,7 @@ from typing import Union, TypeAlias
 from django.contrib import admin
 from django.utils.safestring import mark_safe, SafeString
 
-from common.admin import ModelaAdminWithImage
+from common.admin import ModelAdminWithImage
 from .models import products, providers
 from .models import categories
 
@@ -146,7 +146,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 # region -------------------------- CATEGORY ADMIN -----------------------------------
 @admin.register(categories.Category)
-class CategoryAdmin(ModelaAdminWithImage):
+class CategoryAdmin(ModelAdminWithImage):
     """
     Модель админа категории.
 
