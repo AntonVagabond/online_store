@@ -24,11 +24,12 @@
 3. 📚 [Dependencies used](#dependencies_used)
 4. 📈 [Relationships between tables](#table)
 5. 📽️ [Example work](#example_work)
-6. 🔌 [Installation and launch](#installation_and_launch)
+6. 🔧 [Project Features](#project_features)
+7. 🔌 [Installation and launch](#installation_and_launch)
    - 📔 [Installing the project in the IDE](#installation_ide)
    - 🐳 [Installing the project in Docker](#installation_docker)
-7. 📗 [API Documentation](#documentation_api)
-8. 🔐 [License](#license)
+8. 📗 [API Documentation](#documentation_api)
+9. 🔐 [License](#license)
 
 <a name="project_desc"></a>
 ## ✏️ Description of the project ##
@@ -93,14 +94,36 @@ An approximate list of [endpoints](endpoints/Endpoints.en.md) and their capabili
 
 <a name="example_work"></a>
 ## 📽️ Example work. ##
-1. An example of how [Database copying works](videos/Postman_t9M2iW3Xku.mp4) you can download and watch.
-2. An example of the work of [Placing an order and paying for it in Yookassa](videos/pycharm64_Jr15ACpje5.mp4) you can download and watch.
+1. An example of how **_Database copying works_**. Download [video](videos/Postman_t9M2iW3Xku.mp4) in the best quality.
+![copy_bd](gifs/Postman_t9M2iW3Xku-_1_.gif)
+
+---
+
+2. An example of the work of _**Placing an order and paying for it in Yookassa_**. Download [video](videos/pycharm64_Jr15ACpje5.mp4) in the best quality.
+![pay_yookassa](gifs/pycharm64_Jr15ACpje5.gif)
+
+<a name="project_features"></a>
+## 🔧 Project Features ##
+>[WARNING]
+> If you encounter errors when starting a project, a couple of recommendations below can help you!
+>1. When you start the project, you get an error. This [link](problems/root_project/RootProjectProblem.en.md) can help you.
+>2. You have a logging error when logging into the documentation. This [link](problems/logging/LoggingProblem.en.md) can help you.
+
+- This project began to be created without knowing how to write the REST API more competently and \
+how to properly implement the online store itself. For this reason, there may be some shortcomings.
+- Why are there no microservices in this project? I had heard about microservices at that time, \
+but I did not understand how to implement them. For this reason, this project has only one service.
+
+
+- For more convenient use of the project: \
+If you want your project to start with the **Run** button (_Shift+F10_) and apply **Debug** (_Shift+F9_), go to this [link](configurations/Config.en.md)
 
 <a name="installation_and_launch"></a>
 ## 🔌 Installation and launch ##
 > [!WARNING]
 > If you **have** all the following on your computer, you can skip this warning.
 > - You may need to register in [Sentry](https://sentry.io)
+> - You can try to register with [Yookassa](https://yookassa.ru/developers/payment-acceptance/testing-and-going-live/testing) to test the platform.
 
 <a name="installation_ide"></a>
 ### 📔 Installing the project in the IDE ###
