@@ -203,7 +203,9 @@ docker-compose exec web python manage.py createsuperuser
 
 <a name="documentation_api"></a>
 ## 📗 Документация API ##
-Документация по API доступна по `/api/v1`.
+Документация по API доступна по `/api/v1`. \
+Краткий показ документации:
+![swagger](docs/gifs/opera_Za35gkYTrd.gif)
 
 <a name="license"></a>
 ## 🔐 Лицензия ##
