@@ -3,7 +3,9 @@ version: '3.11'
 services:
 
   web:
-    build: ./
+    build:
+      context: .
+      dockerfile: src/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     container_name: web-online-store
     volumes:
@@ -62,10 +64,11 @@ services:
       - ./:/usr/src/app/
     container_name: celery-beat-store
     depends_on:
+      - web
       - db
       - redis
       - rabbitmq
-      - web
+      - celery
 
 volumes:
   postgres_data:
