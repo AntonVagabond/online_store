@@ -95,12 +95,12 @@ An approximate list of [endpoints](endpoints/Endpoints.en.md) and their capabili
 <a name="example_work"></a>
 ## 📽️ Example work. ##
 1. An example of how **_Database copying works_**. Download [video](videos/Postman_t9M2iW3Xku.mp4) in the best quality.
-![copy_bd](gifs/Postman_t9M2iW3Xku-_1_.gif)
+![copy_bd](gifs/pycharm64_Jr15ACpje5.gif)
 
 ---
 
 2. An example of the work of _**Placing an order and paying for it in Yookassa_**. Download [video](videos/pycharm64_Jr15ACpje5.mp4) in the best quality.
-![pay_yookassa](gifs/pycharm64_Jr15ACpje5.gif)
+![pay_yookassa](gifs/Postman_t9M2iW3Xku-_1_.gif)
 
 <a name="project_features"></a>
 ## 🔧 Project Features ##

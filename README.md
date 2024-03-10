@@ -96,12 +96,12 @@
 <a name="example_work"></a>
 ## 📽️ Пример работы. ##
 1. Пример работы копирования **_Базы Данных_**. Скачать [видео](docs/videos/Postman_t9M2iW3Xku.mp4) в лучшем качестве.
-![copy_bd](docs/gifs/Postman_t9M2iW3Xku-_1_.gif)
+![copy_bd](docs/gifs/pycharm64_Jr15ACpje5.gif)
 
 ---
 
 2. Пример работы **_Оформления заказа и его оплата в Yookassa_**. Скачать [видео](docs/videos/pycharm64_Jr15ACpje5.mp4) в лучшем качестве.
-![pay_yookassa](docs/gifs/pycharm64_Jr15ACpje5.gif)
+![pay_yookassa](docs/gifs/Postman_t9M2iW3Xku-_1_.gif)
 
 <a name="project_features"></a>
 ## 🔧 Особенности проекта ##
