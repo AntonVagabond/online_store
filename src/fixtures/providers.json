@@ -1,0 +1,32 @@
+[
+{
+  "model": "products.provider",
+  "pk": 1,
+  "fields": {
+    "name": "ТеХолод",
+    "email": "techolod@gmail.com",
+    "phone_number": "+79274568955",
+    "logo": "orders/providers/2023/12/20/загружено_8.jpg"
+  }
+},
+{
+  "model": "products.provider",
+  "pk": 2,
+  "fields": {
+    "name": "Teapot.co",
+    "email": "teapot@yandex.ru",
+    "phone_number": "+79272568659",
+    "logo": "orders/providers/2023/12/20/загружено_9.jpg"
+  }
+},
+{
+  "model": "products.provider",
+  "pk": 3,
+  "fields": {
+    "name": "Coocers.corp",
+    "email": "coocers@mail.ru",
+    "phone_number": "+79274568931",
+    "logo": ""
+  }
+}
+]

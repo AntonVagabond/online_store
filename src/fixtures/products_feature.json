@@ -1,0 +1,47 @@
+[
+{
+  "model": "products.productfeature",
+  "pk": 5,
+  "fields": {
+    "size": 35,
+    "color": "бежевый",
+    "patterns": false
+  }
+},
+{
+  "model": "products.productfeature",
+  "pk": 3,
+  "fields": {
+    "size": 50,
+    "color": "белый",
+    "patterns": false
+  }
+},
+{
+  "model": "products.productfeature",
+  "pk": 2,
+  "fields": {
+    "size": 25,
+    "color": "серый",
+    "patterns": false
+  }
+},
+{
+  "model": "products.productfeature",
+  "pk": 1,
+  "fields": {
+    "size": 6,
+    "color": "белый",
+    "patterns": false
+  }
+},
+{
+  "model": "products.productfeature",
+  "pk": 4,
+  "fields": {
+    "size": 5,
+    "color": "черный",
+    "patterns": true
+  }
+}
+]

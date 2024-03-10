@@ -1,0 +1,42 @@
+[
+  {
+    "model": "carts.OrderStatus",
+    "pk": 1,
+    "fields": {
+      "status": "В РАБОТЕ",
+      "description": "Продавец собирает и упаковывает заказ."
+    }
+  },
+  {
+    "model": "carts.OrderStatus",
+    "pk": 2,
+    "fields": {
+      "status": "СОБРАНО ПРОДАВЦОМ",
+      "description": "Товары собраны продавцом и передаются в доставку."
+    }
+  },
+  {
+    "model": "carts.OrderStatus",
+    "pk": 3,
+    "fields": {
+      "status": "В СЛУЖБЕ ДОСТАВКИ",
+      "description": "Ваш заказ доставляется в ваш город."
+    }
+  },
+  {
+    "model": "carts.OrderStatus",
+    "pk": 4,
+    "fields": {
+      "status": "ОЖИДАЕТ В ПУНКТЕ ВЫДАЧИ",
+      "description": "Срок хранения товаров 15 дней."
+    }
+  },
+  {
+    "model": "carts.OrderStatus",
+    "pk": 5,
+    "fields": {
+      "status": "ПОЛУЧЕНО",
+      "description": "Товар получен."
+    }
+  }
+]

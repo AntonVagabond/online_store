@@ -1,0 +1,37 @@
+[
+{
+  "model": "products.productdescription",
+  "pk": 5,
+  "fields": {
+    "description": "Бежевый красивый термопот"
+  }
+},
+{
+  "model": "products.productdescription",
+  "pk": 3,
+  "fields": {
+    "description": "Холодильная витрина для магазина продуктов"
+  }
+},
+{
+  "model": "products.productdescription",
+  "pk": 2,
+  "fields": {
+    "description": "Дорогой холодильник для большой семьи."
+  }
+},
+{
+  "model": "products.productdescription",
+  "pk": 1,
+  "fields": {
+    "description": "Качественная плита, прослужит для вашей семьи очень долго!"
+  }
+},
+{
+  "model": "products.productdescription",
+  "pk": 4,
+  "fields": {
+    "description": "Чайник за очень быстрое время разогревает воду."
+  }
+}
+]

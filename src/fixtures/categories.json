@@ -1,0 +1,92 @@
+[
+{
+  "model": "products.category",
+  "pk": 1,
+  "fields": {
+    "title": "Техника для кухни",
+    "image": "orders/categories/2023/12/20/2252f632365bda05431a61498a99b847b303e5ea3ade88a799fb9a6a7795e558.png",
+    "description": null,
+    "parent": null
+  }
+},
+{
+  "model": "products.category",
+  "pk": 2,
+  "fields": {
+    "title": "Плиты и печи",
+    "image": "orders/categories/2023/12/20/808e692f1f1bff88182acee1db1b833e17c0a5c77f83fade64c53a0abbaa6695.jpg",
+    "description": null,
+    "parent": 1
+  }
+},
+{
+  "model": "products.category",
+  "pk": 3,
+  "fields": {
+    "title": "Плиты электрические",
+    "image": "orders/categories/2023/12/20/068862faed3b11d785621dc70444c08cf5b6f3952b21e4f159194aa220f86da0.jpg",
+    "description": "Большой выбор электрических плит!",
+    "parent": 2
+  }
+},
+{
+  "model": "products.category",
+  "pk": 4,
+  "fields": {
+    "title": "Холодильное оборудование",
+    "image": "orders/categories/2023/12/20/103d1ee49224b3a45b7092b0b6c32338ea493ddad94b9f14a3b6da0a8a17320e.png",
+    "description": "Категория холодильников",
+    "parent": null
+  }
+},
+{
+  "model": "products.category",
+  "pk": 5,
+  "fields": {
+    "title": "Холодильники",
+    "image": "orders/categories/2023/12/20/50898681d76ead3909b500d097b77fec1d4266bb75d7865aa3fc22bb0697e9bc.jpg",
+    "description": "Стильные холодильники",
+    "parent": 4
+  }
+},
+{
+  "model": "products.category",
+  "pk": 6,
+  "fields": {
+    "title": "Холодильные витрины",
+    "image": "orders/categories/2023/12/20/ed266c733ddef33faa45b4b3a8b485cc766a923abb46cc2c523b041ddad4487d.jpg",
+    "description": "Холодильники для магазинов",
+    "parent": 4
+  }
+},
+{
+  "model": "products.category",
+  "pk": 7,
+  "fields": {
+    "title": "Электрочайники и термопоты",
+    "image": "orders/categories/2023/12/20/7bc000be3fa3fddd6e56f1c1b02e64944a31653d016bc9c8e79528b87c8fc64c.jpg",
+    "description": "Виды чайников",
+    "parent": null
+  }
+},
+{
+  "model": "products.category",
+  "pk": 8,
+  "fields": {
+    "title": "Электрочайники",
+    "image": "orders/categories/2023/12/20/7bc000be3fa3fddd6e56f1c1b02e64944a31653d016bc9c8e79528b87c8fc64c_1.jpg",
+    "description": "Электрочайники разных видов",
+    "parent": 7
+  }
+},
+{
+  "model": "products.category",
+  "pk": 9,
+  "fields": {
+    "title": "Термопоты",
+    "image": "orders/categories/2023/12/20/d1c90209d04d50ac2e338ef9bbccdb0882d5f81ae3f095821169d2d0ab2f287c.jpg",
+    "description": "Термопоты разных видов",
+    "parent": 7
+  }
+}
+]
