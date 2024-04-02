@@ -214,3 +214,7 @@ docker-compose exec web python manage.py createsuperuser
 <a name="license"></a>
 ## 🔐 Лицензия ##
 Подробности см. в файле [LICENSE](LICENSE).
+
+## 🧙‍♂️ Авторы
+- [Акуев Антон Артурович](https://github.com/AntonVagabond)
+- [Сыса Роман Алексеевич](https://github.com/menma331)

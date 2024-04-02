@@ -212,3 +212,7 @@ A brief presentation of the documentation:
 <a name="license"></a>
 ## 🔐 License ##
 For details, see the [LICENSE](LICENSE) file.
+
+## 🧙‍♂️ Authors
+- [Akuev Anton Arturovich](https://github.com/AntonVagabond)
+- [Sysa Roman Alekseevich](https://github.com/menma331)
