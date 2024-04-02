@@ -113,6 +113,9 @@ An approximate list of [endpoints](endpoints/Endpoints.en.md) and their capabili
 how to properly implement the online store itself. For this reason, there may be some shortcomings.
 - Why are there no microservices in this project? I had heard about microservices at that time, \
 but I did not understand how to implement them. For this reason, this project has only one service.
+- Also, if you run through docker, you will need to complete the configuration \
+_celery_(roll back to a lower version) or add the config to _rabbitmq_. For some \
+one of these reasons, docker does not want _celery_ to work and warnings pop up in _rabbitmq_.
 
 
 - For more convenient use of the project: \

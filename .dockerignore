@@ -1,10 +1,8 @@
 src/Dockerfile
+docs
 .idea
 src/.env.example
 .gitignore
 .github
 *.md
-.tox
 LICENSE
-Makefile
-table.png

@@ -4,14 +4,14 @@ services:
 
   web:
     build:
-      context: .
-      dockerfile: src/Dockerfile
+      context: ./src
+      dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     container_name: web-online-store
     volumes:
       - ./:/usr/src/app/
-      - /var/www/back/static/:/usr/src/app/static/
-      - /var/www/back/media/:/usr/src/app/media/
+      - /src/static/:/usr/src/app/src/static/
+      - /src/media/:/usr/src/app/src/media/
     ports:
       - "8000:8000"
     env_file:
@@ -20,35 +20,51 @@ services:
       - db
       - redis
       - rabbitmq
-      - celery
-      - celery-beat
 
   db:
     image: postgres:14-alpine
     container_name: db-store
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=${PG_USER}
       - POSTGRES_PASSWORD=${PG_PASSWORD}
       - POSTGRES_DB=${PG_DATABASE}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
 
   redis:
     image: redis:latest
     container_name: redis-store
+    volumes:
+      - redis_data:/data/
+    env_file:
+      - src/.env
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3.13-management
     container_name: rabbitmq-store
+    hostname: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    networks:
+      - rabbitmq
 
   celery:
-    restart: always
     build:
-      context: ./
-    command: celery --app=config worker --loglevel=info --pool=solo
+      context: ./src
+    command: ['celery', '--app=config', 'worker', '--loglevel=info', '--pool=solo']
     volumes:
       - ./:/usr/src/app/
     container_name: celery-store
+    env_file:
+      - src/.env
+    environment:
+      - BROKER_URL=${RABBIT_URL}
+      - RESULT_BACKEND=${REDIS_URL}
+      - BROKER_CONNECTION_RETRY=300
     depends_on:
       - db
       - redis
@@ -56,10 +72,9 @@ services:
       - web
 
   celery-beat:
-    restart: always
     build:
-      context: ./
-    command: celery -A config beat -l info
+      context: ./src
+    command: ['celery', '-A', 'config', 'beat', '-l', 'info']
     volumes:
       - ./:/usr/src/app/
     container_name: celery-beat-store
@@ -72,3 +87,9 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  rabbitmq:
+    driver: bridge
