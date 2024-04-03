@@ -30,6 +30,7 @@
    - 🐳 [Установка проекта в Docker](#installation_docker)
 8. 📗 [Документация API](#documentation_api)
 9. 🔐 [Лицензия](#license)
+10. 🧙‍♂️ [Авторы](#authors)
 
 <a name="project_desc"></a> 
 ## ✏️ Описание проекта ##
@@ -215,6 +216,7 @@ docker-compose exec web python manage.py createsuperuser
 ## 🔐 Лицензия ##
 Подробности см. в файле [LICENSE](LICENSE).
 
+<a name="authors"></a>
 ## 🧙‍♂️ Авторы
 - [Акуев Антон Артурович](https://github.com/AntonVagabond)
 - [Сыса Роман Алексеевич](https://github.com/menma331)

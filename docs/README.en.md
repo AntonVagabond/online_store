@@ -30,6 +30,7 @@
    - 🐳 [Installing the project in Docker](#installation_docker)
 8. 📗 [API Documentation](#documentation_api)
 9. 🔐 [License](#license)
+10. 🧙‍♂️ [Authors](#authors)
 
 <a name="project_desc"></a>
 ## ✏️ Description of the project ##
@@ -213,6 +214,7 @@ A brief presentation of the documentation:
 ## 🔐 License ##
 For details, see the [LICENSE](LICENSE) file.
 
+<a name="authors"></a>
 ## 🧙‍♂️ Authors
 - [Akuev Anton Arturovich](https://github.com/AntonVagabond)
 - [Sysa Roman Alekseevich](https://github.com/menma331)
